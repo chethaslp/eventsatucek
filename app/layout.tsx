@@ -7,8 +7,8 @@ import { Toaster } from '@/components/ui/toaster'
 const inter = Raleway({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Quest App',
-  description: 'Your tressure hunt app!',
+  title: 'Events@UCEK',
+  description: 'A all-in-one place to know about all events at UCEK!',
 }
 
 export default function RootLayout({

@@ -1,9 +1,8 @@
 "use client"
 import { Logo } from '@/components/ui/logo';
 import { Loader2 } from "lucide-react";
-import { Pixelify_Sans } from 'next/font/google'
 
-const font = Pixelify_Sans({ subsets: ['latin'], weight: ['400']})
+
 export default function Loading({msg}:{msg: string}) {
     return (
         <div className={`flex gap-3  h-screen w-screen flex-col z-50`}>
@@ -12,7 +11,7 @@ export default function Loading({msg}:{msg: string}) {
             </div> 
             <div className="flex justify-center items-center mb-10 flex-row gap-2 text-secondary-foreground text-center">
                 <Loader2 size={20} className="animate-spin"/>
-                <small className={font.className}>{msg}</small>
+                <small>{msg}</small>
             </div>
         </div>
     )
