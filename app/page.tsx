@@ -1,60 +1,73 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/ui/navbar";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Navbar } from '@/components/ui/navbar';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/components/ui/use-toast';
-import Papa from 'papaparse'
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import Loading from "./loading";
+import CardGrid from "@/components/ui/CardGrid";
+import Card from "@/components/ui/Card";
+import Link from "next/link";
+import { getData } from "@/lib/data";
 
-import Image from 'next/image'
-import { useEffect, useState } from 'react';
-import Loading from './loading';
-import { BentoGrid, BentoGridItem } from '@/components/ui/card-grid';
-
-function getImgLink(link:string){
-  return "https://drive.google.com/uc?export=download&id="+link.replace("https://drive.google.com/open?id=","")
+function getImgLink(link: string) {
+  return (
+    "https://drive.google.com/uc?export=download&id=" +
+    link.replace("https://drive.google.com/open?id=", "")
+  );
 }
 
 export default function Home() {
-
-  const { toast } = useToast()
+  const { toast } = useToast();
+  const router = useRouter();
   const [data, setData] = useState<string[]>([]);
-  const url = "https://docs.google.com/spreadsheets/d/1jrpjxOBA4kVCLgrrjjLt46bmNCRDaruuJvcU3JwvOkc/gviz/tq?tqx=out:csv&sheet=s1"
 
-  useEffect(()=>{
-    Papa.parse<string>(url, {
-      download: true,
-      skipEmptyLines: true,
-      complete(results) {
-        let d = results.data
-        delete d[0]
-        setData(d);
-        console.log(d)
-      },
-    })
-},[])
+  useEffect(() => {
+    getData()
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  }, []);
 
-  return (data.length == 0)? <Loading msg='Loading...'/>:
-    <div className='h-screen flex flex-col'>
-      <Navbar/>
-      <main className="flex flex-col h-full w-full p-5">
-      <div className='mb-5'>
-        <CardTitle>Upcoming Events</CardTitle>
+  return data.length == 0 ? (
+    <Loading msg="Loading..." />
+  ) : (
+    <div className="">
+      <Navbar />
+      <div className="flex flex-col w-full h-full p-5 items-center mb-5">
+        <div className="mb-5">
+          <p>Upcoming Events</p>
         </div>
-      <BentoGrid className="max-w-4xl mx-auto">
-        {data.map((evnt,i)=>(
-            <BentoGridItem
-              key={i}
-              title={evnt[2]}
-              description={evnt[3]}
-              header={<Image  width={500} height={100} referrerPolicy={"no-referrer"} src={getImgLink(evnt[4])} alt='Event Poster'></Image>}
-              icon={<div>{evnt[6]}</div>}
-              className={i === 3 || i === 6 ? "md:col-span-2" : ""}
-            />
+        <CardGrid>
+          {data.map((evnt, i) => (
+            <Link href={`/event/${i}`}>
+              <Card
+                key={i}
+                title={evnt[2]}
+                description={evnt[3]}
+                header={
+                  <Image
+                    width={500}
+                    height={500}
+                    referrerPolicy={"no-referrer"}
+                    src={getImgLink(evnt[4])}
+                    alt="Event Poster"
+                    className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
+                  ></Image>
+                }
+                icon={evnt[6]}
+                isOnline={evnt[7] == "Online" ? true : false}
+              />
+          </Link>
           ))}
-    </BentoGrid>
-      </main>
+        </CardGrid>
+      </div>
     </div>
-    
+  );
 }
