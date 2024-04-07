@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import CardGrid from "@/components/ui/CardGrid";
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import Link from "next/link";
 import { getData } from "@/lib/data";
 
