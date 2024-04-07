@@ -1,79 +1,53 @@
-import * as React from "react"
+import React from "react";
+import { cn, formatDateArray } from "@/lib/utils";
+import { IoLocationSharp } from "react-icons/io5";
+import { RiWifiOffLine } from "react-icons/ri";
+import { IoWifiOutline } from "react-icons/io5";
+const Card = ({
+  title,
+  header,
+  icon,
+  isOnline
+}: {
+  className?: string;
+  title?: string | React.ReactNode;
+  description?: string | React.ReactNode;
+  header?: React.ReactNode;
+  icon?: string;
+  isOnline?: boolean
+}) => {
+  const date = formatDateArray(icon);
+  
+  return (
+    <div className="shadow-lg hover:shadow-sm shadow-black cursor-pointer group rounded-xl overflow-hidden relative bg-black w-[25rem] h-[25rem] transition duration-300 ease-in-out ">
+      {header}
+      <div className="text-white w-full absolute top-[270px] p-3 flex flex-col m-5 group-hover:opacity-0 opacity-100 transition duration-300 ease-in-out">
+        <div className="flex flex-row w-full items-center">
+          <div className="bg-[#8f90918c] shadow-md font-semibold mr-4 text-white w-12 h-12 rounded-lg text-center">
+            {date.month} <br />
+            {date.day}
+          </div>
+          <div className=" flex flex-col" >
+            <div className="font-semibold">
+            {title}
+            </div>
+            <div>
+            {date.from_time} 
+            &nbsp;-&nbsp;
+            17:00 pm
+            </div>
+          </div>
 
-import { cn } from "@/lib/utils"
+          {isOnline ?  <IoWifiOutline size={22} className="absolute right-12"  /> : <RiWifiOffLine size={22} className="absolute right-12" /> }
+            
+        </div>
+        <div className="flex flex-row mt-2 items-center">
+          <IoLocationSharp className="mr-2" />
+          <p>IEDC Hall | UCEK</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
-Card.displayName = "Card"
-
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-))
-CardHeader.displayName = "CardHeader"
-
-const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-))
-CardTitle.displayName = "CardTitle"
-
-const CardDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-))
-CardDescription.displayName = "CardDescription"
-
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
-
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-))
-CardFooter.displayName = "CardFooter"
-
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export default Card;
