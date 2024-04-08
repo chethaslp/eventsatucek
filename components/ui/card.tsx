@@ -32,9 +32,7 @@ const Card = ({
             {title}
             </div>
             <div>
-            {date.from_time} 
-            &nbsp;-&nbsp;
-            17:00 pm
+            at {date.from_time}
             </div>
           </div>
 
