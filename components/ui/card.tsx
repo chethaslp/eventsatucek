@@ -43,7 +43,7 @@ const Card = ({
         </div>
         <div className="flex flex-row mt-2 items-center">
           <IoLocationSharp className="mr-2" />
-          <p>IEDC Hall | UCEK</p>
+          <p>UCEK</p>
         </div>
       </div>
     </div>
