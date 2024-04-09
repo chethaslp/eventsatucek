@@ -5,12 +5,8 @@ import { Button } from "./button";
 import { Logo } from "./logo";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "./use-toast";
-import { useEffect } from "react";
 
 
 export function Navbar({ qName }: {qName?:string}) {

@@ -82,9 +82,9 @@ export default function Home() {
                 {" "}
                 <BsClock className="mr-2" />at {date.from_time}
               </p>
-              <div className="flex flex-col md:flex-row md:gap-3">
-                <Link href={"/event/"+data[1][1]}><div className="justify-center flex hover:shadow-md hover:bg-slate-950 transition-colors bg-black text-white items-center h-9 rounded-md w-40 mt-3 mb-3">View More</div></Link>
-                <Link href={data[1][9]} target="_blank"><div className="justify-center flex hover:shadow-md hover:bg-slate-950 transition-colors bg-slate-600 text-white items-center h-9 rounded-md w-40 mt-3 mb-3">Register Now</div></Link>
+              <div className="flex flex-col md:flex-row md:gap-3 mt-5">
+                <Link href={"/event/"+data[1][1]}><Button className="hover:scale-105 transition-all" variant={'secondary'}>View More</Button></Link>
+                <Link href={data[1][9]} target="_blank"><Button className="hover:scale-105 transition-all">Register Now</Button></Link>
               </div>
           </div>
           <div>
@@ -93,7 +93,8 @@ export default function Home() {
               height={300}
               referrerPolicy={"no-referrer"}
               src={getImgLink(data[1][5])}
-              className="rounded-[22px]"
+              onClick={()=>window.location.href = "/event/"+data[1][1]}
+              className="rounded-[22px] transition-transform cursor-pointer scale-100 hover:scale-105"
               alt="Event Poster"
             ></Image>
           </div>

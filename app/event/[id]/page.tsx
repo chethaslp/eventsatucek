@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { getUpcomingEvents, getPastEvents, getImgLink, getEvent } from "@/lib/data";
+import { getImgLink, getEvent } from "@/lib/data";
 import Loading from "@/app/loading";
 import { Navbar } from "@/components/ui/navbar";
 import Image from "next/image";
-import { cn, formatDateArray } from "@/lib/utils";
+import { formatDateArray } from "@/lib/utils";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiWifiOffLine } from "react-icons/ri";
 import { IoWifiOutline } from "react-icons/io5";
