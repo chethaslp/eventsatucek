@@ -52,7 +52,7 @@ export default function Home() {
     <div className="">
       <Navbar />
       <div className="flex flex-col w-full h-full p-5 items-center mb-5">
-        <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 w-[70%]">
+        <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 md:w-[70%] w-[95%]">
         
         <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
           
@@ -82,7 +82,7 @@ export default function Home() {
                 {" "}
                 <BsClock className="mr-2" />at {date.from_time}
               </p>
-              <div className="flex flex-col md:flex-row md:gap-3 mt-5">
+              <div className="flex flex-row gap-3 mt-5 mb-4">
                 <Link href={"/event/"+data[1][1]}><Button className="hover:scale-105 transition-all" variant={'secondary'}>View More</Button></Link>
                 <Link href={data[1][9]} target="_blank"><Button className="hover:scale-105 transition-all">Register Now</Button></Link>
               </div>
