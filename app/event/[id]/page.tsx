@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getData } from "@/lib/data";
+import { getUpcomingEvents, getPastEvents, getImgLink, getEvent } from "@/lib/data";
 import Loading from "@/app/loading";
 import { Navbar } from "@/components/ui/navbar";
 import Image from "next/image";
@@ -12,17 +12,11 @@ import { RiWifiOffLine } from "react-icons/ri";
 import { IoWifiOutline } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import { FaCalendarAlt } from "react-icons/fa";
-function getImgLink(link: string) {
-  return (
-    "https://drive.google.com/uc?export=download&id=" +
-    link.replace("https://drive.google.com/open?id=", "")
-  );
-}
 
-function Page({ params }: { params: { id: number } }) {
+function Page({ params }: { params: { id: string } }) {
   const [data, setData] = useState<string[]>([]);
   useEffect(() => {
-    getData()
+    getEvent(params.id)
       .then((data) => {
         setData(data);
       })
@@ -31,8 +25,8 @@ function Page({ params }: { params: { id: number } }) {
       });
   }, []);
 
-  let result = data[params.id];
-  const date = result ? formatDateArray(result[6]) : null;
+  let result = data[1];
+  const date = result ? formatDateArray(result[7]) : null;
 
   return data.length == 0 ? (
     <Loading msg="Loading..." />
@@ -45,20 +39,20 @@ function Page({ params }: { params: { id: number } }) {
             width={500}
             height={500}
             referrerPolicy={"no-referrer"}
-            src={getImgLink(result[4])}
+            src={getImgLink(result[5])}
             alt="Event Poster"
           ></Image>
 
           <div className="p-9">
-            <p className="text-4xl font-bold mb-1">{result[2]}</p>
+            <p className="text-4xl font-bold mb-1">{result[3]}</p>
             <p className="flex items-center mb-1 ">
               <FaCalendarAlt className="mr-2" />
               {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;{date.year}
             </p>
             <p className="flex items-center mb-1">
-              <IoLocationSharp className="mr-2" /> IEDC HALL | UCEK{" "}
+              <IoLocationSharp className="mr-2" /> {result[10]==""? "Will be Updated.": result[10]}
             </p>
-            {result[7] == "Online" ? (
+            {result[8] == "Online" ? (
               <p className="flex items-center mb-1">
                 <IoWifiOutline className="mr-2" /> Online
               </p>
@@ -72,9 +66,9 @@ function Page({ params }: { params: { id: number } }) {
               <BsClock className="mr-2" /> {date.from_time}&nbsp; - &nbsp; 17:00
               pm
             </p>
-            <p>{result[3]}</p>
+            <p>{result[4]}</p>
             <div className="justify-center flex bg-black text-white items-center h-9 rounded-md w-40 mt-3">
-              <a href={result[8]}>Register Now</a>
+              <a href={result[9]}>Register Now</a>
             </div>
           </div>
         </div>

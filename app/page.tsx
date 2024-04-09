@@ -8,7 +8,7 @@ import CardGrid from "@/components/ui/CardGrid";
 import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 
-import { getData } from "@/lib/data";
+import { getUpcomingEvents } from "@/lib/data";
 import { formatDateArray } from "@/lib/utils";
 import Loading from "./loading";
 
@@ -36,7 +36,7 @@ export default function Home() {
   let date;
 
   useEffect(() => {
-    getData()
+    getUpcomingEvents()
       .then((data) => {
         setData(data);
         console.log(data[1])
@@ -52,7 +52,7 @@ export default function Home() {
     <div className="">
       <Navbar />
       <div className="flex flex-col w-full h-full p-5 items-center mb-5">
-        <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 w-[85%]">
+        <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 w-[70%]">
         
         <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
           
@@ -60,16 +60,16 @@ export default function Home() {
             <p className="text-2xl text-black mt-4 mb-2 dark:text-neutral-200">
                 Next Event
             </p>
-            <p className="text-3xl font-bold mb-1">{data[1][2]}</p>
+            <p className="text-3xl font-bold mb-1">{data[1][3]}</p>
               <p className="flex items-center mb-1 ">
                 <FaCalendarAlt className="mr-2" />
-                {(()=>{date = data[1] ? formatDateArray(data[1][6]) : null})()}
+                {(()=>{date = data[1] ? formatDateArray(data[1][7]) : null})()}
                 {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;{date.year}
               </p>
               <p className="flex items-center mb-1">
-                <IoLocationSharp className="mr-2" /> {(data[1][9]=="")? "Will be updated." : data[1][9] }
+                <IoLocationSharp className="mr-2" /> {(data[1][10]=="")? "Will be updated." : data[1][9] }
               </p>
-              {data[1][7] == "Online" ? (
+              {data[1][8] == "Online" ? (
                 <p className="flex items-center mb-1">
                   <IoWifiOutline className="mr-2" /> Online
                 </p>
@@ -82,14 +82,17 @@ export default function Home() {
                 {" "}
                 <BsClock className="mr-2" />at {date.from_time}
               </p>
-              <Link href={data[1][8]} target="_blank"><div className="justify-center flex hover:shadow-md hover:bg-slate-950 transition-colors bg-black text-white items-center h-9 rounded-md w-40 mt-3 mb-3">Register Now</div></Link>
+              <div className="flex flex-col md:flex-row md:gap-3">
+                <Link href={"/event/"+data[1][1]}><div className="justify-center flex hover:shadow-md hover:bg-slate-950 transition-colors bg-black text-white items-center h-9 rounded-md w-40 mt-3 mb-3">View More</div></Link>
+                <Link href={data[1][9]} target="_blank"><div className="justify-center flex hover:shadow-md hover:bg-slate-950 transition-colors bg-slate-600 text-white items-center h-9 rounded-md w-40 mt-3 mb-3">Register Now</div></Link>
+              </div>
           </div>
           <div>
             <Image
-              width={500}
-              height={500}
+              width={300}
+              height={300}
               referrerPolicy={"no-referrer"}
-              src={getImgLink(data[1][4])}
+              src={getImgLink(data[1][5])}
               className="rounded-[22px]"
               alt="Event Poster"
             ></Image>
@@ -101,24 +104,24 @@ export default function Home() {
         </div>
         <CardGrid>
           {data.map((evnt, i) => (
-            <Link key={`event_${i}`} href={`/event/${i}`}>
+            <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
               <Card
-                key={i}
-                title={evnt[2]}
-                description={evnt[3]}
+                key={evnt[1]}
+                title={evnt[3]}
+                description={evnt[4]}
                 header={
                   <Image
                     width={500}
                     height={500}
                     referrerPolicy={"no-referrer"}
-                    src={getImgLink(evnt[4])}
+                    src={getImgLink(evnt[5])}
                     alt="Event Poster"
                     className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
                   ></Image>
                 }
-                icon={evnt[6]}
-                isOnline={evnt[7] == "Online" ? true : false}
-                venue={evnt[9]}
+                icon={evnt[7]}
+                isOnline={evnt[8] == "Online" ? true : false}
+                venue={evnt[10]}
               />
           </Link>
           ))}
