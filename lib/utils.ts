@@ -31,3 +31,18 @@ export function formatDateArray(dateString?: string): any {
   event_date.from_time = formattedTime + ' ' + (hours < 12 ? 'am' : 'pm');
   return event_date;
 }
+
+export function resolveClubIcon(clb:string){
+  return {
+    "Google Developers Student Club - UCEK" : "/logos/gdsc.png",
+    "IEEE - UCEK" : "/logos/ieee.png",
+    "Legacy IEDC - UCEK" : "/logos/iedc.png",
+    "μlearn - UCEK" : "/logos/muln.png",
+    "FOSS - UCEK" : "/logos/foss.png",
+    "TinkerHub - UCEK" : "/logos/trh.png",
+    "SFI UCEK" : "/logos/sfi.png",
+    "Meluhans Dance Club" : "/logos/mdc.png",
+    "Music Club - UCEK" : "/logos/mcc.png",
+    "Film Club - UCEK" : "/logos/fmc.png"
+  }[clb]
+}
