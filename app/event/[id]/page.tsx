@@ -40,7 +40,7 @@ function Page({ params }: { params: { id: number } }) {
     <div className="flex flex-col">
       <Navbar />
       <div className="flex justify-center mb-8 ">
-        <div className="h-fit w-[30rem] overflow-hidden shadow-md shadow-black rounded-xl">
+        <div className="h-fit w-[30rem] overflow-hidden !shadow-black sm:shadow-md rounded-xl">
           <Image
             width={500}
             height={500}

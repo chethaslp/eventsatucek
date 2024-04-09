@@ -7,14 +7,16 @@ const Card = ({
   title,
   header,
   icon,
-  isOnline
+  isOnline,
+  venue
 }: {
   className?: string;
   title?: string | React.ReactNode;
   description?: string | React.ReactNode;
   header?: React.ReactNode;
   icon?: string;
-  isOnline?: boolean
+  isOnline?: boolean,
+  venue?:string
 }) => {
   const date = formatDateArray(icon);
   
@@ -41,7 +43,7 @@ const Card = ({
         </div>
         <div className="flex flex-row mt-2 items-center">
           <IoLocationSharp className="mr-2" />
-          <p>UCEK</p>
+          <p>{(venue == "")? "TBA" : venue}</p>
         </div>
       </div>
     </div>
