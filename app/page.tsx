@@ -21,6 +21,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import { RiWifiOffLine } from "react-icons/ri";
 import { IoWifiOutline } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
+import Footer from "@/components/ui/Footer";
 
 function getImgLink(link: string) {
   return (
@@ -51,7 +52,7 @@ export default function Home() {
   ) : (
     <div className="">
       <Navbar />
-      <div className="flex flex-col w-full h-full p-5 items-center mb-5 dark:bg-[#121212]">
+      <div className="flex flex-col w-full h-full p-5 items-center dark:bg-[#121212]">
         <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 md:w-[70%] w-[95%]">
         
         <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
@@ -128,6 +129,7 @@ export default function Home() {
           ))}
         </CardGrid>
       </div>
+      <Footer/>
     </div>
   );
 }
