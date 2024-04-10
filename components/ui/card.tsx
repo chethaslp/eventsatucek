@@ -3,6 +3,8 @@ import { cn, formatDateArray } from "@/lib/utils";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiWifiOffLine } from "react-icons/ri";
 import { IoWifiOutline } from "react-icons/io5";
+import { BsClock } from "react-icons/bs";
+
 const Card = ({
   title,
   header,
@@ -21,7 +23,7 @@ const Card = ({
   const date = formatDateArray(icon);
   
   return (
-    <div className="shadow-lg hover:shadow-sm shadow-black cursor-pointer group rounded-xl overflow-hidden relative bg-black w-[25rem] h-[25rem] transition duration-300 ease-in-out ">
+    <div className="shadow-md hover:shadow-sm shadow-black cursor-pointer group rounded-xl overflow-hidden relative bg-black w-[25rem] h-[25rem] transition duration-300 ease-in-out ">
       {header}
       <div className="text-white w-full absolute top-[270px] p-3 flex flex-col m-5 group-hover:opacity-0 opacity-100 transition duration-300 ease-in-out">
         <div className="flex flex-row w-full items-center">
@@ -29,12 +31,12 @@ const Card = ({
             {date.month} <br />
             {date.day}
           </div>
-          <div className=" flex flex-col" >
+          <div className=" flex flex-col gap-1" >
             <div className="font-semibold">
             {title}
             </div>
-            <div>
-            at {date.from_time}
+            <div className="flex items-center gap-1">
+            <BsClock/> {date.from_time}
             </div>
           </div>
 

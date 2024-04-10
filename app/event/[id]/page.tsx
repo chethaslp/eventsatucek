@@ -30,10 +30,10 @@ function Page({ params }: { params: { id: string } }) {
   return data.length == 0 ? (
     <Loading msg="Loading..." />
   ) : (
-    <div className="flex flex-col">
+    <div className="flex flex-col dark:bg-[#121212] min-h-[50rem]">
       <Navbar />
       <div className="flex justify-center mb-8 ">
-        <div className="h-fit w-[30rem] overflow-hidden !shadow-black sm:shadow-md rounded-xl">
+        <div className="h-fit w-[30rem] overflow-hidden !shadow-black sm:shadow-md rounded-xl dark:bg-[#0c0c0c]">
           <Image
             width={500}
             height={500}

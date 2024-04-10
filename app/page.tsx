@@ -51,7 +51,7 @@ export default function Home() {
   ) : (
     <div className="">
       <Navbar />
-      <div className="flex flex-col w-full h-full p-5 items-center mb-5">
+      <div className="flex flex-col w-full h-full p-5 items-center mb-5 dark:bg-[#121212]">
         <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 md:w-[70%] w-[95%]">
         
         <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
@@ -94,7 +94,7 @@ export default function Home() {
               referrerPolicy={"no-referrer"}
               src={getImgLink(data[1][5])}
               onClick={()=>window.location.href = "/event/"+data[1][1]}
-              className="rounded-[22px] transition-transform cursor-pointer scale-100 hover:scale-105"
+              className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out"
               alt="Event Poster"
             ></Image>
           </div>
