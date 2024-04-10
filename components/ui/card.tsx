@@ -1,16 +1,18 @@
 import React from "react";
-import { cn, formatDateArray } from "@/lib/utils";
+import { resolveClubIcon, formatDateArray } from "@/lib/utils";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiWifiOffLine } from "react-icons/ri";
 import { IoWifiOutline } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
+import Image from "next/image";
 
 const Card = ({
   title,
   header,
   icon,
   isOnline,
-  venue
+  venue,
+  club
 }: {
   className?: string;
   title?: string | React.ReactNode;
@@ -19,12 +21,16 @@ const Card = ({
   icon?: string;
   isOnline?: boolean,
   venue?:string
+  club:string
 }) => {
   const date = formatDateArray(icon);
-  
+  const clubIcon = resolveClubIcon(club)
   return (
     <div className="shadow-md hover:shadow-sm shadow-black cursor-pointer group rounded-xl overflow-hidden relative bg-black w-[25rem] h-[25rem] transition duration-300 ease-in-out ">
       {header}
+      <div className="text-white w-20 h-20 absolute top-[1px] m-1 flex flex-col  group-hover:opacity-0 opacity-100 transition duration-300 ease-in-out">
+        <Image src={clubIcon} alt={club+"logo"}/>
+      </div>
       <div className="text-white w-full absolute top-[270px] p-3 flex flex-col m-5 group-hover:opacity-0 opacity-100 transition duration-300 ease-in-out">
         <div className="flex flex-row w-full items-center">
           <div className="bg-[#8f90918c] shadow-md font-semibold mr-4 text-white w-12 h-12 rounded-lg text-center">

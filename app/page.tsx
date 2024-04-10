@@ -40,7 +40,7 @@ export default function Home() {
     getUpcomingEvents()
       .then((data) => {
         setData(data);
-        console.log(data[1])
+        console.log(data)
       })
       .catch((error) => {
         console.error("An error occurred:", error);
@@ -111,6 +111,7 @@ export default function Home() {
                 key={evnt[1]}
                 title={evnt[3]}
                 description={evnt[4]}
+                club={evnt[6]}
                 header={
                   <Image
                     width={500}
