@@ -124,7 +124,7 @@ export default function Home() {
                 }
                 icon={evnt[7]}
                 isOnline={evnt[8] == "Online" ? true : false}
-                venue={evnt[10]}
+                venue={evnt[11]}
               />
           </Link>
           ))}
