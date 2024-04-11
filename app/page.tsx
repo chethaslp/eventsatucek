@@ -58,7 +58,7 @@ export default function Home() {
         <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
           
           <div>
-            <p className="text-2xl text-black mt-4 mb-2 dark:text-neutral-200">
+            <p className="text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
                 Next Event
             </p>
             <p className="text-3xl font-bold mb-1">{data[1][3]}</p>
@@ -67,8 +67,8 @@ export default function Home() {
                 {(()=>{date = data[1] ? formatDateArray(data[1][7]) : null})()}
                 {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;{date.year}
               </p>
-              <p className="flex items-center mb-1">
-                <IoLocationSharp className="mr-2" /> {(data[1][10]=="")? "Will be updated." : data[1][9] }
+              <p className="flex break-words items-center mb-1">
+                <IoLocationSharp className="mr-2" /> {(data[1][10]=="")? "Will be updated." : data[1][10] }
               </p>
               {data[1][8] == "Online" ? (
                 <p className="flex items-center mb-1">
@@ -124,7 +124,7 @@ export default function Home() {
                 }
                 icon={evnt[7]}
                 isOnline={evnt[8] == "Online" ? true : false}
-                venue={evnt[11]}
+                venue={evnt[10]}
               />
           </Link>
           ))}
