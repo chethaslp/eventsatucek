@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 
 export default function Loading({msg}:{msg: string}) {
     return (
-        <div className={`flex gap-3  h-screen w-screen flex-col z-50`}>
+        <div className="flex gap-3  h-screen w-screen flex-col z-50 dark:bg-[#121212]">
             <div className="flex justify-center items-center h-full w-full animate-pulse transition-all drop-shadow-xl">
                 <Logo size={"6xl"}/>
             </div> 

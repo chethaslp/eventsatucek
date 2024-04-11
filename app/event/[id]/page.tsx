@@ -5,7 +5,7 @@ import { getImgLink, getEvent } from "@/lib/data";
 import Loading from "@/app/loading";
 import { Navbar } from "@/components/ui/navbar";
 import Image from "next/image";
-import { formatDateArray } from "@/lib/utils";
+import { formatDateArray,resolveClubIcon } from "@/lib/utils";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiWifiOffLine } from "react-icons/ri";
 import { IoWifiOutline } from "react-icons/io5";
@@ -25,15 +25,16 @@ function Page({ params }: { params: { id: string } }) {
   }, []);
 
   let result = data[1];
-  const date = result ? formatDateArray(result[7]) : null;
 
+  const date = result ? formatDateArray(result[7]) : null;
+   const clubIcon = result ?  resolveClubIcon(result[6]): null;
   return data.length == 0 ? (
     <Loading msg="Loading..." />
   ) : (
-    <div className="flex flex-col">
+    <div className="flex flex-col dark:bg-[#121212] min-h-[50rem]">
       <Navbar />
       <div className="flex justify-center mb-8 ">
-        <div className="h-fit w-[30rem] overflow-hidden !shadow-black sm:shadow-md rounded-xl">
+        <div className="h-fit w-[30rem] overflow-hidden !shadow-black sm:shadow-md rounded-xl dark:bg-[#0c0c0c]">
           <Image
             width={500}
             height={500}
@@ -43,7 +44,9 @@ function Page({ params }: { params: { id: string } }) {
           ></Image>
 
           <div className="p-9">
+            <div className="flex justify-between ">
             <p className="text-4xl font-bold mb-1">{result[3]}</p>
+            </div>
             <p className="flex items-center mb-1 ">
               <FaCalendarAlt className="mr-2" />
               {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;{date.year}

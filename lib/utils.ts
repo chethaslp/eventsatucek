@@ -1,6 +1,17 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
- 
+import GDSCLogo from  "../public/logos/gdsc.png"
+import IEDCLogo from  "../public/logos/iedc.png"
+import FOSSLogo from  "../public/logos/foss.png"
+import FMCLogo from  "../public/logos/fmc.png"
+import MCCLogo from  "../public/logos/mcc.png"
+import IEEELogo from  "../public/logos/ieee.png"
+import MDCLogo from  "../public/logos/mdc.png"
+import MULNLogo from  "../public/logos/muln.png"
+import NSSLogo from  "../public/logos/nss.png"
+import SFILogo from  "../public/logos/sfi.png"
+import TRHLogo from  "../public/logos/trh.png"
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -12,7 +23,6 @@ export function formatDateArray(dateString?: string): any {
       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
-  // Parse the date string
   if (!dateString) {
       return ;
   }
@@ -26,23 +36,23 @@ export function formatDateArray(dateString?: string): any {
   const hours = date.getHours();
   const minutes = date.getMinutes();
 
-  // Format hours and minutes
   let formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
   event_date.from_time = formattedTime + ' ' + (hours < 12 ? 'am' : 'pm');
   return event_date;
 }
 
-export function resolveClubIcon(clb:string){
+export function resolveClubIcon(clb:string):any{
   return {
-    "Google Developers Student Club - UCEK" : "/logos/gdsc.png",
-    "IEEE - UCEK" : "/logos/ieee.png",
-    "Legacy IEDC - UCEK" : "/logos/iedc.png",
-    "μlearn - UCEK" : "/logos/muln.png",
-    "FOSS - UCEK" : "/logos/foss.png",
-    "TinkerHub - UCEK" : "/logos/trh.png",
-    "SFI UCEK" : "/logos/sfi.png",
-    "Meluhans Dance Club" : "/logos/mdc.png",
-    "Music Club - UCEK" : "/logos/mcc.png",
-    "Film Club - UCEK" : "/logos/fmc.png"
+    "Google Developers Student Club - UCEK" : GDSCLogo,
+    "IEEE - UCEK" : IEEELogo,
+    "Legacy IEDC - UCEK" : IEDCLogo,
+    "μlearn - UCEK" : MULNLogo,
+    "FOSS - UCEK" : FOSSLogo,
+    "TinkerHub - UCEK" : TRHLogo,
+    "SFI UCEK" : SFILogo,
+    "Meluhans Dance Club" : MDCLogo,
+    "Music Club - UCEK" : MCCLogo,
+    "Film Club - UCEK" : FMCLogo,
+    "NSS - UCEK" : NSSLogo
   }[clb]
 }

@@ -15,7 +15,7 @@ export function Navbar({ qName }: {qName?:string}) {
     const {toast} = useToast()
     // if(!user) redirect("/signin?c="+path)
     
-    return <div className='w-full backdrop-blur pr-5 pt-3 pl-5 pb-3'>
+    return <div className='w-full backdrop-blur pr-5 pt-3 pl-5 pb-3 dark:bg-[#121212]'>
                 <div className="flex items-center justify-between gap-2 flex-row">
                     <div className="flex items-center flex-row gap-2">
                         <Link href={"/"}><Logo size={"6xl"}/></Link>
