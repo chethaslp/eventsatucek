@@ -31,7 +31,7 @@ function Page() {
         <div className="text-2xl flex items-center justify-center mb-5">Contributors</div>
       <CardGrid>
           {data.map((contr:{login:string, avatar_url:string, html_url:string, }) => (
-            <div className="rounded-[24px] flex flex-col border border-slate-600 p-5">
+            <div key={contr.login} className="rounded-[24px] flex flex-col border border-slate-600 p-5">
                 <AvatarCard url={contr.avatar_url} />
                 <div className="flex justify-around items-center mt-5">
                     <span className="text-md">@{contr.login}</span>
