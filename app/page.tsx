@@ -8,7 +8,7 @@ import CardGrid from "@/components/ui/CardGrid";
 import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 
-import { getUpcomingEvents } from "@/lib/data";
+import { getImgLink, getUpcomingEvents } from "@/lib/data";
 import { formatDateArray } from "@/lib/utils";
 import Loading from "./loading";
 
@@ -18,17 +18,10 @@ import Link from "next/link";
 
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
-import { RiWifiOffLine } from "react-icons/ri";
-import { IoWifiOutline } from "react-icons/io5";
+import { IoIosCloud } from "react-icons/io";
+import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import Footer from "@/components/ui/Footer";
-
-function getImgLink(link: string) {
-  return (
-    "https://drive.google.com/uc?export=download&id=" +
-    link.replace("https://drive.google.com/open?id=", "")
-  );
-}
 
 export default function Home() {
   const { toast } = useToast();
@@ -56,7 +49,7 @@ export default function Home() {
         <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 md:w-[70%] w-[95%]">
         
         <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
-          <div className="max-w-full">
+          <div className="max-w-full m-3">
             <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
                 Next Event
             </p>
@@ -71,26 +64,28 @@ export default function Home() {
               </p>
               {data[1][8] == "Online" ? (
                 <p className="flex items-center mb-1">
-                  <IoWifiOutline className="mr-2" /> Online
+                  <IoIosCloud className="mr-2" /> Online
                 </p>
               ) : (
                 <p className="flex items-center mb-1">
-                  <RiWifiOffLine className="mr-2" /> Offline{" "}
+                  <IoCloudOfflineSharp className="mr-2" /> Offline{" "}
                 </p>
               )}
               <p className="flex items-center mb-1">
                 {" "}
                 <BsClock className="mr-2" />at {date.from_time}
               </p>
-              <div className="flex flex-row gap-3 mt-5 mb-4">
-                <Link href={"/event/"+data[1][1]}><Button className="hover:scale-105 transition-all" variant={'secondary'}>View More</Button></Link>
-                <Link href={data[1][9]} target="_blank"><Button className="hover:scale-105 transition-all">Register Now</Button></Link>
+              <div className="flex flex-row gap-3 mt-5 mb-4 justify-center md:gap-5">
+                <Link href={"/event/"+data[1][1]}><Button className="hover:scale-105 transition-all h-12" variant={'secondary'}>View More</Button></Link>
+                <Link href={data[1][9]} target="_blank">
+                  <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">RVSP Now!</button>
+                </Link>
               </div>
           </div>
           <div>
             <Image
-              width={300}
-              height={300}
+              width={350}
+              height={350}
               referrerPolicy={"no-referrer"}
               src={getImgLink(data[1][5])}
               onClick={()=>window.location.href = "/event/"+data[1][1]}

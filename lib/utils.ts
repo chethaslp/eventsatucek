@@ -15,6 +15,9 @@ import TRHLogo from  "../public/logos/trh.png"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+export const GITHUB_URL = "https://github.com/chethaslp/eventsatucek"
+export const GITHUB_API_URL = "https://api.github.com/repos/chethaslp/eventsatucek/contributors"
+
 
 export function formatDateArray(dateString?: string): any {
   const event_date: any = {};

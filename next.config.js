@@ -5,7 +5,8 @@ const nextConfig = {
         domains: [
             'localhost',
             'https://*.googleusercontent.com',
-            'drive.google.com'
+            'drive.google.com',
+           'avatars.githubusercontent.com'
     ]}
 }
 

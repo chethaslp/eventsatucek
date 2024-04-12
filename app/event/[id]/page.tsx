@@ -7,11 +7,13 @@ import { Navbar } from "@/components/ui/navbar";
 import Image from "next/image";
 import { formatDateArray,resolveClubIcon } from "@/lib/utils";
 import { IoLocationSharp } from "react-icons/io5";
-import { RiWifiOffLine } from "react-icons/ri";
-import { IoWifiOutline } from "react-icons/io5";
+import { IoIosCloud } from "react-icons/io";
+import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import { FaCalendarAlt } from "react-icons/fa";
 import Footer from "@/components/ui/Footer";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function Page({ params }: { params: { id: string } }) {
   const [data, setData] = useState<string[]>([]);
@@ -34,8 +36,8 @@ function Page({ params }: { params: { id: string } }) {
   ) : (
     <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
       <Navbar />
-      <div className="flex justify-center mb-8 ">
-        <div className="h-fit md:w-[25rem] w-[20rem] overflow-hidden !shadow-black shadow-md rounded-xl dark:bg-[#0c0c0c]">
+      <div className="flex justify-center  mb-8 ">
+        <div className="h-fit md:flex md:m-3 md:flex-row w-[22rem] md:w-auto overflow-hidden !shadow-black shadow-md rounded-xl dark:bg-[#0c0c0c]">
           <Image
             width={500}
             height={500}
@@ -59,11 +61,11 @@ function Page({ params }: { params: { id: string } }) {
             </p>
             {result[8] == "Online" ? (
               <p className="flex items-center mb-1">
-                <IoWifiOutline className="mr-2 text-sm md:text-[]" /> Online
+                <IoIosCloud className="mr-2 text-sm md:text-[]" /> Online
               </p>
             ) : (
               <p className="flex items-center mb-1">
-                <RiWifiOffLine className="mr-2 text-sm md:text-[]" /> Offline{" "}
+                <IoCloudOfflineSharp className="mr-2 text-sm md:text-[]" /> Offline{" "}
               </p>
             )}
             <p className="flex items-center mb-1">
@@ -75,8 +77,11 @@ function Page({ params }: { params: { id: string } }) {
             <p>{result[4]}</p>
             </div>
 
-            <div className="justify-center flex bg-black text-white items-center h-9 rounded-md w-40 mt-3">
-              <a href={result[9]}>Register Now</a>
+            <div className="justify-center flex items-center mt-5">
+            <Link href={result[9]} target="_blank">
+                <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">RVSP Now!</button>
+            </Link>
+            
             </div>
           </div>
         </div>

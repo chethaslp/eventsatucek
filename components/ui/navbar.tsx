@@ -6,7 +6,9 @@ import { Logo } from "./logo";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaGithub } from "react-icons/fa";
 import { useToast } from "./use-toast";
+import { GITHUB_URL } from "@/lib/utils";
 
 
 export function Navbar({ qName }: {qName?:string}) {
@@ -17,11 +19,30 @@ export function Navbar({ qName }: {qName?:string}) {
     
     return <div className='w-full backdrop-blur pr-5 pt-3 pl-5 pb-3 dark:bg-[#121212]'>
                 <div className="flex items-center justify-between gap-2 flex-row">
-                    <div className="flex items-center flex-row gap-2">
+                    <div className="flex items-center flex-row gap-2 hover:scale-105 transition-all scale-100">
                         <Link href={"/"}><Logo size={"6xl"}/></Link>
                         {qName && <span className="text-lg ml-2">/&nbsp;{qName}</span>}
                     </div>
+                    <div className="flex items-center flex-row gap-2">
+                        <div>
+                           
+                        </div>
+                        <div>
+                           
+                        </div>
+                        
+
+                    </div>
                     <div className='flex items-center justify-center gap-2'>
+                            <a href={"/"} className="w-fill hidden md:block">
+                                <Button variant="link" className="text">Past Events</Button>
+                            </a>
+                            <a href={"/contributors"} className="w-fill hidden md:block">
+                                <Button variant="link" className="text">Contributors</Button>    
+                            </a>
+                        <a href={GITHUB_URL} target="_blank">
+                            <Button variant="outline" className="text-lg" size="icon"><FaGithub/></Button>
+                        </a>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                             <Button variant="outline" size="icon">
