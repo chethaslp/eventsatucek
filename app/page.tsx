@@ -52,16 +52,15 @@ export default function Home() {
   ) : (
     <div className="">
       <Navbar />
-      <div className="flex flex-col w-full h-full p-5 items-center dark:bg-[#121212]">
+      <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#121212]">
         <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 md:w-[70%] w-[95%]">
         
         <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
-          
-          <div>
-            <p className="text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
+          <div className="max-w-full">
+            <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
                 Next Event
             </p>
-            <p className="text-3xl font-bold mb-1">{data[1][3]}</p>
+            <p className="text-xl md:text-3xl font-bold mb-1">{data[1][3]}</p>
               <p className="flex items-center mb-1 ">
                 <FaCalendarAlt className="mr-2" />
                 {(()=>{date = data[1] ? formatDateArray(data[1][7]) : null})()}

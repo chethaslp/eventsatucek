@@ -9,8 +9,8 @@ const CardGrid = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <div className="w-full md:w-[90%]  justify-items-center grid md:gap-x-1 gap-y-6  md:grid-cols-3 mb-10">
-      {children}
+    <div className=" md:w-[90%] w-full justify-items-center grid  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 md:gap-x-4 gap-y-6 mb-10">
+      {children}  
     </div>
   );
 };

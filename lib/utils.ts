@@ -27,7 +27,16 @@ export function formatDateArray(dateString?: string): any {
       return ;
   }
 
-  const date = new Date(dateString);
+  const parts:any = dateString.split(/[\s/:]/); 
+  const date = new Date(   // format - YYYY-MM-DDTHH:mm:ss.sss
+    parts[2],
+    parts[1] - 1,
+    parts[0],
+    parts[3],
+    parts[4],
+    parts[5]
+  );
+
   // Get day, month, hours, and minutes
   event_date.day = dateString.substring(0, 2);
   event_date.dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
