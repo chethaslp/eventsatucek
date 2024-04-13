@@ -26,12 +26,12 @@ const Card = ({
   const date = formatDateArray(icon);
   const clubIcon = resolveClubIcon(club)
   return (
-    <div className="shadow-md hover:shadow-sm shadow-black cursor-pointer group rounded-xl overflow-hidden relative bg-black w-[18rem] h-[18rem] md:w-[25rem] md:h-[25rem] transition duration-300 ease-in-out ">
+    <div className="shadow-md hover:shadow-sm shadow-black cursor-pointer group rounded-xl overflow-hidden relative bg-black w-[18rem] h-[18rem] sm:w-[25rem] sm:h-[25rem] md:w-[25rem] md:h-[25rem] transition duration-300 ease-in-out ">
       {header}
       <div className="text-white w-14 h-14 md:w-20 md:h-20 absolute top-[1px] m-1 flex flex-col  group-hover:opacity-0 opacity-100 transition duration-300 ease-in-out">
         <Image src={clubIcon} alt={club+"logo"}/>
       </div>
-      <div className="text-white w-full absolute top-[168px]  md:top-[270px] flex flex-col p-3  group-hover:opacity-50 opacity-100 transition duration-300 ease-in-out">
+      <div className="text-white w-full absolute top-[168px] sm:top-[275px]  md:top-[275px] flex flex-col p-3  group-hover:opacity-50 opacity-100 transition duration-300 ease-in-out">
         <div className="flex flex-row w-full items-center">
           <div className="bg-[#8f90918c] shadow-md font-semibold mr-4 text-white text-[14px] md:text-[16px] w-10 h-10 md:w-12 md:h-12 rounded-lg text-center">
             {date.month} <br />

@@ -36,7 +36,7 @@ function Page({ params }: { params: { id: string } }) {
   ) : (
     <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
       <Navbar />
-      <div className="flex justify-center  mb-8 ">
+      <div className="flex justify-center  mb-8 md:px-20">
         <div className="h-fit md:flex md:m-3 md:flex-row w-[22rem] md:w-auto overflow-hidden !shadow-black shadow-md rounded-xl dark:bg-[#0c0c0c]">
           <Image
             width={500}
