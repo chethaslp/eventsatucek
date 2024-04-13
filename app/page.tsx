@@ -73,7 +73,7 @@ export default function Home() {
               )}
               <p className="flex items-center mb-1">
                 {" "}
-                <BsClock className="mr-2" />at {date.from_time}
+                <BsClock className="mr-2" />{date.from_time}
               </p>
               <div className="flex flex-row gap-3 mt-5 mb-4 justify-center md:gap-5">
                 <Link href={"/event/"+data[1][1]}><Button className="hover:scale-105 transition-all h-12" variant={'secondary'}>View More</Button></Link>
