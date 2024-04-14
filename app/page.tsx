@@ -8,8 +8,8 @@ import CardGrid from "@/components/ui/CardGrid";
 import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 
-import { getImgLink, getUpcomingEvents } from "@/lib/data";
-import { formatDateArray } from "@/lib/utils";
+import { getImgLink, getUpcomingEvents, } from "@/lib/data";
+import { formatDateArray,countdownHelper } from "@/lib/utils";
 import Loading from "./loading";
 
 import Image from "next/image";
@@ -22,23 +22,31 @@ import { IoIosCloud } from "react-icons/io";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import Footer from "@/components/ui/Footer";
+import { Urbanist } from 'next/font/google'
+const font = Urbanist({ subsets: ['latin'], weight: ['400']})
 
 export default function Home() {
   const { toast } = useToast();
   const router = useRouter();
   const [data, setData] = useState<string[]>([]);
+  const [countdown, setountdown] = useState<string>()
   let date;
-
+  var currentDate:any = new Date();
   useEffect(() => {
     getUpcomingEvents()
       .then((data) => {
         setData(data);
-        console.log(data)
+        var eventDate:any = new Date(formatDateArray(data[1][7]).date); // Convert 'date' to a Date object
+        var day_difference = eventDate - currentDate
+        setountdown(countdownHelper(day_difference))
       })
       .catch((error) => {
         console.error("An error occurred:", error);
       });
-  }, []);
+  }, [currentDate]);
+
+ 
+
 
   return data.length == 0 ? (
     <Loading msg="Loading..." />
@@ -46,21 +54,33 @@ export default function Home() {
     <div className="">
       <Navbar />
       <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#121212]">
-        <BackgroundGradient className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900" containerClassName="m-5 md:w-[70%] w-[95%]">
-        
-        <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
-          <div className="max-w-full m-3">
-            <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
+        <BackgroundGradient
+          className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900"
+          containerClassName="m-5 md:w-[70%] w-[95%]"
+        >
+          <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
+            <div className="max-w-full m-3">
+              <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
                 Next Event
-            </p>
-            <p className="text-xl md:text-3xl font-bold mb-1">{data[1][3]}</p>
+              </p>
+             
+              <p className="text-xl md:text-3xl font-bold mb-1">{data[1][3]}</p>
+              <div className="flex items-center">
+                <p className="text-lg font-medium">
+                Applications Close In - &nbsp;
+                </p>
+                <p className={`${font.className} text-xl font-semibold`} >{countdown}</p>
+              </div>
               <p className="flex items-center mb-1 ">
                 <FaCalendarAlt className="mr-2" />
-                {(()=>{date = data[1] ? formatDateArray(data[1][7]) : null})()}
+                {(() => {
+                  date = data[1] ? formatDateArray(data[1][7]) : null;
+                })()}
                 {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;{date.year}
               </p>
               <p className="flex break-words items-center mb-1">
-                <IoLocationSharp className="mr-2" /> {(data[1][10]=="")? "Will be updated." : data[1][10] }
+                <IoLocationSharp className="mr-2" />{" "}
+                {data[1][10] == "" ? "Will be updated." : data[1][10]}
               </p>
               {data[1][8] == "Online" ? (
                 <p className="flex items-center mb-1">
@@ -73,27 +93,37 @@ export default function Home() {
               )}
               <p className="flex items-center mb-1">
                 {" "}
-                <BsClock className="mr-2" />{date.from_time}
+                <BsClock className="mr-2" />
+                {date.from_time}
               </p>
               <div className="flex flex-row gap-3 mt-5 mb-4 justify-center md:gap-5">
-                <Link href={"/event/"+data[1][1]}><Button className="hover:scale-105 transition-all h-12" variant={'secondary'}>View More</Button></Link>
+                <Link href={"/event/" + data[1][1]}>
+                  <Button
+                    className="hover:scale-105 transition-all h-12"
+                    variant={"secondary"}
+                  >
+                    View More
+                  </Button>
+                </Link>
                 <Link href={data[1][9]} target="_blank">
-                  <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">RVSP Now!</button>
+                  <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                    RVSP Now!
+                  </button>
                 </Link>
               </div>
+            </div>
+            <div>
+              <Image
+                width={350}
+                height={350}
+                referrerPolicy={"no-referrer"}
+                src={getImgLink(data[1][5])}
+                onClick={() => (window.location.href = "/event/" + data[1][1])}
+                className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out"
+                alt="Event Poster"
+              ></Image>
+            </div>
           </div>
-          <div>
-            <Image
-              width={350}
-              height={350}
-              referrerPolicy={"no-referrer"}
-              src={getImgLink(data[1][5])}
-              onClick={()=>window.location.href = "/event/"+data[1][1]}
-              className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out"
-              alt="Event Poster"
-            ></Image>
-          </div>
-        </div>
         </BackgroundGradient>
         <div className="m-7">
           <p className="text-3xl">Upcoming Events</p>
@@ -120,11 +150,11 @@ export default function Home() {
                 isOnline={evnt[8] == "Online" ? true : false}
                 venue={evnt[10]}
               />
-          </Link>
+            </Link>
           ))}
         </CardGrid>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
