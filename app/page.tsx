@@ -22,7 +22,6 @@ import { IoIosCloud } from "react-icons/io";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import Footer from "@/components/ui/Footer";
-import Countdown from "react-countdown";
 import { Urbanist } from 'next/font/google'
 const font = Urbanist({ subsets: ['latin'], weight: ['400']})
 
