@@ -50,7 +50,7 @@ function Page({ params }: { params: { id: string } }) {
     <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
       <Navbar />
       <div className="flex justify-center  mb-8 md:px-20">
-        <div className="h-fit md:flex md:m-3 md:flex-row w-[22rem] md:w-auto overflow-hidden !shadow-black shadow-md rounded-xl dark:bg-[#0c0c0c]">
+        <div className="h-fit md:flex md:m-3 md:flex-row min:w-[22rem] md:w-auto overflow-hidden !shadow-black shadow-md rounded-xl dark:bg-[#0c0c0c]">
           <Image
             width={500}
             height={500}
@@ -60,10 +60,19 @@ function Page({ params }: { params: { id: string } }) {
           ></Image>
 
           <div className="p-9">
-            <div className="flex justify-between ">
+            <div className="flex justify-between items-center">
               <p className=" font-bold mb-1 text-2xl md:text-3xl">
                 {result[3]}
               </p>
+              <Image
+              width={50}
+              height={50}
+              className="rounded-full"
+              referrerPolicy={"no-referrer"}
+              src={clubIcon}
+              alt="Club Icon"
+              >
+              </Image>
             </div>
             <div className="text-sm md:text-[15px]">
               <p className="flex items-center mb-1 ">
