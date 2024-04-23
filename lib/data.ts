@@ -1,8 +1,8 @@
 import Papa from "papaparse";
 
-export function getData(url:string): Promise<string[]> {
+export function  getData(url:string): Promise<string[]> {
   return new Promise((resolve, reject) => {
-  Papa.parse<string>(url, {
+   Papa.parse<string>(url, {
     download: true,
     skipEmptyLines: true,
     complete(results) {
@@ -43,4 +43,12 @@ export function getPastEvents(): Promise<string[]> {
               + "?tqx=out:csv&sheet=s1&tq=" 
               + encodeURIComponent("select * where toDate(`H`) < now() order by(`H`)");
   return getData(url)
+}
+
+export function  getEventsOfSameClub(club: string, id:string): Promise<string[]> {
+   const url =  "https://docs.google.com/spreadsheets/d/1jrpjxOBA4kVCLgrrjjLt46bmNCRDaruuJvcU3JwvOkc/gviz/tq"
+              + "?tqx=out:csv&sheet=s1&tq=" 
+              + encodeURIComponent("select * where `G` = '" + club + "' and `B` != '" + id + "' and toDate(`H`) > now() order by `H`");
+
+  return getData(url);
 }
