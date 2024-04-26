@@ -9,6 +9,8 @@ const inter = Raleway({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Events@UCEK',
   description: 'A all-in-one place to know about all events at UCEK!',
+  icons: "/vercel.svg",
+  manifest: "/manifest.json"
 }
 
 export default function RootLayout({

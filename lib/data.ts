@@ -1,6 +1,31 @@
 import Papa from "papaparse";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
 
 const EVNTS_SHEET_ID = "1jrpjxOBA4kVCLgrrjjLt46bmNCRDaruuJvcU3JwvOkc"
+const PUBLIC_KEY = "BPpBelMiDJmKoVfUm-h_23puTUUsmQuhDV8wSih6vN8e9SjQ-a0gGEMUje_pOzoGPDNxNyLZcvEwmIXEW0iaZ5g"
+const firebaseConfig = {
+  apiKey: "AIzaSyAdSmj_Dt2z3KTVDZcprly2GCT_0UGKZOk",
+  authDomain: "proj-eventsatucek.firebaseapp.com",
+  projectId: "proj-eventsatucek",
+  messagingSenderId: "747267605566",
+  appId: "1:747267605566:web:e6d8dbb9f4a16dbf2e7d6f"
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+// getToken(messaging, { vapidKey: PUBLIC_KEY }).then((currentToken) => {
+//   if (currentToken) {
+
+//   } else {
+//     console.log('No registration token available. Request permission to generate one.');
+
+//   }
+// }).catch((err) => {
+//   console.log('An error occurred while retrieving token. ', err);
+// });
+
 
 
 export function getData(url:string): Promise<string[][]> {
