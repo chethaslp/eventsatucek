@@ -1,3 +1,5 @@
+"use client";
+
 import Papa from "papaparse";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
@@ -13,7 +15,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+// const messaging = getMessaging(app);
 
 // getToken(messaging, { vapidKey: PUBLIC_KEY }).then((currentToken) => {
 //   if (currentToken) {
