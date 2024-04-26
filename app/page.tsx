@@ -43,14 +43,19 @@ export default function Home() {
       .then((data) => {
         setData(data);
         setBannerEvent(data.shift() || [""])
-        var eventDate:any = new Date(formatDateArray(bannerEvent? bannerEvent[7] :"").date); // Convert 'date' to a Date object
-        var day_difference = eventDate - currentDate
-        setCountdown(countdownHelper(day_difference))
       })
       .catch((error) => {
         console.error("An error occurred:", error);
       });
   }, []);
+
+  useEffect(() => {
+    if(bannerEvent[7] != ""){
+      var eventDate:any = new Date(formatDateArray(bannerEvent? bannerEvent[7] :"").date); // Convert 'date' to a Date object
+      var day_difference = eventDate - currentDate
+      setCountdown(countdownHelper(day_difference))
+    }
+  }, [currentDate])
 
   useEffect((() =>  {
     function reqNotification(){

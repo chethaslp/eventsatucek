@@ -13,8 +13,7 @@ import { Message, getMessaging } from 'firebase-admin/messaging';
 
 export async function POST(req: NextRequest) {
 
-  const {title, body, image} = await req.json()
-  const token = req.headers.get('X-TOKEN')
+  const {title, body, image, token} = await req.json()
 
   if (!title ||  !body || !image || (token != process.env.TOKEN)) {
     return NextResponse.json(
