@@ -22,15 +22,42 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-
   const message : Message = {
     notification: {
-      title :title,
-      body: body,
-      imageUrl: image,
+      title: title,
+      body: body
     },
-    topic: "all"
+    android: {
+      notification: {
+        imageUrl: image
+      }
+    },
+    apns: {
+      payload: {
+        aps: {
+          'mutable-content': 1
+        }
+      },
+      fcmOptions: {
+        imageUrl: image
+      }
+    },
+    webpush: {
+      headers: {
+        image: image
+      }
+    },
+    topic: "all",
   };
+
+  // const message : Message = {
+  //   notification: {
+  //     title :title,
+  //     body: body,
+  //     imageUrl: image,
+  //   },
+  //   topic: "all"
+  // };
   // Subscribe the user corresponding to the registration token to the topic.
   return getMessaging().send(message)
   .then((response) => {

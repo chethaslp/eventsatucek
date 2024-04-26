@@ -58,7 +58,7 @@ export default function Home() {
       Notification.requestPermission().then((permission)=>{
         if (permission === "granted") {
           // getting FCM Token
-          getToken(getMessaging(initializeApp(firebaseConfig)), { vapidKey: PUBLIC_KEY,})
+          getToken(getMessaging(initializeApp(firebaseConfig)), { vapidKey: PUBLIC_KEY })
           // Sending FCM Token to the server
           .then( token => fetch("/api/addSubscriber",{
             method : 'POST',
