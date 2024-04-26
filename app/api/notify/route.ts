@@ -25,10 +25,12 @@ export async function POST(req: NextRequest) {
   const message : Message = {
     notification: {
       title: title,
-      body: body
+      body: body,
+      imageUrl: image,
     },
     android: {
       notification: {
+        icon: image,
         imageUrl: image
       }
     },
@@ -43,8 +45,10 @@ export async function POST(req: NextRequest) {
       }
     },
     webpush: {
-      headers: {
-        image: image
+      notification:{
+        image : image,
+        badge : image,
+        icon : image
       }
     },
     topic: "all",

@@ -50,7 +50,7 @@ export default function Home() {
       .catch((error) => {
         console.error("An error occurred:", error);
       });
-  }, [currentDate]);
+  }, []);
 
   useEffect((() =>  {
     function reqNotification(){
@@ -77,9 +77,8 @@ export default function Home() {
   useEffect(()=>{
     onMessage(getMessaging(initializeApp(firebaseConfig)), (payload)=>{
       toast.toast({
-          title: payload.notification?.title,
-          description: payload.notification?.body,
-          icon: payload.notification?.image
+          title: "New Event Published!",
+          description: "Refresh the page to view now."
         })
     })
     
