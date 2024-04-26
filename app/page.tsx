@@ -7,8 +7,8 @@ import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 import Footer from "@/components/ui/Footer";
 
-import { getImgLink, getUpcomingEvents, } from "@/lib/data";
-import { formatDateArray,countdownHelper } from "@/lib/utils";
+import { PUBLIC_KEY, firebaseConfig, getImgLink, getUpcomingEvents, } from "@/lib/data";
+import { formatDateArray, countdownHelper } from "@/lib/utils";
 import Loading from "./loading";
 
 import { useEffect, useState } from "react";
@@ -24,11 +24,13 @@ import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+
 const font = Urbanist({ subsets: ['latin'], weight: ['400']})
 
 export default function Home() {
-  const { toast } = useToast();
-  const router = useRouter();
+  const toast = useToast()
   const [data, setData] = useState<Array<string[]>>([]);
   const [countdown, setCountdown] = useState<string>()
   const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""])
@@ -49,6 +51,39 @@ export default function Home() {
         console.error("An error occurred:", error);
       });
   }, [currentDate]);
+
+  useEffect((() =>  {
+    function reqNotification(){
+      //requesting permission using Notification API
+      Notification.requestPermission().then((permission)=>{
+        if (permission === "granted") {
+          // getting FCM Token
+          getToken(getMessaging(initializeApp(firebaseConfig)), { vapidKey: PUBLIC_KEY,})
+          // Sending FCM Token to the server
+          .then( token => fetch("/api/addSubscriber",{
+            method : 'POST',
+            body : token
+          }))
+          .then((resp)=> console.log(resp))
+    
+        } else if (permission === "denied") {
+            alert("Please accept the notification for recieving Live Updates about Events at UCEK. ");
+        }
+      })
+      }
+      reqNotification();
+  }),[])
+
+  useEffect(()=>{
+    onMessage(getMessaging(initializeApp(firebaseConfig)), (payload)=>{
+      toast.toast({
+          title: payload.notification?.title,
+          description: payload.notification?.body,
+          icon: payload.notification?.image
+        })
+    })
+    
+  })
 
  
 
