@@ -1,44 +1,49 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/ui/navbar";
-import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import CardGrid from "@/components/ui/CardGrid";
 import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
+import Footer from "@/components/ui/Footer";
 
 import { getImgLink, getUpcomingEvents, } from "@/lib/data";
 import { formatDateArray,countdownHelper } from "@/lib/utils";
 import Loading from "./loading";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Urbanist } from 'next/font/google'
 
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoIosCloud } from "react-icons/io";
+import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
-import Footer from "@/components/ui/Footer";
-import { Urbanist } from 'next/font/google'
+
 const font = Urbanist({ subsets: ['latin'], weight: ['400']})
 
 export default function Home() {
   const { toast } = useToast();
   const router = useRouter();
-  const [data, setData] = useState<string[]>([]);
-  const [countdown, setountdown] = useState<string>()
+  const [data, setData] = useState<Array<string[]>>([]);
+  const [countdown, setCountdown] = useState<string>()
+  const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""])
   let date;
+
   var currentDate:any = new Date();
+
   useEffect(() => {
     getUpcomingEvents()
       .then((data) => {
         setData(data);
-        var eventDate:any = new Date(formatDateArray(data[1][7]).date); // Convert 'date' to a Date object
+        setBannerEvent(data.shift() || [""])
+        var eventDate:any = new Date(formatDateArray(bannerEvent? bannerEvent[7] :"").date); // Convert 'date' to a Date object
         var day_difference = eventDate - currentDate
-        setountdown(countdownHelper(day_difference))
+        setCountdown(countdownHelper(day_difference))
       })
       .catch((error) => {
         console.error("An error occurred:", error);
@@ -64,25 +69,19 @@ export default function Home() {
                 Next Event
               </p>
              
-              <p className="text-xl md:text-3xl font-bold mb-1">{data[1][3]}</p>
-              <div className="flex items-center">
-                <p className="text-lg font-medium">
-                Applications Close In - &nbsp;
-                </p>
-                <p className={`${font.className} text-xl font-semibold`} >{countdown}</p>
-              </div>
+              <p className="text-xl md:text-3xl font-bold mb-1">{bannerEvent[3]}</p>
               <p className="flex items-center mb-1 ">
                 <FaCalendarAlt className="mr-2" />
                 {(() => {
-                  date = data[1] ? formatDateArray(data[1][7]) : null;
+                  date = bannerEvent ? formatDateArray(bannerEvent[7]) : null;
                 })()}
                 {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;{date.year}
               </p>
               <p className="flex break-words items-center mb-1">
                 <IoLocationSharp className="mr-2" />{" "}
-                {data[1][10] == "" ? "Will be updated." : data[1][10]}
+                {bannerEvent[10] == "" ? "Will be updated." : bannerEvent[10]}
               </p>
-              {data[1][8] == "Online" ? (
+              {bannerEvent[8] == "Online" ? (
                 <p className="flex items-center mb-1">
                   <IoIosCloud className="mr-2" /> Online
                 </p>
@@ -96,8 +95,14 @@ export default function Home() {
                 <BsClock className="mr-2" />
                 {date.from_time}
               </p>
-              <div className="flex flex-row gap-3 mt-5 mb-4 justify-center md:gap-5">
-                <Link href={"/event/" + data[1][1]}>
+              <div className="flex flex-col items-center mt-4 rounded-lg bg-glass p-3">
+                <p className="text font-medium">
+                Applications Close In
+                </p>
+                <p className={`${font.className} text-xl font-semibold`} >{countdown?countdown:"00d : 00h : 00m : 00s"}</p>
+              </div>
+              <div className="flex flex-row gap-3 mb-4 mt-2 justify-center md:gap-5">
+                <Link href={"/event/" + bannerEvent[1]}>
                   <Button
                     className="hover:scale-105 transition-all h-12"
                     variant={"secondary"}
@@ -105,7 +110,7 @@ export default function Home() {
                     View More
                   </Button>
                 </Link>
-                <Link href={data[1][9]} target="_blank">
+                <Link href={bannerEvent[9]} target="_blank">
                   <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
                     RVSP Now!
                   </button>
@@ -117,8 +122,8 @@ export default function Home() {
                 width={350}
                 height={350}
                 referrerPolicy={"no-referrer"}
-                src={getImgLink(data[1][5])}
-                onClick={() => (window.location.href = "/event/" + data[1][1])}
+                src={getImgLink(bannerEvent[5])}
+                onClick={() => (window.location.href = "/event/" + bannerEvent[1])}
                 className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out"
                 alt="Event Poster"
               ></Image>
@@ -152,6 +157,9 @@ export default function Home() {
               />
             </Link>
           ))}
+          <Link href={"/event/past"} className="rounded-[22px] flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center w-[18rem] h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass">
+            <PiClockCounterClockwiseBold size={50}/> View Past Events.
+          </Link>
         </CardGrid>
       </div>
       <Footer />

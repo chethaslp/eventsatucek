@@ -33,12 +33,12 @@ function Page() {
           {data.map((contr:{login:string, avatar_url:string, html_url:string, }) => (
             <div key={contr.login} className="rounded-[24px] flex flex-col border border-slate-600 p-5">
                 <AvatarCard url={contr.avatar_url} />
-                <div className="flex justify-around items-center mt-5">
-                    <span className="text-md">@{contr.login}</span>
-                    <a href={contr.html_url} target="_blank" className="transition-all hover:scale-105 scale-100">
-                            <FaGithub size={30}/>
-                    </a>
-                </div>
+                <a href={contr.html_url} target="_blank" className="transition-all hover:scale-105 scale-100">
+                  <div className="flex justify-center gap-2 items-center mt-5 rounded-lg bg-slate-800 p-2">
+                      <FaGithub size={30}/>
+                      <span className="text-md">/ @{contr.login}</span>
+                  </div>
+                </a>
             </div>
           ))}
         </CardGrid>

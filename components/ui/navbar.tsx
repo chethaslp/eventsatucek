@@ -34,13 +34,13 @@ export function Navbar({ qName }: {qName?:string}) {
 
                     </div>
                     <div className='flex items-center justify-center gap-2'>
-                            <a href={"/"} className="w-fill hidden md:block">
-                                <Button variant="link" className="text">Past Events</Button>
+                            <a href={(path =="/event/past")? "/" : "/event/past"} className="w-fill hidden md:block">
+                                <Button variant="link" className="text">{(path =="/event/past")? "Upcoming Events" : "Past Events"}</Button>
                             </a>
                             <a href={"/contributors"} className="w-fill hidden md:block">
                                 <Button variant="link" className="text">Contributors</Button>    
                             </a>
-                        <a href={GITHUB_URL} target="_blank">
+                        <a href={GITHUB_URL} target="_blank" className="w-fill hidden md:block">
                             <Button variant="outline" className="text-lg" size="icon"><FaGithub/></Button>
                         </a>
                         <DropdownMenu>
