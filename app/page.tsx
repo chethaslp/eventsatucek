@@ -42,20 +42,19 @@ export default function Home() {
     getUpcomingEvents()
       .then((data) => {
         setData(data);
-        setBannerEvent(data.shift() || [""])
+        const upcomingEvent = data.shift() || [""]; // Shift the first event from data
+        setBannerEvent(upcomingEvent);
+
+        if (upcomingEvent && upcomingEvent.length > 7) {
+          const eventDate:any = new Date(formatDateArray(upcomingEvent[7]).date); // Convert 'date' to a Date object
+          const day_difference:any = eventDate - currentDate;
+          setCountdown(countdownHelper(day_difference));
+        }
       })
       .catch((error) => {
         console.error("An error occurred:", error);
       });
-  }, []);
-
-  useEffect(() => {
-    if(bannerEvent[7] != ""){
-      var eventDate:any = new Date(formatDateArray(bannerEvent? bannerEvent[7] :"").date); // Convert 'date' to a Date object
-      var day_difference = eventDate - currentDate
-      setCountdown(countdownHelper(day_difference))
-    }
-  }, [currentDate])
+  }, [bannerEvent]);
 
   useEffect((() =>  {
     function reqNotification(){
