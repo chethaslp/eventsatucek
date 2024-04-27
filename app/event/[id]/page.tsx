@@ -15,19 +15,23 @@ import Footer from "@/components/ui/Footer";
 import Link from "next/link";
 import CardGrid from "@/components/ui/CardGrid";
 import Card from "@/components/ui/card";
+import { useTheme } from 'next-themes';
 
 function Page({ params }: { params: { id: string } }) {
+  const { theme } = useTheme();
+  console.log(theme);
+  const themeToDark  = theme == 'dark' ? false : true 
   const [data, setData] = useState<string[]>([]);
   const [past, setPast] = useState(false);
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
-  let date = data[0] ? formatDateArray(data[7]) : null, clubIcon = data ? resolveClubIcon(data[6]) : null;
+  let date = data[0] ? formatDateArray(data[7]) : null, clubIcon = data ? resolveClubIcon(data[6], themeToDark) : null;
 
   useEffect(() => {
     getEvent(params.id)
       .then((evnt) => {
         setData(evnt[0]);
         date = data ? formatDateArray(data[7]) : null
-        clubIcon = data ? resolveClubIcon(data[6]) : null;
+        clubIcon = data ? resolveClubIcon(data[6], themeToDark) : null;
         
         console.log(((new Date(date.date) as any) - (new Date() as any)))
         if(((new Date(date.date) as any) - (new Date() as any)) > 0 ) setPast(true);
@@ -68,9 +72,7 @@ function Page({ params }: { params: { id: string } }) {
                 {data[3]}
               </p>
               <Image
-              width={50}
-              height={50}
-              className="rounded-full"
+              className="rounded-full w-12 md:w-20"
               referrerPolicy={"no-referrer"}
               src={clubIcon}
               alt="Club Icon"
@@ -125,7 +127,7 @@ function Page({ params }: { params: { id: string } }) {
                   key={evnt[1]}
                   title={evnt[3]}
                   description={evnt[4]}
-                  club={resolveClubIcon(evnt[6])}
+                  club={resolveClubIcon(evnt[6], false)}
                   header={
                     <Image
                       width={500}
@@ -147,7 +149,6 @@ function Page({ params }: { params: { id: string } }) {
       {/* TODO: ADD SHIMMER CARDS HERE */}
       </>}
         </div>
-
       <Footer  />
     </div>
   );
