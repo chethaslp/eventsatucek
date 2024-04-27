@@ -21,8 +21,8 @@ messaging.onBackgroundMessage(function(payload) {
   const notificationTitle = payload.data.title;
   const notificationOptions = {
     body: payload.data.message,
-    icon: payload.data.image,
-    badge: payload.data.image,
+    icon: "/vercel.svg",
+    badge: payload.data.icon,
     image: payload.data.image,
     data: { url:payload.data.onClick }, //the url which we gonna use later
   };
