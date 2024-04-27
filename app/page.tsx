@@ -38,13 +38,12 @@ export default function Home() {
   const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""])
   let date;
 
-  var currentDate:any = new Date();
-
   useEffect(() => {
     getUpcomingEvents()
       .then((data) => {
         setData(data);
-        setBannerEvent(data.shift() || [""])
+        const upcomingEvent = data.shift() || [""]; // Shift the first event from data
+        setBannerEvent(upcomingEvent);
       })
       .catch((error) => {
         console.error("An error occurred:", error);
@@ -52,12 +51,17 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if(bannerEvent[7] != ""){
-      var eventDate:any = new Date(formatDateArray(bannerEvent? bannerEvent[7] :"").date); // Convert 'date' to a Date object
-      var day_difference = eventDate - currentDate
-      setCountdown(countdownHelper(day_difference))
+    // Update countdown timer when bannerEvent changes
+    if (bannerEvent && bannerEvent[7]) {
+      const intervalId = setInterval(() => {
+        const eventDate:any = new Date(formatDateArray(bannerEvent[7]).date); // Convert 'date' to a Date object
+        const currentDate:any = new Date(); // Assuming currentDate represents the current date
+        const day_difference:any = eventDate - currentDate;
+        setCountdown(countdownHelper(day_difference));
+      }, 1000); // Update countdown every second
+      return () => clearInterval(intervalId); // Cleanup function to clear the interval when component unmounts or when bannerEvent changes
     }
-  }, [currentDate])
+  }, [bannerEvent]);
 
   useEffect((() =>  {
     function reqNotification(){

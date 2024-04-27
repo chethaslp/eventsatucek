@@ -19,7 +19,7 @@ import { useTheme } from 'next-themes';
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
-  console.log(theme);
+
   const themeToDark  = theme == 'dark' ? false : true 
   const [data, setData] = useState<string[]>([]);
   const [past, setPast] = useState(false);
