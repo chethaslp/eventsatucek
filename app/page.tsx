@@ -250,7 +250,7 @@ export default function Home() {
           </Link>
         </CardGrid>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 }
