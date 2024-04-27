@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   const {title, body, image, token, club, evntId} = await req.json()
 
-  if (!title ||  !body || !image || (token != process.env.TOKEN)) {
+  if (!title ||  !body || !image || !club || (token != process.env.TOKEN)) {
     console.log(token, process.env.TOKEN)
     return NextResponse.json(
       { msg: 'Unauthorized.' },
@@ -26,22 +26,12 @@ export async function POST(req: NextRequest) {
     data: {
       title: title,
       message: body,
-      icon: resolveClubIcon(club),
+      icon: resolveClubIcon(club) || "",
       image:  getImgLink(image),
-      url: "https://eventsatucek.vercel.app/event/"+evntId
+      url: "/event/"+evntId
     },
     topic: "all",
   };
-
-  // const message : Message = {
-  //   notification: {
-  //     title :title,
-  //     body: body,
-  //     imageUrl: image,
-  //   },
-  //   topic: "all"
-  // };
-  // Subscribe the user corresponding to the registration token to the topic.
   
   return getMessaging().send(message)
   .then((response) => {
@@ -63,7 +53,7 @@ export async function POST(req: NextRequest) {
 }
 
 function getImgLink(link: string) {
-  return "https://eventsatucek.vercel.app/_next/image?w=640&q=75&url=" + encodeURIComponent(
+  return "/_next/image?w=640&q=75&url=" + encodeURIComponent(
     "https://drive.google.com/uc?export=download&id=" +
     link.replace("https://drive.google.com/open?id=", "")
   );

@@ -21,10 +21,10 @@ messaging.onBackgroundMessage(function(payload) {
   const notificationTitle = payload.data.title;
   const notificationOptions = {
     body: payload.data.message,
-    icon: "/vercel.svg",
-    badge: payload.data.icon,
+    badge: "/vercel.svg",
+    icon: payload.data.icon,
     image: payload.data.image,
-    data: { url:payload.data.onClick }, //the url which we gonna use later
+    data: { url:payload.data.url }, //the url which we gonna use later
   };
   return self.registration.showNotification(notificationTitle,notificationOptions);
 });
