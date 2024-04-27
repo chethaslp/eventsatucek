@@ -28,12 +28,14 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 import { register } from 'register-service-worker'
+import NoEvents from "./NoEvents";
 
 const font = Urbanist({ subsets: ['latin'], weight: ['400']})
 
 export default function Home() {
   const toast = useToast()
   const [data, setData] = useState<Array<string[]>>([]);
+  const [loading, setLoading] = useState(true)
   const [countdown, setCountdown]:any = useState<string>()
   const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""])
   let date;
@@ -44,6 +46,7 @@ export default function Home() {
         setData(data);
         const upcomingEvent = data.shift() || [""]; // Shift the first event from data
         setBannerEvent(upcomingEvent);
+        setLoading(false)
       })
       .catch((error) => {
         console.error("An error occurred:", error);
@@ -112,8 +115,16 @@ export default function Home() {
     
   })
 
- 
-  return data.length == 0 ? (
+
+  // If there is no events happening
+  if(data.length == 0 && !loading){
+    return(
+      <NoEvents/>
+    )
+  }
+
+
+  return loading ? (
     <Loading msg="Loading..." />
   ) : (
     <div className="">
@@ -161,15 +172,15 @@ export default function Home() {
                 </p>
                 <div className={`${font.className} flex gap-1 sm:gap-2 md:gap-4 items-center font-semibold`}>
                   <div className="flex flex-col items-center">
-                    <h1 className="text-xl md:text-3xl">{countdown?.days}</h1>
+                    <h1 className="text-xl md:text-3xl">{countdown? countdown.days: 0}</h1>
                     <p className="text-sm md:text-0">DAYS</p>
                   </div >:
                   <div className="flex flex-col items-center">
-                    <h1 className="text-xl md:text-3xl">{countdown?.hours}</h1>
+                    <h1 className="text-xl md:text-3xl">{countdown? countdown.hours: 0}</h1>
                     <p className="text-sm md:text-0">HOURS</p>
                   </div>:
                   <div className="flex flex-col items-center">
-                    <h1 className="text-xl md:text-3xl">{countdown?.minutes}</h1>
+                    <h1 className="text-xl md:text-3xl">{countdown? countdown.minutes: 0}</h1>
                     <p className="text-sm md:text-0">MINUTES</p>
                   </div>:
                   <div className="flex flex-col items-center">
