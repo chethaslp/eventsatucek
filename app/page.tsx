@@ -34,7 +34,7 @@ const font = Urbanist({ subsets: ['latin'], weight: ['400']})
 export default function Home() {
   const toast = useToast()
   const [data, setData] = useState<Array<string[]>>([]);
-  const [countdown, setCountdown] = useState<string>()
+  const [countdown, setCountdown]:any = useState<string>()
   const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""])
   let date;
 
@@ -113,8 +113,6 @@ export default function Home() {
   })
 
  
-
-
   return data.length == 0 ? (
     <Loading msg="Loading..." />
   ) : (
@@ -157,11 +155,28 @@ export default function Home() {
                 <BsClock className="mr-2" />
                 {date.from_time}
               </p>
-              <div className="flex flex-col items-center mt-4 rounded-lg bg-glass p-3">
-                <p className="text font-medium">
+              <div className="flex flex-col items-center mt-3 rounded-lg bg-glass p-3">
+                <p className="text font-medium pb-2">
                 Applications Close In
                 </p>
-                <p className={`${font.className} text-xl font-semibold`} >{countdown?countdown:"00d : 00h : 00m : 00s"}</p>
+                <div className={`${font.className} flex gap-1 sm:gap-2 md:gap-4 items-center font-semibold`}>
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-xl md:text-3xl">{countdown?.days}</h1>
+                    <p className="text-sm md:text-0">DAYS</p>
+                  </div >:
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-xl md:text-3xl">{countdown?.hours}</h1>
+                    <p className="text-sm md:text-0">HOURS</p>
+                  </div>:
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-xl md:text-3xl">{countdown?.minutes}</h1>
+                    <p className="text-sm md:text-0">MINUTES</p>
+                  </div>:
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-xl md:text-3xl">{countdown? countdown.seconds: 0}</h1>
+                    <p className="text-sm md:text-0">SECONDS</p>
+                  </div>
+                </div>
               </div>
               <div className="flex flex-row gap-3 mb-4 mt-2 justify-center md:gap-5">
                 <Link href={"/event/" + bannerEvent[1]}>
