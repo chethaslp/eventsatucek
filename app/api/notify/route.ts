@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     data: {
       title: title,
       message: body,
-      image: "https://eventsatucek.vercel.app/_next/image?w=640&q=75&url=" + encodeURIComponent(image),
+      image:  getImgLink(image),
       url: "https://eventsatucek.vercel.app/event/"+evntId
     },
     topic: "all",
@@ -59,4 +59,11 @@ export async function POST(req: NextRequest) {
     );
   });
 
+}
+
+function getImgLink(link: string) {
+  return "https://eventsatucek.vercel.app/_next/image?w=640&q=75&url=" + encodeURIComponent(
+    "https://drive.google.com/uc?export=download&id=" +
+    link.replace("https://drive.google.com/open?id=", "")
+  );
 }
