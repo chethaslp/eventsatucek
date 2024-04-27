@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
   const {title, body, image, token, evntId} = await req.json()
 
   if (!title ||  !body || !image || (token != process.env.TOKEN)) {
+    console.log(token, process.env.TOKEN)
     return NextResponse.json(
       { msg: 'Unauthorized.' },
       { status: 400 }
@@ -24,8 +25,8 @@ export async function POST(req: NextRequest) {
   const message : Message = {
     data: {
       title: title,
-      body: body,
-      image: image,
+      message: body,
+      image: "https://eventsatucek.vercel.app/_next/image?w=640&q=75&url=" + encodeURIComponent(image),
       url: "https://eventsatucek.vercel.app/event/"+evntId
     },
     topic: "all",
@@ -40,6 +41,7 @@ export async function POST(req: NextRequest) {
   //   topic: "all"
   // };
   // Subscribe the user corresponding to the registration token to the topic.
+  
   return getMessaging().send(message)
   .then((response) => {
     // Response is a message ID string.
@@ -50,11 +52,11 @@ export async function POST(req: NextRequest) {
     );
   })
   .catch((error) => {
+    console.log('Error sending message:', error);
     return NextResponse.json(
       { msg: 'Error.' },
       { status: 500 }
     );
-    console.log('Error sending message:', error);
   });
 
 }

@@ -22,8 +22,9 @@ messaging.onBackgroundMessage(function(payload) {
   const notificationOptions = {
     body: payload.data.message,
     icon: payload.data.image,
+    badge: payload.data.image,
     image: payload.data.image,
-    data: { url:payload.data.url }, //the url which we gonna use later
+    data: { url:payload.data.onClick }, //the url which we gonna use later
   };
   return self.registration.showNotification(notificationTitle,notificationOptions);
 });
