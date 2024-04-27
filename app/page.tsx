@@ -27,6 +27,8 @@ import { BsClock } from "react-icons/bs";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
+import { register } from 'register-service-worker'
+
 const font = Urbanist({ subsets: ['latin'], weight: ['400']})
 
 export default function Home() {
@@ -63,13 +65,30 @@ export default function Home() {
       Notification.requestPermission().then((permission)=>{
         if (permission === "granted") {
           // getting FCM Token
-          getToken(getMessaging(initializeApp(firebaseConfig)), { vapidKey: PUBLIC_KEY })
-          // Sending FCM Token to the server
-          .then( token => fetch("/api/addSubscriber",{
-            method : 'POST',
-            body : token
-          }))
-          .then((resp)=> console.log(resp))
+          register('/firebase-messaging-sw.js', {
+            registrationOptions: { scope: '/firebase-cloud-messaging-push-scope' },
+            ready (registration) {
+                console.log('ServiceWorker is active now.')
+              },
+              error (error) {
+                console.error('Error during service worker registration:', error)
+              },
+              registered(reg){
+                console.log("Registered ServiceWorker.")
+                getToken(getMessaging(initializeApp(firebaseConfig)), { vapidKey: PUBLIC_KEY })
+                // Sending FCM Token to the server
+                .then( token => {
+                  if(localStorage.getItem("sw-registered") != "1"){
+                    fetch("/api/addSubscriber",{
+                      method : 'POST',
+                      body : token
+                    }).then((resp)=> {
+                      console.log(resp)
+                      localStorage.setItem("sw-registered","1");
+                    })
+                  }
+              })
+          }})
     
         } else if (permission === "denied") {
             alert("Please accept the notification for recieving Live Updates about Events at UCEK. ");

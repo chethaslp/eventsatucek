@@ -33,13 +33,6 @@ self.addEventListener('notificationclick', function(event) {
   let url = event.notification.data.url;
   event.notification.close(); 
   event.waitUntil(
-    clients.matchAll({type: 'window'}).then( windowClients => {
-      // Check if there is already a window/tab open with the target URL
-      for (var i = 0; i < windowClients.length; i++) {
-        var client = windowClients[i];
-        if (client.url === url && 'focus' in client) return client.focus();
-        if (clients.openWindow) return clients.openWindow(url);
-      }
-    })
+        clients.openWindow(url)
   );
 });
