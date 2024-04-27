@@ -20,14 +20,14 @@ function Page({ params }: { params: { id: string } }) {
   const [data, setData] = useState<string[]>([]);
   const [past, setPast] = useState(false);
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
-  let date = data[0] ? formatDateArray(data[7]) : null, clubIcon = data ? resolveClubIcon(data[6]) : null;
+  let date = data[0] ? formatDateArray(data[7]) : null, clubIcon = data ? resolveClubIcon(data[6], true) : null;
 
   useEffect(() => {
     getEvent(params.id)
       .then((evnt) => {
         setData(evnt[0]);
         date = data ? formatDateArray(data[7]) : null
-        clubIcon = data ? resolveClubIcon(data[6]) : null;
+        clubIcon = data ? resolveClubIcon(data[6], true) : null;
         
         console.log(((new Date(date.date) as any) - (new Date() as any)))
         if(((new Date(date.date) as any) - (new Date() as any)) > 0 ) setPast(true);
@@ -125,7 +125,7 @@ function Page({ params }: { params: { id: string } }) {
                   key={evnt[1]}
                   title={evnt[3]}
                   description={evnt[4]}
-                  club={resolveClubIcon(evnt[6])}
+                  club={resolveClubIcon(evnt[6], false)}
                   header={
                     <Image
                       width={500}
@@ -147,7 +147,6 @@ function Page({ params }: { params: { id: string } }) {
       {/* TODO: ADD SHIMMER CARDS HERE */}
       </>}
         </div>
-
       <Footer  />
     </div>
   );
