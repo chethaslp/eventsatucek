@@ -13,7 +13,7 @@ import { Message, getMessaging } from 'firebase-admin/messaging';
 
 export async function POST(req: NextRequest) {
 
-  const {title, body, image, token} = await req.json()
+  const {title, body, image, token, evntId} = await req.json()
 
   if (!title ||  !body || !image || (token != process.env.TOKEN)) {
     return NextResponse.json(
@@ -22,33 +22,11 @@ export async function POST(req: NextRequest) {
     );
   }
   const message : Message = {
-    notification: {
+    data: {
       title: title,
       body: body,
-      imageUrl: image,
-    },
-    android: {
-      notification: {
-        icon: image,
-        imageUrl: image
-      }
-    },
-    apns: {
-      payload: {
-        aps: {
-          'mutable-content': 1
-        }
-      },
-      fcmOptions: {
-        imageUrl: image
-      }
-    },
-    webpush: {
-      notification:{
-        image : image,
-        badge : image,
-        icon : image
-      }
+      image: image,
+      url: "https://eventsatucek.vercel.app/event/"+evntId
     },
     topic: "all",
   };
