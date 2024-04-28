@@ -6,15 +6,20 @@ import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 import Footer from "@/components/ui/Footer";
 
-import { PUBLIC_KEY, firebaseConfig, getImgLink, getUpcomingEvents, } from "@/lib/data";
+import {
+  PUBLIC_KEY,
+  firebaseConfig,
+  getImgLink,
+  getUpcomingEvents,
+  getClubs,
+} from "@/lib/data";
 import { formatDateArray, countdownHelper } from "@/lib/utils";
 import Loading from "./loading";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Urbanist } from 'next/font/google'
+import { Urbanist } from "next/font/google";
 
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
@@ -22,21 +27,36 @@ import { IoIosCloud } from "react-icons/io";
 import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
+import { LuFilter } from "react-icons/lu";
 
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
-import { register } from 'register-service-worker'
+import { register } from "register-service-worker";
 import NoEvents from "./NoEvents";
 
-const font = Urbanist({ subsets: ['latin'], weight: ['400']})
+const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
 export default function Home() {
-  const toast = useToast()
+  const toast = useToast();
+  const clubDropdownButton:any = useRef(null);
+  const typeDropdownButton:any = useRef(null);
   const [data, setData] = useState<Array<string[]>>([]);
-  const [loading, setLoading] = useState(true)
-  const [countdown, setCountdown]:any = useState<string>()
-  const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""])
+  const [loading, setLoading] = useState(true);
+  const [clubDropdown, setClubDropdown]:any = useState("Club")
+  const [typeDropdown, setTypeDropdown]:any = useState("Type")
+  const [countdown, setCountdown]: any = useState<string>();
+  const [bannerEvent, setBannerEvent] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
   let date;
 
   useEffect(() => {
@@ -45,88 +65,97 @@ export default function Home() {
         setData(data);
         const upcomingEvent = data.shift() || [""]; // Shift the first event from data
         setBannerEvent(upcomingEvent);
-        setLoading(false)
+        setLoading(false);
       })
       .catch((error) => {
         console.error("An error occurred:", error);
       });
   }, []);
 
-  function updateCountdown(){
+  function clubDropdownHandle(club:string):any{
+    clubDropdownButton.current.click();
+    setClubDropdown(club)
+  }
+  function setTypeDropdownHandle(type:string):any{
+    typeDropdownButton.current.click();
+    setTypeDropdown(type)
+  }
+  function updateCountdown() {
     if (bannerEvent && bannerEvent[7]) {
-      const eventDate:any = new Date(formatDateArray(bannerEvent[7]).date); // Convert 'date' to a Date object
-      const currentDate:any = new Date(); // Assuming currentDate represents the current date
-      const day_difference:any = eventDate - currentDate;
+      const eventDate: any = new Date(formatDateArray(bannerEvent[7]).date); // Convert 'date' to a Date object
+      const currentDate: any = new Date(); // Assuming currentDate represents the current date
+      const day_difference: any = eventDate - currentDate;
       setCountdown(countdownHelper(day_difference));
     }
   }
   useEffect(() => {
     // Update countdown timer when bannerEvent changes
-      updateCountdown()
-      const intervalId = setInterval(updateCountdown, 1000); // Update countdown every second
-      return () => clearInterval(intervalId); // Cleanup function to clear the interval when component unmounts or when bannerEvent changes
+    updateCountdown();
+    const intervalId = setInterval(updateCountdown, 1000); // Update countdown every second
+    return () => clearInterval(intervalId); // Cleanup function to clear the interval when component unmounts or when bannerEvent changes
   }, [bannerEvent]);
 
-  useEffect((() =>  {
-    function reqNotification(){
+  useEffect(() => {
+    function reqNotification() {
       //requesting permission using Notification API
-      Notification.requestPermission().then((permission)=>{
+      Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
           // getting FCM Token
-          register('/firebase-messaging-sw.js', {
-            registrationOptions: { scope: '/firebase-cloud-messaging-push-scope' },
-            ready (registration) {
-                console.log('ServiceWorker is active now.')
-              },
-              error (error) {
-                console.error('Error during service worker registration:', error)
-              },
-              registered(reg){
-                console.log("Registered ServiceWorker.")
-                getToken(getMessaging(initializeApp(firebaseConfig)), { vapidKey: PUBLIC_KEY })
-                // Sending FCM Token to the server
-                .then( token => {
-                  if(localStorage.getItem("sw-registered") != "1"){
-                    fetch("/api/addSubscriber",{
-                      method : 'POST',
-                      body : token
-                    }).then((resp)=> {
-                      console.log(resp)
-                      localStorage.setItem("sw-registered","1");
-                    })
-                  }
+          register("/firebase-messaging-sw.js", {
+            registrationOptions: {
+              scope: "/firebase-cloud-messaging-push-scope",
+            },
+            ready(registration) {
+              console.log("ServiceWorker is active now.");
+            },
+            error(error) {
+              console.error("Error during service worker registration:", error);
+            },
+            registered(reg) {
+              console.log("Registered ServiceWorker.");
+              getToken(getMessaging(initializeApp(firebaseConfig)), {
+                vapidKey: PUBLIC_KEY,
               })
-          }})
-    
+                // Sending FCM Token to the server
+                .then((token) => {
+                  if (localStorage.getItem("sw-registered") != "1") {
+                    fetch("/api/addSubscriber", {
+                      method: "POST",
+                      body: token,
+                    }).then((resp) => {
+                      console.log(resp);
+                      localStorage.setItem("sw-registered", "1");
+                    });
+                  }
+                });
+            },
+          });
         } else if (permission === "denied") {
-          if(localStorage.getItem("sw-registered") != "0") {
-            localStorage.setItem("sw-registered","0");
-            alert("Please accept the notification for recieving Live Updates about Events at UCEK. ");
+          if (localStorage.getItem("sw-registered") != "0") {
+            localStorage.setItem("sw-registered", "0");
+            alert(
+              "Please accept the notification for recieving Live Updates about Events at UCEK. "
+            );
           }
         }
-      })
-      }
-      reqNotification();
-  }),[])
+      });
+    }
+    reqNotification();
+  }, []);
 
-  useEffect(()=>{
-    onMessage(getMessaging(initializeApp(firebaseConfig)), (payload)=>{
+  useEffect(() => {
+    onMessage(getMessaging(initializeApp(firebaseConfig)), (payload) => {
       toast.toast({
-          title: "New Event Published!",
-          description: "Refresh the page to view now."
-        })
-    })
-    
-  })
-
+        title: "New Event Published!",
+        description: "Refresh the page to view now.",
+      });
+    });
+  });
 
   // If there is no events happening
-  if(data.length == 0 && !loading && bannerEvent.length == 0){
-    return(
-      <NoEvents/>
-    )
+  if (data.length == 0 && !loading && bannerEvent.length == 0) {
+    return <NoEvents />;
   }
-
 
   return loading ? (
     <Loading msg="Loading..." />
@@ -143,8 +172,10 @@ export default function Home() {
               <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
                 Next Event
               </p>
-             
-              <p className="text-xl md:text-3xl font-bold mb-1">{bannerEvent[3]}</p>
+
+              <p className="text-xl md:text-3xl font-bold mb-1">
+                {bannerEvent[3]}
+              </p>
               <p className="flex items-center mb-1 ">
                 <FaCalendarAlt className="mr-2" />
                 {(() => {
@@ -171,24 +202,35 @@ export default function Home() {
                 {date.from_time}
               </p>
               <div className="flex flex-col items-center mt-3 rounded-lg bg-glass p-3">
-                <p className="text font-medium pb-2">
-                Applications Close In
-                </p>
-                <div className={`${font.className} flex gap-1 sm:gap-2 md:gap-4 items-center font-semibold`}>
+                <p className="text font-medium pb-2">Applications Close In</p>
+                <div
+                  className={`${font.className} flex gap-1 sm:gap-2 md:gap-4 items-center font-semibold`}
+                >
                   <div className="flex flex-col items-center">
-                    <h1 className="text-xl md:text-3xl">{countdown? countdown.days: 0}</h1>
+                    <h1 className="text-xl md:text-3xl">
+                      {countdown ? countdown.days : 0}
+                    </h1>
                     <p className="text-sm md:text-0">DAYS</p>
-                  </div >:
+                  </div>
+                  :
                   <div className="flex flex-col items-center">
-                    <h1 className="text-xl md:text-3xl">{countdown? countdown.hours: 0}</h1>
+                    <h1 className="text-xl md:text-3xl">
+                      {countdown ? countdown.hours : 0}
+                    </h1>
                     <p className="text-sm md:text-0">HOURS</p>
-                  </div>:
+                  </div>
+                  :
                   <div className="flex flex-col items-center">
-                    <h1 className="text-xl md:text-3xl">{countdown? countdown.minutes: 0}</h1>
+                    <h1 className="text-xl md:text-3xl">
+                      {countdown ? countdown.minutes : 0}
+                    </h1>
                     <p className="text-sm md:text-0">MINUTES</p>
-                  </div>:
+                  </div>
+                  :
                   <div className="flex flex-col items-center">
-                    <h1 className="text-xl md:text-3xl">{countdown? countdown.seconds: 0}</h1>
+                    <h1 className="text-xl md:text-3xl">
+                      {countdown ? countdown.seconds : 0}
+                    </h1>
                     <p className="text-sm md:text-0">SECONDS</p>
                   </div>
                 </div>
@@ -202,7 +244,11 @@ export default function Home() {
                     View More
                   </Button>
                 </Link>
-                <Link href={bannerEvent[9]} target="_blank" className={(bannerEvent[9]?"":"hidden")}>
+                <Link
+                  href={bannerEvent[9]}
+                  target="_blank"
+                  className={bannerEvent[9] ? "" : "hidden"}
+                >
                   <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
                     RVSP Now!
                   </button>
@@ -215,17 +261,55 @@ export default function Home() {
                 height={350}
                 referrerPolicy={"no-referrer"}
                 src={getImgLink(bannerEvent[5])}
-                onClick={() => (window.location.href = "/event/" + bannerEvent[1])}
+                onClick={() =>
+                  (window.location.href = "/event/" + bannerEvent[1])
+                }
                 className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out"
                 alt="Event Poster"
               ></Image>
             </div>
           </div>
         </BackgroundGradient>
-        <div className={`m-7 ${(data.length == 0)?"opacity-0":""}`}>
+        <div
+          className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row  ${data.length == 0 ? "opacity-0" : ""}`}
+        >
           <p className="text-3xl">Upcoming Events</p>
+          <div className="md:left-28 z-30 absolute md:my-7 my-12  text-sm md:text-lg p-2">
+            <div className="flex flex-row items-center gap-1 md:gap-2">
+              <LuFilter size={25} /> Filter
+              <details className="dropdown">
+                <summary className="m-1 btn bg-transparent border-2" ref={clubDropdownButton} >{clubDropdown}</summary>
+                <ul  className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52`}>
+                  {getClubs.map((club, idx) => (
+                    <li>
+                      <a onClick={(()=>clubDropdownHandle(club))} key={idx}>{club}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+        
+   
+              <details className="dropdown ">
+                <summary className="m-1 btn bg-transparent border-2" ref={typeDropdownButton}>{typeDropdown}</summary>
+                <ul className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 `}>
+                  {['Online', 'Offline', 'Both'].map((type, idx)=>(
+                    <li>
+                      <a onClick={(()=>setTypeDropdownHandle(type))} key={idx}>{type}</a>
+                    </li>
+                    ))}
+                </ul>
+              </details>
+              </div>
+          </div>
         </div>
-        <div className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mb-10" ${(data.length==0)?"":"md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "}`}>
+
+        <div
+          className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mb-10" ${
+            data.length == 0
+              ? ""
+              : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
+          }`}
+        >
           {data.map((evnt, i) => (
             <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
               <Card
@@ -249,12 +333,15 @@ export default function Home() {
               />
             </Link>
           ))}
-          <Link href={"/event/past"} className="rounded-[22px] flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center w-[18rem] h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass">
-            <PiClockCounterClockwiseBold size={50}/> View Past Events.
+          <Link
+            href={"/event/past"}
+            className="rounded-[22px] flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center w-[18rem] h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
+          >
+            <PiClockCounterClockwiseBold size={50} /> View Past Events.
           </Link>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

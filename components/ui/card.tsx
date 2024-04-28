@@ -31,7 +31,7 @@ const Card = ({
       <div className="text-white w-14 h-14 md:w-16 md:h-16  absolute top-[1px] m-3 flex flex-col  group-hover:opacity-0 opacity-100 transition duration-300 ease-in-out">
         <Image className="rounded-full" src={clubIcon} alt={club + "logo"} />
       </div>
-      <div className="text-white w-full absolute top-[168px] sm:top-[275px]  md:top-[287px] flex flex-col p-3  group-hover:opacity-50 opacity-100 transition duration-300 ease-in-out">
+      <div className="text-white w-full absolute top-[193px] sm:top-[275px]  md:top-[287px] flex flex-col p-3  group-hover:opacity-50 opacity-100 transition duration-300 ease-in-out">
         <div className="flex flex-row w-full items-center">
           <div className="bg-[#8f90918c] shadow-md font-semibold mr-4 text-white text-[14px] md:text-[16px] w-10 h-10 md:w-12 md:h-12 rounded-lg text-center">
             {date.month} <br />

@@ -74,3 +74,18 @@ export function getClubEvents(clb:string,n="10"): Promise<string[][]> {
               + encodeURIComponent("select * where `G` = '"+clb+"' limit "+n);
   return getData(url)
 }
+
+export const getClubs = [
+  "All",
+  "GDSC - UCEK",
+  "IEEE - UCEK",
+  "Legacy IEDC - UCEK",
+  "μlearn - UCEK",
+  "FOSS - UCEK",
+  "TinkerHub - UCEK",  
+  "SFI UCEK",
+  "Meluhans Dance Club",
+  "Music Club - UCEK",
+  "Film Club - UCEK",
+  "NSS - UCEK",
+]
