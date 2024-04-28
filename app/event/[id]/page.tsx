@@ -103,6 +103,7 @@ function Page({ params }: { params: { id: string } }) {
               <h4 className="my-2 font-semibold">About</h4>
               <p>{data[4]}</p>
             </div>
+            
             {!past && data[9] ? (
               <div className="justify-center flex items-center mt-5">
                 <Link href={data[9]} target="_blank">
@@ -112,6 +113,8 @@ function Page({ params }: { params: { id: string } }) {
                 </Link>
               </div>
             ) : null}
+
+
           </div>
         </div>
       </div>
