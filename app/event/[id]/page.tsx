@@ -101,7 +101,6 @@ function Page({ params }: { params: { id: string } }) {
               <p className="flex items-center mb-1">
                 {" "}
                 <BsClock className="mr-2 text-sm md:text-[]" /> {date.from_time}
-                &nbsp; - &nbsp; 17:00 pm
               </p>
               <h4 className="my-2 font-semibold">About</h4>
               <p>{data[4]}</p>

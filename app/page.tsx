@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/ui/navbar";
 import { useToast } from "@/components/ui/use-toast";
-import CardGrid from "@/components/ui/CardGrid";
 import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 import Footer from "@/components/ui/Footer";
@@ -53,17 +52,19 @@ export default function Home() {
       });
   }, []);
 
+  function updateCountdown(){
+    if (bannerEvent && bannerEvent[7]) {
+      const eventDate:any = new Date(formatDateArray(bannerEvent[7]).date); // Convert 'date' to a Date object
+      const currentDate:any = new Date(); // Assuming currentDate represents the current date
+      const day_difference:any = eventDate - currentDate;
+      setCountdown(countdownHelper(day_difference));
+    }
+  }
   useEffect(() => {
     // Update countdown timer when bannerEvent changes
-    if (bannerEvent && bannerEvent[7]) {
-      const intervalId = setInterval(() => {
-        const eventDate:any = new Date(formatDateArray(bannerEvent[7]).date); // Convert 'date' to a Date object
-        const currentDate:any = new Date(); // Assuming currentDate represents the current date
-        const day_difference:any = eventDate - currentDate;
-        setCountdown(countdownHelper(day_difference));
-      }, 1000); // Update countdown every second
+      updateCountdown()
+      const intervalId = setInterval(updateCountdown, 1000); // Update countdown every second
       return () => clearInterval(intervalId); // Cleanup function to clear the interval when component unmounts or when bannerEvent changes
-    }
   }, [bannerEvent]);
 
   useEffect((() =>  {
@@ -98,7 +99,10 @@ export default function Home() {
           }})
     
         } else if (permission === "denied") {
+          if(localStorage.getItem("sw-registered") != "0") {
+            localStorage.setItem("sw-registered","0");
             alert("Please accept the notification for recieving Live Updates about Events at UCEK. ");
+          }
         }
       })
       }
@@ -117,7 +121,7 @@ export default function Home() {
 
 
   // If there is no events happening
-  if(data.length == 0 && !loading){
+  if(data.length == 0 && !loading && bannerEvent.length == 0){
     return(
       <NoEvents/>
     )
@@ -189,7 +193,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row gap-3 mb-4 mt-2 justify-center md:gap-5">
+              <div className="flex flex-row gap-3 mb-4 mt-4 justify-center md:gap-5">
                 <Link href={"/event/" + bannerEvent[1]}>
                   <Button
                     className="hover:scale-105 transition-all h-12"
@@ -218,10 +222,10 @@ export default function Home() {
             </div>
           </div>
         </BackgroundGradient>
-        <div className="m-7">
+        <div className={`m-7 ${(data.length == 0)?"opacity-0":""}`}>
           <p className="text-3xl">Upcoming Events</p>
         </div>
-        <CardGrid>
+        <div className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mb-10" ${(data.length==0)?"":"md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "}`}>
           {data.map((evnt, i) => (
             <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
               <Card
@@ -248,7 +252,7 @@ export default function Home() {
           <Link href={"/event/past"} className="rounded-[22px] flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center w-[18rem] h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass">
             <PiClockCounterClockwiseBold size={50}/> View Past Events.
           </Link>
-        </CardGrid>
+        </div>
       </div>
       <Footer/>
     </div>

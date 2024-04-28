@@ -12,21 +12,6 @@ export const firebaseConfig = {
   appId: "1:747267605566:web:e6d8dbb9f4a16dbf2e7d6f"
 };
 
-// const messaging = getMessaging(app);
-
-// getToken(messaging, { vapidKey: PUBLIC_KEY }).then((currentToken) => {
-//   if (currentToken) {
-
-//   } else {
-//     console.log('No registration token available. Request permission to generate one.');
-
-//   }
-// }).catch((err) => {
-//   console.log('An error occurred while retrieving token. ', err);
-// });
-
-
-
 export function getData(url:string): Promise<string[][]> {
   return new Promise((resolve, reject) => {
   Papa.parse<string[]>(url, {
@@ -65,7 +50,7 @@ export function getUpcomingEvents(n="20"): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where toDate(`H`) > now() order by(`H`) limit "+n);
+              + encodeURIComponent("select * where H > now() order by(`H`) limit "+n);
   return getData(url)
 }
 
@@ -74,7 +59,7 @@ export function getPastEvents(n="20"): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where toDate(`H`) < now() order by(`H`) desc limit "+n);
+              + encodeURIComponent("select * where H < now() order by(`H`) desc limit "+n);
   return getData(url)
 }
 
