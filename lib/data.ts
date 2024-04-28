@@ -2,7 +2,7 @@
 
 import Papa from "papaparse";
 
-const EVNTS_SHEET_ID = "1jrpjxOBA4kVCLgrrjjLt46bmNCRDaruuJvcU3JwvOkc"
+const EVNTS_SHEET_ID = "1JF8JCd01dGp1s3iFiriOUHZxlMro63vCAf5Qsm7RNEE"
 export const PUBLIC_KEY = "BPpBelMiDJmKoVfUm-h_23puTUUsmQuhDV8wSih6vN8e9SjQ-a0gGEMUje_pOzoGPDNxNyLZcvEwmIXEW0iaZ5g"
 export const firebaseConfig = {
   apiKey: "AIzaSyAdSmj_Dt2z3KTVDZcprly2GCT_0UGKZOk",
@@ -74,7 +74,7 @@ export function getPastEvents(n="20"): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where toDate(`H`) < now() order by(`H`) limit "+n);
+              + encodeURIComponent("select * where toDate(`H`) < now() order by(`H`) desc limit "+n);
   return getData(url)
 }
 

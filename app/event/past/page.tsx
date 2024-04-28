@@ -19,24 +19,34 @@ import { IoIosCloud } from "react-icons/io";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import Footer from "@/components/ui/Footer";
+import NoEvents from "@/app/NoEvents";
 
 export default function Home() {
   const { toast } = useToast();
   const router = useRouter();
-  const [data, setData] = useState<string[][]>();
+  const [data, setData] = useState<string[][]>([]);
+  const [loading, setLoading] = useState(true);
   let date;
 
   useEffect(() => {
     getPastEvents()
       .then((clbdata) => {
           setData(clbdata);
+          setLoading(false);
       })
       .catch((error) => {
         console.error("An error occurred:", error);
       });
   }, []);
 
-  return !data ? (
+  // If there is no events happening
+  if(data.length == 0 && !loading){
+    return(
+      <NoEvents/>
+    )
+  }
+
+  return loading ? (
     <Loading msg="Loading..." />
   ) : (
     <div className="">
