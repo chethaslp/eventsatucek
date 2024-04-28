@@ -91,12 +91,26 @@ export function resolveClubIcon(clb: string,black:boolean ): any {
 }
 
 export function countdownHelper(millisecond: any) {
-  var days = Math.floor(millisecond / (1000 * 60 * 60 * 24));
-  var hours = Math.floor(
+  interface Time{
+    days:number;
+    hours:number;
+    minutes:number;
+    seconds:number;
+  }
+
+    const result: Time = {
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  };
+
+  result.days = Math.floor(millisecond / (1000 * 60 * 60 * 24));
+  result.hours = Math.floor(
     (millisecond % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
   );
-  var minutes = Math.floor((millisecond % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((millisecond % (1000 * 60)) / 1000);
+  result.minutes = Math.floor((millisecond % (1000 * 60 * 60)) / (1000 * 60));
+  result.seconds = Math.floor((millisecond % (1000 * 60)) / 1000);
 
-  return `${days}d : ${hours}h : ${minutes}m : ${seconds}s`;
+  return result
 }
