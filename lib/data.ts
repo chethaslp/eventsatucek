@@ -67,10 +67,25 @@ export function getPastEvents(n="20"): Promise<string[][]> {
 
 // Sort Events Club Wise
 // params: {clb -> Club Name}
-export function getClubEvents(clb:string,n="10"): Promise<string[][]> {
+export function getClubEvents(clb:string, id:string): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where `G` = '"+clb+"' limit "+n);
+              + encodeURIComponent("select * where `G` = '" + clb + "' and `B` != '" + id + "' and toDate(`H`) > now() order by `H`");
   return getData(url)
 }
+
+export const getClubs = [
+  "All",
+  "GDSC - UCEK",
+  "IEEE - UCEK",
+  "Legacy IEDC - UCEK",
+  "μlearn - UCEK",
+  "FOSS - UCEK",
+  "TinkerHub - UCEK",  
+  "SFI UCEK",
+  "Meluhans Dance Club",
+  "Music Club - UCEK",
+  "Film Club - UCEK",
+  "NSS - UCEK",
+]
