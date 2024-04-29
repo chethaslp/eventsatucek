@@ -97,10 +97,10 @@ export default function Home() {
 
   useEffect(() => {
     function reqNotification() {
-      //requesting permission using Notification API
+      // Requesting permission using Notification API
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
-          // getting FCM Token
+          // Getting FCM Token
           register("/firebase-messaging-sw.js", {
             registrationOptions: {
               scope: "/firebase-cloud-messaging-push-scope",
@@ -118,30 +118,42 @@ export default function Home() {
               })
                 // Sending FCM Token to the server
                 .then((token) => {
-                  if (localStorage.getItem("sw-registered") != "1") {
+                  if (localStorage.getItem("sw-registered") !== "1") {
                     fetch("/api/addSubscriber", {
                       method: "POST",
-                      body: token,
-                    }).then((resp) => {
-                      console.log(resp);
-                      localStorage.setItem("sw-registered", "1");
-                    });
+                      headers: {
+                        "Content-Type": "application/json", // Set Content-Type header
+                      },
+                      body: JSON.stringify({ token }), // Stringify token object
+                    })
+                      .then((resp) => {
+                        console.log(resp);
+                        localStorage.setItem("sw-registered", "1");
+                      })
+                      .catch((error) => {
+                        console.error("Error sending token to server:", error);
+                      });
                   }
+                })
+                .catch((error) => {
+                  console.error("Error getting FCM Token:", error);
                 });
             },
           });
         } else if (permission === "denied") {
-          if (localStorage.getItem("sw-registered") != "0") {
+          if (localStorage.getItem("sw-registered") !== "0") {
             localStorage.setItem("sw-registered", "0");
             alert(
-              "Please accept the notification for recieving Live Updates about Events at UCEK. "
+              "Please accept the notification for receiving Live Updates about Events at UCEK."
             );
           }
         }
       });
     }
-    reqNotification();
+  
+    if (window.Notification) reqNotification();
   }, []);
+  
 
   useEffect(() => {
     onMessage(getMessaging(initializeApp(firebaseConfig)), (payload) => {
@@ -281,8 +293,8 @@ export default function Home() {
                 <summary className="m-1 btn bg-transparent border-2" ref={clubDropdownButton} >{clubDropdown}</summary>
                 <ul  className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52`}>
                   {getClubs.map((club, idx) => (
-                    <li>
-                      <a onClick={(()=>clubDropdownHandle(club))} key={idx}>{club}</a>
+                    <li key={idx}>
+                      <a onClick={(()=>clubDropdownHandle(club))}>{club}</a>
                     </li>
                   ))}
                 </ul>
@@ -293,8 +305,8 @@ export default function Home() {
                 <summary className="m-1 btn bg-transparent border-2" ref={typeDropdownButton}>{typeDropdown}</summary>
                 <ul className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 `}>
                   {['Online', 'Offline', 'Both'].map((type, idx)=>(
-                    <li>
-                      <a onClick={(()=>setTypeDropdownHandle(type))} key={idx}>{type}</a>
+                    <li key={idx}>
+                      <a onClick={(()=>setTypeDropdownHandle(type))}>{type}</a>
                     </li>
                     ))}
                 </ul>
