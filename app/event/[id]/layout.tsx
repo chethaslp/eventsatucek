@@ -25,6 +25,7 @@ export async function generateMetadata({params}:{params:{id:string}}): Promise<M
 
  
   return {
+    metadataBase: new URL('https://eventsatucek.vercel.app'),
     title: "Events@UCEK - " + evnt[3],
     description: evnt[4],
     icons: "/vercel.svg",
