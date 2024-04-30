@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Loading from "@/app/loading";
-import { Navbar } from "@/components/ui/navbar";
+import { FaGithub } from "react-icons/fa";
 import { GITHUB_API_URL } from "@/lib/utils";
-import Footer from "@/components/ui/Footer";
+import { Navbar } from "@/components/ui/navbar";
 import { AvatarCard } from "@/components/ui/avatar-card";
 import CardGrid from "@/components/ui/CardGrid";
-import { FaGithub } from "react-icons/fa";
+import Footer from "@/components/ui/Footer";
+import Loading from "@/components/ui/Loading";
 
 function Page() {
   const [data, setData] = useState<any>([]);
@@ -26,7 +26,7 @@ function Page() {
   ) : (
     <div className="flex flex-col dark:bg-[#121212] ">
       <Navbar />
-      <div className="flex justify-center mb-8 flex-col h-[35rem] ">
+      <div className="flex justify-center items-center mb-8 flex-col h-[35rem] ">
         <div className="text-2xl flex items-center justify-center mb-5">
           Contributors
         </div>
@@ -57,7 +57,7 @@ function Page() {
           )}
         </CardGrid>
       </div>
-        <Footer />
+      <Footer />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import Card from "@/components/ui/card";
 
 import { getImgLink, getPastEvents } from "@/lib/data";
 import { formatDateArray } from "@/lib/utils";
-import Loading from "../../loading";
+import Loading from "../../../components/ui/Loading";
 
 import Image from "next/image";
 import { useEffect, useState } from "react";

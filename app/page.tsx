@@ -14,7 +14,7 @@ import {
   getClubs,
 } from "@/lib/data";
 import { formatDateArray, countdownHelper } from "@/lib/utils";
-import Loading from "./loading";
+import Loading from "../components/ui/Loading";
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
