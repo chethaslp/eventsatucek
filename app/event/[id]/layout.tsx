@@ -50,19 +50,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en" className='h-screen'>
-      <body className={inter.className}>
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-                <Toaster/>
-                {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  )
+  return children
 }

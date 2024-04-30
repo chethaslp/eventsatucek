@@ -64,7 +64,7 @@ function Page({ params }: { params: { id: string } }) {
   ) : (
     <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
       <Navbar />
-      <div className="flex  justify-center px-5 md:px-20">
+      <div className="flex-1  justify-center px-5 md:px-20">
         <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:!shadow-black md:shadow-md rounded-xl dark:bg-[#0c0c0c]">
           <div className="absolute group z-10 w-10 hover:w-24 flex p-2 m-3 bg-white rounded-full text-black  shadow-sm shadow-black transition-width duration-300 ease-in-out">
             <IoShareSocialSharp className="w-5 h-5 group-hover:fixed " />
@@ -161,7 +161,7 @@ function Page({ params }: { params: { id: string } }) {
                           className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
                         ></Image>
                       }
-                      icon={evnt[7]}
+                      date={evnt[7]}
                       isOnline={evnt[8] == "Online" ? true : false}
                       venue={evnt[10]}
                     />

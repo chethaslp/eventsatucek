@@ -9,9 +9,7 @@ const ShareButton = ({ date, title, location, type, about, img }: any) => {
   
 ${about}
 
-📅 Data: ${date.dayOfWeek}, ${date.day} ${date.month} ${date.year}
-⌚ Time: ${date.from_time}
-🔹 Type: ${type}
+📅 ${date.dayOfWeek}, ${date.day} ${date.month} ${date.year} at ${date.from_time} - (${type})
 📍 Venue: ${location == "" ? "Will be Updated" : location}
   
 🌐 Checkout Now: ${window.location.href}`;
@@ -20,13 +18,8 @@ const whatsapp_message = `*${title}*
   
 ${about}
 
-📅 *Data:* ${date.dayOfWeek}, ${date.day} ${date.month} ${date.year}
-
-⌚ *Time:* ${date.from_time}
-
-🔹 *Type:* ${type}
-
-📍 *Venue:* ${location == "" ? "Will be Updated" : location}
+📅 ${date.dayOfWeek}, ${date.day} ${date.month} ${date.year} at ${date.from_time} - (${type})
+📍 Venue: ${location == "" ? "Will be Updated" : location}
   
 
 🌐 *Checkout Now:* ${window.location.href}`;
@@ -34,6 +27,7 @@ ${about}
   const handleCopy = async () => {
     await navigator.clipboard.writeText(copy_message);
     toast.toast({
+      variant:'default',
       title: "Copied!",
     });
   };

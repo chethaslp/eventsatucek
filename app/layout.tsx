@@ -10,6 +10,7 @@ const inter = Raleway({ subsets: ['latin'] })
 export const metadata:Metadata = {
     title: 'Events@UCEK',
     description: 'An all-in-one place to know about all events at UCEK!',
+    metadataBase: new URL('https://eventsatucek.vercel.app'),
     icons: "/vercel.svg",
     manifest: "/manifest.json",
     appleWebApp:{
@@ -25,6 +26,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  
   return (
     <html lang="en" className='h-screen'>
       <body className={inter.className}>

@@ -80,13 +80,18 @@ export function getMoreClubEvents(clb:string, id:string): Promise<string[][]> {
 
 // Sort Events Club Wise
 // params: {clb -> Club Name}
-export function filterEvents(clb=getClubs[0],type="Both",n="20"): Promise<string[][]> {
+export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Promise<string[][]> {
 
   function resolveQuery(){
-    if(clb == getClubs[0] && type == "Both") return "select * where H > now() order by(`H`)"  /* Returns if club is set to "All" and type is "Both" */
-    if(clb == getClubs[0]) return "select * where `I` = '"+ type + "' and `H` > now() order by(`H`)" /* Returns if club is set to "All" and type is different */
-    if(type == "Both")  return "select * where `G` = '"+ clb + "' and `H` > now() order by(`H`)" /* Returns if club is different and type is set to "Both" */
-    return "select * where `G` = '"+ clb + "' and  `I` = '"+ type + "' and `H` > now() order by(`H`)" /* Returns if club and type is different. */
+    var t;
+    if (time == 'All') t = "1=1 order by(`H`)"
+    else if(time == 'Upcoming') t = "H > now() order by(`H`)"
+    else if(time == 'Past') t = "H < now() order by(`H`)"
+
+    if(clb == getClubs[0] && type == "Both") return "select * where "+ t /* Returns if club is set to "All" and type is "Both" */
+    if(clb == getClubs[0]) return "select * where `I` = '"+ type + "' and "+ t /* Returns if club is set to "All" and type is different */
+    if(type == "Both")  return "select * where `G` = '"+ clb + "' and "+ t /* Returns if club is different and type is set to "Both" */
+    return "select * where `G` = '"+ clb + "' and  `I` = '"+ type + "' and "+ t /* Returns if club and type is different. */
   }
 
   const url = "https://docs.google.com/spreadsheets/d/"

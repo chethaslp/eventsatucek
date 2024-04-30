@@ -57,6 +57,8 @@ export default function Home() {
         </div>
         <CardGrid>
           {data.map((evnt, i) => (
+            <Link
+              href={"/event/"+evnt[1]}>
               <Card
                 key={evnt[1]}
                 title={evnt[3]}
@@ -72,10 +74,11 @@ export default function Home() {
                     className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
                   ></Image>
                 }
-                icon={evnt[7]}
+                date={evnt[7]}
                 isOnline={evnt[8] == "Online" ? true : false}
                 venue={evnt[10]}
               />
+            </Link>
           ))}
         </CardGrid>
       </div>

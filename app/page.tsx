@@ -6,15 +6,7 @@ import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 import Footer from "@/components/ui/Footer";
 
-import {
-  PUBLIC_KEY,
-  firebaseConfig,
-  getImgLink,
-  getUpcomingEvents,
-  getClubs,
-  getMoreClubEvents,
-  filterEvents,
-} from "@/lib/data";
+import { getImgLink, getUpcomingEvents, getClubs, filterEvents } from "@/lib/data";
 import { formatDateArray, countdownHelper } from "@/lib/utils";
 import Loading from "../components/ui/Loading";
 
@@ -31,22 +23,22 @@ import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import { LuFilter } from "react-icons/lu";
 
-import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
-import { register } from "register-service-worker";
 import NoEvents from "./NoEvents";
+import FCM from "@/components/ui/fcm";
 
 const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
 export default function Home() {
-  const toast = useToast();
   const clubDropdownButton: any = useRef(null);
   const typeDropdownButton: any = useRef(null);
+  const timeDropdownButton: any = useRef(null);
+
   const [data, setData] = useState<Array<string[]>>([]);
   const [loading, setLoading] = useState(true);
-  const [onlyOneEvent, setOnlyOneEvent] = useState(false);
+
   const [clubDropdown, setClubDropdown]: any = useState("All Clubs");
+  const [timeDropdown, setTimeDropdown]: any = useState("All");
   const [typeDropdown, setTypeDropdown]: any = useState("Both");
   const [countdown, setCountdown]: any = useState<string>();
   const [bannerEvent, setBannerEvent] = useState<string[]>([
@@ -66,7 +58,8 @@ export default function Home() {
     getUpcomingEvents()
       .then((data) => {
         if(data.length <=1){
-          setOnlyOneEvent(true)
+          setTimeDropdown("Past");
+          filterEvents(clubDropdown, typeDropdown, "Past").then((evnts) => setData(evnts));
         }
         setData(data);
         const upcomingEvent = data.shift() || [""]; // Shift the first event from data
@@ -78,20 +71,30 @@ export default function Home() {
       });
   }, []);
 
+
   function clubDropdownHandle(club: string): any {
     clubDropdownButton.current.click();
     if (club != clubDropdown) {
       setClubDropdown(club);
-      filterEvents(club, typeDropdown).then((evnts) => setData(evnts));
+      filterEvents(club, typeDropdown, timeDropdown).then((evnts) => setData(evnts));
     }
   }
-  function setTypeDropdownHandle(type: string): any {
+  function typeDropdownHandle(type: string): any {
     typeDropdownButton.current.click();
     if (type != typeDropdown) {
       setTypeDropdown(type);
-      filterEvents(clubDropdown, type).then((evnts) => setData(evnts));
+      filterEvents(clubDropdown, type, timeDropdown).then((evnts) => setData(evnts));
     }
   }
+  function timeDropdownHandle(time: string): any {
+    timeDropdownButton.current.click();
+    if (time != typeDropdown) {
+      setTimeDropdown(time);
+      filterEvents(clubDropdown, typeDropdown, time).then((evnts) => setData(evnts));
+    }
+  }
+
+
   function updateCountdown() {
     if (bannerEvent && bannerEvent[7]) {
       const eventDate: any = new Date(formatDateArray(bannerEvent[7]).date); // Convert 'date' to a Date object
@@ -107,74 +110,6 @@ export default function Home() {
     return () => clearInterval(intervalId); // Cleanup function to clear the interval when component unmounts or when bannerEvent changes
   }, [bannerEvent]);
 
-  useEffect(() => {
-    function reqNotification() {
-      // Requesting permission using Notification API
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          // Getting FCM Token
-          register("/firebase-messaging-sw.js", {
-            registrationOptions: {
-              scope: "/firebase-cloud-messaging-push-scope",
-            },
-            ready(registration) {
-              console.log("ServiceWorker is active now.");
-            },
-            error(error) {
-              console.error("Error during service worker registration:", error);
-            },
-            registered(reg) {
-              console.log("Registered ServiceWorker.");
-              getToken(getMessaging(initializeApp(firebaseConfig)), {
-                vapidKey: PUBLIC_KEY,
-              })
-                // Sending FCM Token to the server
-                .then((token) => {
-                  if (localStorage.getItem("sw-registered") !== "1") {
-                    fetch("/api/addSubscriber", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json", // Set Content-Type header
-                      },
-                      body: JSON.stringify({ token }), // Stringify token object
-                    })
-                      .then((resp) => {
-                        console.log(resp);
-                        localStorage.setItem("sw-registered", "1");
-                      })
-                      .catch((error) => {
-                        console.error("Error sending token to server:", error);
-                      });
-                  }
-                })
-                .catch((error) => {
-                  console.error("Error getting FCM Token:", error);
-                });
-            },
-          });
-        } else if (permission === "denied") {
-          if (localStorage.getItem("sw-registered") !== "0") {
-            localStorage.setItem("sw-registered", "0");
-            alert(
-              "Please accept the notification for receiving Live Updates about Events at UCEK."
-            );
-          }
-        }
-      });
-    }
-
-    if (window.Notification) reqNotification();
-  }, []);
-
-  useEffect(() => {
-    onMessage(getMessaging(initializeApp(firebaseConfig)), (payload) => {
-      toast.toast({
-        title: "New Event Published!",
-        description: "Refresh the page to view now.",
-      });
-    });
-  });
-
   // If there is no events happening
   if (data.length == 0 && !loading && bannerEvent.length == 0) {
     return <NoEvents />;
@@ -185,6 +120,7 @@ export default function Home() {
   ) : (
     <>
       <div className="">
+        <FCM/>
         <Navbar />
         <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#121212]">
           <BackgroundGradient
@@ -296,10 +232,10 @@ export default function Home() {
             </div>
           </BackgroundGradient>
           <div
-            className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row ${onlyOneEvent ? 'opacity-0': ''}`}
+            className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row`}
           >
-            <p className="text-3xl">Upcoming Events</p>
-            <div className="md:left-28 z-30 absolute md:my-7 my-12  text-sm md:text-lg p-2">
+            <p className="text-3xl">{timeDropdown} Events</p>
+            <div className="md:left-28 z-30 absolute md:my-7 my-12 text-sm md:text-lg p-2">
               <div className="flex flex-row items-center gap-1 md:gap-2">
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
@@ -331,7 +267,26 @@ export default function Home() {
                   >
                     {["Online", "Offline", "Both"].map((type, idx) => (
                       <li key={idx}>
-                        <a onClick={() => setTypeDropdownHandle(type)}>
+                        <a onClick={() => typeDropdownHandle(type)}>
+                          {type}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+                <details className="dropdown ">
+                  <summary
+                    className="m-1 btn bg-transparent border-2"
+                    ref={timeDropdownButton}
+                  >
+                    {timeDropdown}
+                  </summary>
+                  <ul
+                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 `}
+                  >
+                    {["Upcoming", "Past", "All"].map((type, idx) => (
+                      <li key={idx}>
+                        <a onClick={() => timeDropdownHandle(type)}>
                           {type}
                         </a>
                       </li>
@@ -366,7 +321,7 @@ export default function Home() {
                       className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
                     ></Image>
                   }
-                  icon={evnt[7]}
+                  date={evnt[7]}
                   isOnline={evnt[8] == "Online" ? true : false}
                   venue={evnt[10]}
                 />
@@ -374,7 +329,7 @@ export default function Home() {
             ))}
             <Link
               href={"/event/past"}
-              className="rounded-[22px] flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px] sm:text w-[10rem] h-[10rem] sm:w-[18rem] sm:h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
+              className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px] sm:text w-[10rem] h-[10rem] sm:w-[18rem] sm:h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
             >
               <PiClockCounterClockwiseBold className="text-[30px] sm:text-[50px]" />{" "}
               View Past Events.
