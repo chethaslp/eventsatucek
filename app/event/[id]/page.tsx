@@ -1,21 +1,26 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { getImgLink, getEvent, getMoreClubEvents } from "@/lib/data";
-import Loading from "@/app/loading";
-import { Navbar } from "@/components/ui/navbar";
-import Image from "next/image";
-import { formatDateArray, resolveClubIcon } from "@/lib/utils";
-import { IoLocationSharp } from "react-icons/io5";
-import { IoIosCloud } from "react-icons/io";
-import { IoCloudOfflineSharp } from "react-icons/io5";
-import { BsClock } from "react-icons/bs";
-import { FaCalendarAlt } from "react-icons/fa";
-import Footer from "@/components/ui/Footer";
+import Head from "next/head";
 import Link from "next/link";
-import CardGrid from "@/components/ui/CardGrid";
-import Card from "@/components/ui/card";
+import Image from "next/image";
 import { useTheme } from "next-themes";
+import React, { useEffect, useState } from "react";
+
+import Card from "@/components/ui/card";
+import Footer from "@/components/ui/Footer";
+import Loading from "@/components/ui/Loading";
+import CardGrid from "@/components/ui/CardGrid";
+import { Navbar } from "@/components/ui/navbar";
+import ShareButton from "@/components/ui/ShareButton";
+
+import { BsClock } from "react-icons/bs";
+import { IoIosCloud } from "react-icons/io";
+import { FaCalendarAlt } from "react-icons/fa";
+import { IoLocationSharp } from "react-icons/io5";
+import { IoShareSocialSharp } from "react-icons/io5";
+import { IoCloudOfflineSharp } from "react-icons/io5";
+import { getImgLink, getEvent, getMoreClubEvents } from "@/lib/data";
+import { formatDateArray, resolveClubIcon } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 function Page({ params }: { params: { id: string } }) {
@@ -56,17 +61,30 @@ function Page({ params }: { params: { id: string } }) {
   return data.length == 0 ? (
     <Loading msg="Loading..." />
   ) : (
-    <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
-      <Navbar />
-      <div className="flex  justify-center px-5 md:px-20">
-        <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:!shadow-black md:shadow-md rounded-xl dark:bg-[#0c0c0c]">
-          <Image
-            width={500}
-            height={500}
-            referrerPolicy={"no-referrer"}
-            src={getImgLink(data[5])}
-            alt="Event Poster"
-          ></Image>
+      <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
+        <Navbar />
+        <div className="flex  justify-center px-5 md:px-20">
+          <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:!shadow-black md:shadow-md rounded-xl dark:bg-[#0c0c0c]">
+            <div className="absolute group z-10 w-10 hover:w-24 flex p-2 m-3 bg-white rounded-full text-black  shadow-sm shadow-black transition-width duration-300 ease-in-out">
+              <IoShareSocialSharp className="w-5 h-5 group-hover:fixed " />
+              <div className="group-hover:flex  hidden ml-5  ">
+                <ShareButton
+                  date={date}
+                  title={data[3]}
+                  location={data[10]}
+                  type={data[8]}
+                  about={data[4]}
+                  img={getImgLink(data[5])}
+                />
+              </div>
+            </div>
+            <Image
+              width={500}
+              height={500}
+              referrerPolicy={"no-referrer"}
+              src={getImgLink(data[5])}
+              alt="Event Poster"
+            ></Image>
 
           <div className="p-9">
             <div className="flex justify-between items-center">
