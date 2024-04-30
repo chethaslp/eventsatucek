@@ -1,5 +1,3 @@
-"use client";
-
 import Papa from "papaparse";
 
 const EVNTS_SHEET_ID = "1jrpjxOBA4kVCLgrrjjLt46bmNCRDaruuJvcU3JwvOkc" /* DEV */
