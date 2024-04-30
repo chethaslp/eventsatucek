@@ -34,6 +34,7 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 import { register } from "register-service-worker";
 import NoEvents from "./NoEvents";
+import Head from "next/head";
 
 const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
@@ -171,6 +172,16 @@ export default function Home() {
   return loading ? (
     <Loading msg="Loading..." />
   ) : (
+    <>
+    <Head>
+        <title>Events@UCEK</title>
+        <meta property="og:title" content="A all-in-one place to know about all events at UCEK!"/>
+        <meta property="og:image" content={getImgLink(bannerEvent[5])} />
+        <meta property="og:image:width" content="500" />
+        <meta property="og:image:height" content="500" />
+        <meta property="og:description" content="A all-in-one place to know about all events at UCEK!" />
+        <meta property="og:url" content={window.location.href} />
+      </Head>
     <div className="">
       <Navbar />
       <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#121212]">
@@ -354,5 +365,6 @@ export default function Home() {
       </div>
       <Footer />
     </div>
+    </>
   );
 }
