@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getImgLink, getEvent, getClubEvents } from "@/lib/data";
+import { getImgLink, getEvent, getMoreClubEvents } from "@/lib/data";
 import Loading from "@/app/loading";
 import { Navbar } from "@/components/ui/navbar";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import Link from "next/link";
 import CardGrid from "@/components/ui/CardGrid";
 import Card from "@/components/ui/card";
 import { useTheme } from "next-themes";
+import { Loader2 } from "lucide-react";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
@@ -23,6 +24,7 @@ function Page({ params }: { params: { id: string } }) {
   const themeToDark = theme == "dark" ? false : true;
   const [data, setData] = useState<string[]>([]);
   const [past, setPast] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
 
   let date = data[0] ? formatDateArray(data[7]) : null,
@@ -34,8 +36,13 @@ function Page({ params }: { params: { id: string } }) {
         setData(evnt[0]);
         date = data ? formatDateArray(data[7]) : null;
         clubIcon = data ? resolveClubIcon(data[6], themeToDark) : null;
-        if ((new Date(date.date) as any) - (new Date() as any) > 0)
-          setPast(true);
+        if ((new Date(date.date) as any) - (new Date() as any) > 0) setPast(true);
+        return 1;
+      })
+      .then(()=> getMoreClubEvents(data[6] ? data[6] : "nill", params.id))
+      .then((upcomingEvents) => {
+        setMoreEvents(upcomingEvents);
+        setLoading(false)
       })
       .catch((error) => {
         console.error("An error occurred:", error);
@@ -43,13 +50,7 @@ function Page({ params }: { params: { id: string } }) {
   }, []);
 
   useEffect(() => {
-    getClubEvents(data[6] ? data[6] : "nill", params.id)
-      .then((upcomingEvents) => {
-        setMoreEvents(upcomingEvents);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    
   }, [data]);
 
   return data.length == 0 ? (
@@ -119,7 +120,7 @@ function Page({ params }: { params: { id: string } }) {
         </div>
       </div>
       <div className="flex justify-center flex-col items-center">
-        {moreEvents.length > 0 ? (
+        {!loading ? ((moreEvents.length > 0)?
           <>
             <h1 className="text-lg md:text-3xl font-semibold mt-10 mb-8 p-3">
               Upcoming Events from {data ? data[6] : null}
@@ -149,10 +150,7 @@ function Page({ params }: { params: { id: string } }) {
                 </Link>
               ))}
             </CardGrid>
-          </>
-        ) : (
-          <>{/* TODO: ADD SHIMMER CARDS HERE */}</>
-        )}
+          </>: null) : <div className="flex justify-center items-center p-5"> <Loader2 size={30} className="animate-spin"/></div>}
       </div>
       <Footer />
     </div>

@@ -2,7 +2,9 @@
 
 import Papa from "papaparse";
 
-const EVNTS_SHEET_ID = "1JF8JCd01dGp1s3iFiriOUHZxlMro63vCAf5Qsm7RNEE"
+const EVNTS_SHEET_ID = "1jrpjxOBA4kVCLgrrjjLt46bmNCRDaruuJvcU3JwvOkc" /* DEV */
+// const EVNTS_SHEET_ID = "1JF8JCd01dGp1s3iFiriOUHZxlMro63vCAf5Qsm7RNEE" /* PROD */
+
 export const PUBLIC_KEY = "BPpBelMiDJmKoVfUm-h_23puTUUsmQuhDV8wSih6vN8e9SjQ-a0gGEMUje_pOzoGPDNxNyLZcvEwmIXEW0iaZ5g"
 export const firebaseConfig = {
   apiKey: "AIzaSyAdSmj_Dt2z3KTVDZcprly2GCT_0UGKZOk",
@@ -65,9 +67,12 @@ export function getPastEvents(n="20"): Promise<string[][]> {
 
 
 
-// Sort Events Club Wise
-// params: {clb -> Club Name}
-export function getClubEvents(clb:string, id:string): Promise<string[][]> {
+// Get more Events from club.
+// params: {
+//   clb -> Club Name
+//   id -> ID of event to be excluded from the list
+// }
+export function getMoreClubEvents(clb:string, id:string): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
@@ -75,8 +80,26 @@ export function getClubEvents(clb:string, id:string): Promise<string[][]> {
   return getData(url)
 }
 
+// Sort Events Club Wise
+// params: {clb -> Club Name}
+export function filterEvents(clb=getClubs[0],type="Both",n="20"): Promise<string[][]> {
+
+  function resolveQuery(){
+    if(clb == getClubs[0] && type == "Both") return "select * where H > now() order by(`H`)"  /* Returns if club is set to "All" and type is "Both" */
+    if(clb == getClubs[0]) return "select * where `I` = '"+ type + "' and `H` > now() order by(`H`)" /* Returns if club is set to "All" and type is different */
+    if(type == "Both")  return "select * where `G` = '"+ clb + "' and `H` > now() order by(`H`)" /* Returns if club is different and type is set to "Both" */
+    return "select * where `G` = '"+ clb + "' and  `I` = '"+ type + "' and `H` > now() order by(`H`)" /* Returns if club and type is different. */
+  }
+
+  const url = "https://docs.google.com/spreadsheets/d/"
+              + EVNTS_SHEET_ID
+              + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
+              + encodeURIComponent(resolveQuery());
+  return getData(url)
+}
+
 export const getClubs = [
-  "All",
+  "All Clubs",
   "GDSC - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",

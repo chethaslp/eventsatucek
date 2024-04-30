@@ -12,6 +12,8 @@ import {
   getImgLink,
   getUpcomingEvents,
   getClubs,
+  getMoreClubEvents,
+  filterEvents,
 } from "@/lib/data";
 import { formatDateArray, countdownHelper } from "@/lib/utils";
 import Loading from "./loading";
@@ -43,8 +45,8 @@ export default function Home() {
   const typeDropdownButton:any = useRef(null);
   const [data, setData] = useState<Array<string[]>>([]);
   const [loading, setLoading] = useState(true);
-  const [clubDropdown, setClubDropdown]:any = useState("Club")
-  const [typeDropdown, setTypeDropdown]:any = useState("Type")
+  const [clubDropdown, setClubDropdown]:any = useState("All Clubs")
+  const [typeDropdown, setTypeDropdown]:any = useState("Both")
   const [countdown, setCountdown]: any = useState<string>();
   const [bannerEvent, setBannerEvent] = useState<string[]>([
     "",
@@ -74,11 +76,17 @@ export default function Home() {
 
   function clubDropdownHandle(club:string):any{
     clubDropdownButton.current.click();
-    setClubDropdown(club)
+    if (club != clubDropdown){
+      setClubDropdown(club)
+      filterEvents(club, typeDropdown).then((evnts)=>setData(evnts))
+    } 
   }
   function setTypeDropdownHandle(type:string):any{
     typeDropdownButton.current.click();
-    setTypeDropdown(type)
+    if (type != typeDropdown){
+      setTypeDropdown(type)
+      filterEvents(clubDropdown, type).then((evnts)=>setData(evnts))
+    }
   }
   function updateCountdown() {
     if (bannerEvent && bannerEvent[7]) {
@@ -315,10 +323,10 @@ export default function Home() {
         </div>
 
         <div
-          className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mb-10" ${
+          className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-2 md:gap-x-4 gap-y-6 mb-10" ${
             data.length == 0
               ? ""
-              : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
+              : "sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
           }`}
         >
           {data.map((evnt, i) => (
@@ -346,9 +354,9 @@ export default function Home() {
           ))}
           <Link
             href={"/event/past"}
-            className="rounded-[22px] flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center w-[18rem] h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
+            className="rounded-[22px] flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px] sm:text w-[10rem] h-[10rem] sm:w-[18rem] sm:h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
           >
-            <PiClockCounterClockwiseBold size={50} /> View Past Events.
+            <PiClockCounterClockwiseBold className="text-[30px] sm:text-[50px]" /> View Past Events.
           </Link>
         </div>
       </div>

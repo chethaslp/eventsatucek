@@ -25,11 +25,11 @@ function Page() {
   return data.length == 0 ? (
     <Loading msg="Loading..." />
   ) : (
-    <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] h-[100dvh] ">
+    <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] h-full">
       <Navbar />
-      <div className="flex justify-center mb-8 flex-col">
+      <div className="flex-1 justify-center mb-8 flex-col">
         <div className="text-2xl flex items-center justify-center mb-5">Contributors</div>
-      <CardGrid>
+      <div className="items-center justify-center w-full justify-items-center flex justify-around md:gap-x-4 gap-y-6 mb-10">
           {data.map((contr:{login:string, avatar_url:string, html_url:string, }) => (
             <div key={contr.login} className="rounded-[24px] flex flex-col border border-slate-600 p-5">
                 <AvatarCard url={contr.avatar_url} />
@@ -41,7 +41,7 @@ function Page() {
                 </a>
             </div>
           ))}
-        </CardGrid>
+        </div>
       
       </div>
         <Footer/>
