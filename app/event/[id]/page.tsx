@@ -41,50 +41,51 @@ function Page({ params }: { params: { id: string } }) {
         setData(evnt[0]);
         date = data ? formatDateArray(data[7]) : null;
         clubIcon = data ? resolveClubIcon(data[6], themeToDark) : null;
-        if ((new Date(date.date) as any) - (new Date() as any) > 0) setPast(true);
+        if ((new Date(date.date) as any) - (new Date() as any) > 0)
+          setPast(true);
         return 1;
       })
-      .then(()=> getMoreClubEvents(data[6] ? data[6] : "nill", params.id))
-      .then((upcomingEvents) => {
-        setMoreEvents(upcomingEvents);
-        setLoading(false)
-      })
-      .catch((error) => {
-        console.error("An error occurred:", error);
-      });
+      
   }, []);
 
   useEffect(() => {
-    
+    getMoreClubEvents(data[6] ? data[6] : "nill", params.id)
+    .then((upcomingEvents) => {
+      setMoreEvents(upcomingEvents);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("An error occurred:", error);
+    });
   }, [data]);
 
   return data.length == 0 ? (
     <Loading msg="Loading..." />
   ) : (
-      <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
-        <Navbar />
-        <div className="flex  justify-center px-5 md:px-20">
-          <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:!shadow-black md:shadow-md rounded-xl dark:bg-[#0c0c0c]">
-            <div className="absolute group z-10 w-10 hover:w-24 flex p-2 m-3 bg-white rounded-full text-black  shadow-sm shadow-black transition-width duration-300 ease-in-out">
-              <IoShareSocialSharp className="w-5 h-5 group-hover:fixed " />
-              <div className="group-hover:flex  hidden ml-5  ">
-                <ShareButton
-                  date={date}
-                  title={data[3]}
-                  location={data[10]}
-                  type={data[8]}
-                  about={data[4]}
-                  img={getImgLink(data[5])}
-                />
-              </div>
+    <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
+      <Navbar />
+      <div className="flex  justify-center px-5 md:px-20">
+        <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:!shadow-black md:shadow-md rounded-xl dark:bg-[#0c0c0c]">
+          <div className="absolute group z-10 w-10 hover:w-24 flex p-2 m-3 bg-white rounded-full text-black  shadow-sm shadow-black transition-width duration-300 ease-in-out">
+            <IoShareSocialSharp className="w-5 h-5 group-hover:fixed " />
+            <div className="group-hover:flex  hidden ml-5  ">
+              <ShareButton
+                date={date}
+                title={data[3]}
+                location={data[10]}
+                type={data[8]}
+                about={data[4]}
+                img={getImgLink(data[5])}
+              />
             </div>
-            <Image
-              width={500}
-              height={500}
-              referrerPolicy={"no-referrer"}
-              src={getImgLink(data[5])}
-              alt="Event Poster"
-            ></Image>
+          </div>
+          <Image
+            width={500}
+            height={500}
+            referrerPolicy={"no-referrer"}
+            src={getImgLink(data[5])}
+            alt="Event Poster"
+          ></Image>
 
           <div className="p-9">
             <div className="flex justify-between items-center">
@@ -122,7 +123,7 @@ function Page({ params }: { params: { id: string } }) {
               <h4 className="my-2 font-semibold">About</h4>
               <p>{data[4]}</p>
             </div>
-            
+
             {!past && data[9] ? (
               <div className="justify-center flex items-center mt-5">
                 <Link href={data[9]} target="_blank">
@@ -132,43 +133,49 @@ function Page({ params }: { params: { id: string } }) {
                 </Link>
               </div>
             ) : null}
-
-
           </div>
         </div>
       </div>
-      <div className="flex justify-center flex-col items-center">
-        {!loading ? ((moreEvents.length > 0)?
-          <>
-            <h1 className="text-lg md:text-3xl font-semibold mt-10 mb-8 p-3">
-              Upcoming Events from {data ? data[6] : null}
-            </h1>
-            <CardGrid>
-              {moreEvents.map((evnt, i) => (
-                <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
-                  <Card
-                    key={evnt[1]}
-                    title={evnt[3]}
-                    description={evnt[4]}
-                    club={evnt[6]}
-                    header={
-                      <Image
-                        width={500}
-                        height={500}
-                        referrerPolicy={"no-referrer"}
-                        src={getImgLink(evnt[5])}
-                        alt="Event Poster"
-                        className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
-                      ></Image>
-                    }
-                    icon={evnt[7]}
-                    isOnline={evnt[8] == "Online" ? true : false}
-                    venue={evnt[10]}
-                  />
-                </Link>
-              ))}
-            </CardGrid>
-          </>: null) : <div className="flex justify-center items-center p-5"> <Loader2 size={30} className="animate-spin"/></div>}
+      <div className="flex justify-center flex-col items-center ">
+        {!loading ? (
+          moreEvents.length > 0 ? (
+            <>
+              <h1 className="text-lg md:text-3xl font-semibold mt-10 mb-8 p-3">
+                Upcoming Events from {data ? data[6] : null}
+              </h1>
+              <CardGrid>
+                {moreEvents.map((evnt, i) => (
+                  <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
+                    <Card
+                      key={evnt[1]}
+                      title={evnt[3]}
+                      description={evnt[4]}
+                      club={evnt[6]}
+                      header={
+                        <Image
+                          width={500}
+                          height={500}
+                          referrerPolicy={"no-referrer"}
+                          src={getImgLink(evnt[5])}
+                          alt="Event Poster"
+                          className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
+                        ></Image>
+                      }
+                      icon={evnt[7]}
+                      isOnline={evnt[8] == "Online" ? true : false}
+                      venue={evnt[10]}
+                    />
+                  </Link>
+                ))}
+              </CardGrid>
+            </>
+          ) : null
+        ) : (
+          <div className="flex justify-center items-center p-5">
+            {" "}
+            <Loader2 size={30} className="animate-spin" />
+          </div>
+        )}
       </div>
       <Footer />
     </div>

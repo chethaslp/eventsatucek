@@ -57,7 +57,6 @@ export default function Home() {
         </div>
         <CardGrid>
           {data.map((evnt, i) => (
-            <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
               <Card
                 key={evnt[1]}
                 title={evnt[3]}
@@ -77,7 +76,6 @@ export default function Home() {
                 isOnline={evnt[8] == "Online" ? true : false}
                 venue={evnt[10]}
               />
-          </Link>
           ))}
         </CardGrid>
       </div>
