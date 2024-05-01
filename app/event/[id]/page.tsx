@@ -89,7 +89,10 @@ function Page({ params }: { params: { id: string } }) {
 
           <div className="p-9">
             <div className="flex justify-between items-center">
-              <p className=" font-bold mb-1 text-2xl md:text-3xl">{data[3]}</p>
+              <p className="flex flex-col mb-1"> 
+                <span className="font-bold text-2xl md:text-3xl">{data[3]}</span>
+                <small className="text-muted-foreground">{data[6]}</small>
+              </p>
               <Image
                 className="rounded-full w-12 md:w-20"
                 referrerPolicy={"no-referrer"}

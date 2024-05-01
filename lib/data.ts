@@ -50,7 +50,7 @@ export function getUpcomingEvents(n="20"): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where H > now() order by(`H`) limit "+n);
+              + encodeURIComponent("select * where H > now() and L = 'Yes' order by(`H`) limit "+n);
   return getData(url)
 }
 
@@ -59,7 +59,7 @@ export function getPastEvents(n="20"): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where H < now() order by(`H`) desc limit "+n);
+              + encodeURIComponent("select * where H < now() and L = 'Yes' order by(`H`) desc limit "+n);
   return getData(url)
 }
 
@@ -74,7 +74,7 @@ export function getMoreClubEvents(clb:string, id:string): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where `G` = '" + clb + "' and `B` != '" + id + "' and toDate(`H`) > now() order by `H`");
+              + encodeURIComponent("select * where `G` = '" + clb + "' and `B` != '" + id + "' and L = 'Yes' and toDate(`H`) > now() order by `H`");
   return getData(url)
 }
 
@@ -88,10 +88,10 @@ export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Pro
     else if(time == 'Upcoming') t = "H > now() order by(`H`)"
     else if(time == 'Past') t = "H < now() order by(`H`)"
 
-    if(clb == getClubs[0] && type == "Both") return "select * where "+ t /* Returns if club is set to "All" and type is "Both" */
-    if(clb == getClubs[0]) return "select * where `I` = '"+ type + "' and "+ t /* Returns if club is set to "All" and type is different */
-    if(type == "Both")  return "select * where `G` = '"+ clb + "' and "+ t /* Returns if club is different and type is set to "Both" */
-    return "select * where `G` = '"+ clb + "' and  `I` = '"+ type + "' and "+ t /* Returns if club and type is different. */
+    if(clb == getClubs[0] && type == "Both") return "select * where L = 'Yes' and "+ t /* Returns if club is set to "All" and type is "Both" */
+    if(clb == getClubs[0]) return "select * where `I` = '"+ type + "' and L = 'Yes' and "+ t /* Returns if club is set to "All" and type is different */
+    if(type == "Both")  return "select * where `G` = '"+ clb + "' and L = 'Yes' and "+ t /* Returns if club is different and type is set to "Both" */
+    return "select * where `G` = '"+ clb + "' and  `I` = '"+ type + "' and L = 'Yes' and "+ t /* Returns if club and type is different. */
   }
 
   const url = "https://docs.google.com/spreadsheets/d/"

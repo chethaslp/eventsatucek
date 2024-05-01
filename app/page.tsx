@@ -7,7 +7,7 @@ import { BackgroundGradient } from "@/components/ui/banner";
 import Footer from "@/components/ui/Footer";
 
 import { getImgLink, getUpcomingEvents, getClubs, filterEvents } from "@/lib/data";
-import { formatDateArray, countdownHelper } from "@/lib/utils";
+import { formatDateArray, countdownHelper, cn } from "@/lib/utils";
 import Loading from "../components/ui/Loading";
 
 import { useEffect, useState, useRef } from "react";
@@ -38,7 +38,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   const [clubDropdown, setClubDropdown]: any = useState("All Clubs");
-  const [timeDropdown, setTimeDropdown]: any = useState("All");
+  const [timeDropdown, setTimeDropdown]: any = useState("Upcoming");
   const [typeDropdown, setTypeDropdown]: any = useState("Both");
   const [countdown, setCountdown]: any = useState<string>();
   const [bannerEvent, setBannerEvent] = useState<string[]>([
@@ -88,7 +88,7 @@ export default function Home() {
   }
   function timeDropdownHandle(time: string): any {
     timeDropdownButton.current.click();
-    if (time != typeDropdown) {
+    if (time != timeDropdown) {
       setTimeDropdown(time);
       filterEvents(clubDropdown, typeDropdown, time).then((evnts) => setData(evnts));
     }
@@ -133,8 +133,9 @@ export default function Home() {
                   Next Event
                 </p>
 
-                <p className="text-xl md:text-3xl font-bold mb-1">
-                  {bannerEvent[3]}
+                <p className="flex flex-col mb-3"> 
+                  <span className="font-bold text-xl md:text-3xl">{bannerEvent[3]}</span>
+                  <small className="text-muted-foreground">{bannerEvent[6]}</small>
                 </p>
                 <p className="flex items-center mb-1 ">
                   <FaCalendarAlt className="mr-2" />
@@ -162,40 +163,35 @@ export default function Home() {
                   <BsClock className="mr-2" />
                   {date.from_time}
                 </p>
-                <div className="flex flex-col items-center mt-3 rounded-lg bg-glass p-3">
-                  <p className="text font-medium pb-2">Applications Close In</p>
-                  <div
-                    className={`${font.className} flex gap-1 sm:gap-2 md:gap-4 items-center font-semibold`}
-                  >
-                    <div className="flex flex-col items-center">
-                      <h1 className="text-xl md:text-3xl">
-                        {countdown ? countdown.days : 0}
-                      </h1>
-                      <p className="text-sm md:text-0">DAYS</p>
-                    </div>
-                    :
-                    <div className="flex flex-col items-center">
-                      <h1 className="text-xl md:text-3xl">
-                        {countdown ? countdown.hours : 0}
-                      </h1>
-                      <p className="text-sm md:text-0">HOURS</p>
-                    </div>
-                    :
-                    <div className="flex flex-col items-center">
-                      <h1 className="text-xl md:text-3xl">
-                        {countdown ? countdown.minutes : 0}
-                      </h1>
-                      <p className="text-sm md:text-0">MINUTES</p>
-                    </div>
-                    :
-                    <div className="flex flex-col items-center">
-                      <h1 className="text-xl md:text-3xl">
-                        {countdown ? countdown.seconds : 0}
-                      </h1>
-                      <p className="text-sm md:text-0">SECONDS</p>
-                    </div>
-                  </div>
-                </div>
+                {/* COUNTDOWN */}
+                      <div className={cn("grid grid-flow-col mt-4 gap-5 text-center auto-cols-max", font.className)}>
+                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                          <span className="countdown font-mono text-5xl">
+                            <span style={{"--value": countdown ? countdown.days : 0} as React.CSSProperties}></span>
+                          </span>
+                          days
+                        </div> 
+                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                          <span className="countdown font-mono text-5xl">
+                            <span style={{"--value": countdown ? countdown.hours : 0} as React.CSSProperties}></span>
+                          </span>
+                          hours
+                        </div> 
+                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                          <span className="countdown font-mono text-5xl">
+                            <span style={{"--value": countdown ? countdown.minutes: 0} as React.CSSProperties}></span>
+                          </span>
+                          min
+                        </div> 
+                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                          <span className="countdown font-mono text-5xl">
+                            <span style={{"--value": countdown ? countdown.seconds : 0} as React.CSSProperties}></span>
+                          </span>
+                          sec
+                        </div>
+                      </div>
+
+                {/* ACTION BUTTONS */}
                 <div className="flex flex-row gap-3 mb-4 mt-4 justify-center md:gap-5">
                   <Link href={"/event/" + bannerEvent[1]}>
                     <Button
