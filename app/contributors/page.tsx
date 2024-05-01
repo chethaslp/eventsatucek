@@ -28,7 +28,7 @@ function Page() {
       <Navbar />
       <div className="flex-1 justify-center mb-8 flex-col">
         <div className="text-2xl flex items-center justify-center mb-5">Contributors</div>
-      <div className="items-center w-full justify-items-center flex justify-around md:gap-x-4 gap-y-6 mb-10">
+      <div className="items-center flex-col sm:flex-row w-full justify-evenly flex md:gap-x-4 gap-y-6 mb-10">
           {data.map((contr:{login:string, avatar_url:string, html_url:string, }) => (
             <div key={contr.login} className="rounded-[24px] flex flex-col border border-slate-600 p-5">
                 <AvatarCard url={contr.avatar_url} />

@@ -1,10 +1,11 @@
 import React from "react";
-import { resolveClubIcon, formatDateArray } from "@/lib/utils";
+import { resolveClubIcon } from "@/lib/utils";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoIosCloud } from "react-icons/io";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import Image from "next/image";
+import moment from "moment";
 
 const Card = ({
   title,
@@ -23,7 +24,8 @@ const Card = ({
   venue?: string;
   club: string;
 }) => {
-  const dt = formatDateArray(date);
+  // 29/04/2024 11:00:0
+  const dt = moment(date, "DD/MM/YYYY HH:mm:s");
   const clubIcon = resolveClubIcon(club, false);
 
   return (
@@ -35,13 +37,12 @@ const Card = ({
       <div className="text-white w-full absolute bottom-0 sm:top-[275px]  md:top-[287px] flex flex-col p-3  group-hover:opacity-50 opacity-100 transition duration-300 ease-in-out">
         <div className="flex flex-row w-full items-center">
           <div className="bg-[#8f90918c] shadow-md font-semibold mr-4 text-white text-[10px] sm:text-[14px] md:text-[16px] w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg text-center">
-            {dt.month} <br />
-            {dt.day}
+            {dt.format("MMM Do")}
           </div>
           <div className="flex flex-col gap-1 text-[8px] sm:text-[14px] md:text-[16px]">
             <div className="font-semibold line-clamp-1">{title}</div>
             <div className="flex items-center gap-1">
-              <BsClock /> {dt.from_time}
+              <BsClock /> {dt.format("h:mm a")}
             </div>
               </div>
             <div className="absolute right-8 md:right-6 text-[8px] sm:text-xl md:text-2xl">

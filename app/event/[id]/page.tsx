@@ -20,30 +20,28 @@ import { IoLocationSharp } from "react-icons/io5";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { IoCloudOfflineSharp } from "react-icons/io5";
 import { getImgLink, getEvent, getMoreClubEvents } from "@/lib/data";
-import { formatDateArray, resolveClubIcon } from "@/lib/utils";
+import { resolveClubIcon } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import moment from "moment";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
 
   const themeToDark = theme == "dark" ? false : true;
   const [data, setData] = useState<string[]>([]);
-  const [past, setPast] = useState(false);
   const [loading, setLoading] = useState(true);
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
 
-  let date = data[0] ? formatDateArray(data[7]) : null,
-    clubIcon = data ? resolveClubIcon(data[6], themeToDark) : null;
+  const [date, setDate] = useState<any>();
+  const [clubIcon, setClubIcon] = useState<string>("");
 
   useEffect(() => {
     getEvent(params.id)
       .then((evnt) => {
         setData(evnt[0]);
-        date = data ? formatDateArray(data[7]) : null;
-        clubIcon = data ? resolveClubIcon(data[6], themeToDark) : null;
-        if ((new Date(date.date) as any) - (new Date() as any) > 0)
-          setPast(true);
-        return 1;
+        setDate(moment(evnt[0][7], "DD/MM/YYYY HH:mm:ss"))
+        setClubIcon( data ? resolveClubIcon(data[6], themeToDark) : null)
+        
       })
       
   }, []);
@@ -64,7 +62,7 @@ function Page({ params }: { params: { id: string } }) {
   ) : (
     <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
       <Navbar />
-      <div className="flex-1  justify-center px-5 md:px-20">
+      <div className="flex-1  justify-center px-5 md:px-20 mb-7">
         <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:!shadow-black md:shadow-md rounded-xl dark:bg-[#0c0c0c]">
           <div className="absolute group z-10 w-10 hover:w-24 flex p-2 m-3 bg-white rounded-full text-black  shadow-sm shadow-black transition-width duration-300 ease-in-out">
             <IoShareSocialSharp className="w-5 h-5 group-hover:fixed " />
@@ -93,17 +91,17 @@ function Page({ params }: { params: { id: string } }) {
                 <span className="font-bold text-2xl md:text-3xl">{data[3]}</span>
                 <small className="text-muted-foreground">{data[6]}</small>
               </p>
-              <Image
+              {clubIcon && <Image
                 className="rounded-full w-12 md:w-20"
                 referrerPolicy={"no-referrer"}
                 src={clubIcon}
                 alt="Club Icon"
-              ></Image>
+              ></Image>}
             </div>
             <div className="text-sm md:text-[15px]">
               <p className="flex items-center mb-1 ">
                 <FaCalendarAlt className="mr-2 text-sm md:text-[]" />
-                {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;{date.year}
+                {date?.format("dddd, Do MMM")} ({date?.calendar()})
               </p>
               <p className="flex items-center mb-1">
                 <IoLocationSharp className="mr-2 text-sm md:text-[]" />{" "}
@@ -121,13 +119,13 @@ function Page({ params }: { params: { id: string } }) {
               )}
               <p className="flex items-center mb-1">
                 {" "}
-                <BsClock className="mr-2 text-sm md:text-[]" /> {date.from_time}
+                <BsClock className="mr-2 text-sm md:text-[]" /> {date?.format("h:mm a")}
               </p>
               <h4 className="my-2 font-semibold">About</h4>
-              <p>{data[4]}</p>
+              <p className="whitespace-break-spaces">{data[4]}</p>
             </div>
 
-            {!past && data[9] ? (
+            {!date?.isBefore() && data[9] ? (
               <div className="justify-center flex items-center mt-5">
                 <Link href={data[9]} target="_blank">
                   <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">

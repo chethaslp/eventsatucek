@@ -1,13 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/ui/navbar";
-import { useToast } from "@/components/ui/use-toast";
 import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 import Footer from "@/components/ui/Footer";
 
 import { getImgLink, getUpcomingEvents, getClubs, filterEvents } from "@/lib/data";
-import { formatDateArray, countdownHelper, cn } from "@/lib/utils";
 import Loading from "../components/ui/Loading";
 
 import { useEffect, useState, useRef } from "react";
@@ -26,6 +24,8 @@ import { LuFilter } from "react-icons/lu";
 
 import NoEvents from "./NoEvents";
 import FCM from "@/components/ui/fcm";
+import moment from "moment";
+import CountdownTimer from "@/components/ui/countdown";
 
 const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
@@ -40,7 +40,7 @@ export default function Home() {
   const [clubDropdown, setClubDropdown]: any = useState("All Clubs");
   const [timeDropdown, setTimeDropdown]: any = useState("Upcoming");
   const [typeDropdown, setTypeDropdown]: any = useState("Both");
-  const [countdown, setCountdown]: any = useState<string>();
+  const [date, setDate] = useState<moment.Moment>();
   const [bannerEvent, setBannerEvent] = useState<string[]>([
     "",
     "",
@@ -52,7 +52,6 @@ export default function Home() {
     "",
     "",
   ]);
-  let date;
 
   useEffect(() => {
     getUpcomingEvents()
@@ -64,6 +63,8 @@ export default function Home() {
         setData(data);
         const upcomingEvent = data.shift() || [""]; // Shift the first event from data
         setBannerEvent(upcomingEvent);
+        setDate(moment(upcomingEvent[7],"DD/MM/YYYY HH:mm:ss"))
+        console.log(date)
         setLoading(false);
       })
       .catch((error) => {
@@ -95,21 +96,6 @@ export default function Home() {
   }
 
 
-  function updateCountdown() {
-    if (bannerEvent && bannerEvent[7]) {
-      const eventDate: any = new Date(formatDateArray(bannerEvent[7]).date); // Convert 'date' to a Date object
-      const currentDate: any = new Date(); // Assuming currentDate represents the current date
-      const day_difference: any = eventDate - currentDate;
-      setCountdown(countdownHelper(day_difference));
-    }
-  }
-  useEffect(() => {
-    // Update countdown timer when bannerEvent changes
-    updateCountdown();
-    const intervalId = setInterval(updateCountdown, 1000); // Update countdown every second
-    return () => clearInterval(intervalId); // Cleanup function to clear the interval when component unmounts or when bannerEvent changes
-  }, [bannerEvent]);
-
   // If there is no events happening
   if (data.length == 0 && !loading && bannerEvent.length == 0) {
     return <NoEvents />;
@@ -139,11 +125,7 @@ export default function Home() {
                 </p>
                 <p className="flex items-center mb-1 ">
                   <FaCalendarAlt className="mr-2" />
-                  {(() => {
-                    date = bannerEvent ? formatDateArray(bannerEvent[7]) : null;
-                  })()}
-                  {date.dayOfWeek}, {date.day}&nbsp;{date.month}&nbsp;
-                  {date.year}
+                  {date?.format("dddd, Do MMM YYYY")} ({date?.fromNow()})
                 </p>
                 <p className="flex break-words items-center mb-1">
                   <IoLocationSharp className="mr-2" />{" "}
@@ -161,36 +143,10 @@ export default function Home() {
                 <p className="flex items-center mb-1">
                   {" "}
                   <BsClock className="mr-2" />
-                  {date.from_time}
+                  {date?.format("h:mm a")}
                 </p>
                 {/* COUNTDOWN */}
-                      <div className={cn("grid grid-flow-col mt-4 gap-5 text-center auto-cols-max", font.className)}>
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                          <span className="countdown font-mono text-5xl">
-                            <span style={{"--value": countdown ? countdown.days : 0} as React.CSSProperties}></span>
-                          </span>
-                          days
-                        </div> 
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                          <span className="countdown font-mono text-5xl">
-                            <span style={{"--value": countdown ? countdown.hours : 0} as React.CSSProperties}></span>
-                          </span>
-                          hours
-                        </div> 
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                          <span className="countdown font-mono text-5xl">
-                            <span style={{"--value": countdown ? countdown.minutes: 0} as React.CSSProperties}></span>
-                          </span>
-                          min
-                        </div> 
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                          <span className="countdown font-mono text-5xl">
-                            <span style={{"--value": countdown ? countdown.seconds : 0} as React.CSSProperties}></span>
-                          </span>
-                          sec
-                        </div>
-                      </div>
-
+                      <CountdownTimer bannerEvent={bannerEvent} date={date}/>
                 {/* ACTION BUTTONS */}
                 <div className="flex flex-row gap-3 mb-4 mt-4 justify-center md:gap-5">
                   <Link href={"/event/" + bannerEvent[1]}>
@@ -231,12 +187,12 @@ export default function Home() {
             className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row`}
           >
             <p className="text-3xl">{timeDropdown} Events</p>
-            <div className="md:left-28 z-30 absolute md:my-7 my-12 text-sm md:text-lg p-2">
+            <div className="md:left-28 z-30 absolute md:my-7 my-12 text-xs md:text-lg pt-6">
               <div className="flex flex-row items-center gap-1 md:gap-2">
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
                   <summary
-                    className="m-1 btn bg-transparent border-2"
+                    className="m-1 btn bg-transparent border-1"
                     ref={clubDropdownButton}
                   >
                     {clubDropdown}
@@ -253,7 +209,7 @@ export default function Home() {
                 </details>
                 <details className="dropdown ">
                   <summary
-                    className="m-1 btn bg-transparent border-2"
+                    className="m-1 btn bg-transparent border-1"
                     ref={typeDropdownButton}
                   >
                     {typeDropdown}
@@ -272,7 +228,7 @@ export default function Home() {
                 </details>
                 <details className="dropdown ">
                   <summary
-                    className="m-1 btn bg-transparent border-2"
+                    className="m-1 btn bg-transparent border-1"
                     ref={timeDropdownButton}
                   >
                     {timeDropdown}
