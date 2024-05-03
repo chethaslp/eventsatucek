@@ -26,7 +26,7 @@ import NoEvents from "./NoEvents";
 import FCM from "@/components/ui/fcm";
 import moment from "moment";
 import CountDown from "@/components/ui/CountDown";
-import CardGrid from "@/components/ui/CardGrid";
+
 
 const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
