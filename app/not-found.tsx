@@ -1,7 +1,6 @@
 "use client"
-import { Logo } from '@/components/ui/logo';
-import { Separator } from '@/components/ui/separator';
-import { Link2Off, Loader2 } from "lucide-react";
+
+import { Link2Off} from "lucide-react";
 import { Bebas_Neue } from 'next/font/google'
 
 const font = Bebas_Neue({ subsets: ['latin'], weight: ['400']})
