@@ -41,10 +41,8 @@ function Page({ params }: { params: { id: string } }) {
         setData(evnt[0]);
         setDate(moment(evnt[0][7], "DD/MM/YYYY HH:mm:ss"))
         setClubIcon( data ? resolveClubIcon(data[6], themeToDark) : null)
-        
       })
-      
-  }, []);
+  }, [date]);
 
   useEffect(() => {
     getMoreClubEvents(data[6] ? data[6] : "nill", params.id)
@@ -92,7 +90,7 @@ function Page({ params }: { params: { id: string } }) {
                 <small className="text-muted-foreground">{data[6]}</small>
               </p>
               {clubIcon && <Image
-                className="rounded-full w-12 md:w-20"
+                className="rounded-full w-12 md:w-20 absolute md:right-28 right-0"
                 referrerPolicy={"no-referrer"}
                 src={clubIcon}
                 alt="Club Icon"
