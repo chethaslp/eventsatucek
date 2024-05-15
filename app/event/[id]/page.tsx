@@ -1,6 +1,5 @@
 "use client";
 
-import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
@@ -41,11 +40,11 @@ function Page({ params }: { params: { id: string } }) {
         setData(evnt[0]);
         setDate(moment(evnt[0][7], "DD/MM/YYYY HH:mm:ss"))
         setClubIcon( data ? resolveClubIcon(data[6], themeToDark) : null)
-        
       })
-      
-  }, []);
+  }, [data]);
 
+  console.log(date);
+  
   useEffect(() => {
     getMoreClubEvents(data[6] ? data[6] : "nill", params.id)
     .then((upcomingEvents) => {
@@ -68,12 +67,12 @@ function Page({ params }: { params: { id: string } }) {
             <IoShareSocialSharp className="w-5 h-5 group-hover:fixed " />
             <div className="group-hover:flex  hidden ml-5  ">
               <ShareButton
-                date={date}
+                date={date?.format("dddd, Do MMM")}
+                time={date?.format("h:mm a")}
                 title={data[3]}
                 location={data[10]}
                 type={data[8]}
                 about={data[4]}
-                img={getImgLink(data[5])}
               />
             </div>
           </div>
@@ -92,7 +91,7 @@ function Page({ params }: { params: { id: string } }) {
                 <small className="text-muted-foreground">{data[6]}</small>
               </p>
               {clubIcon && <Image
-                className="rounded-full w-12 md:w-20"
+                className="rounded-full w-12 md:w-20 absolute md:right-28 right-0"
                 referrerPolicy={"no-referrer"}
                 src={clubIcon}
                 alt="Club Icon"

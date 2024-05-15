@@ -2,14 +2,14 @@ import { RxLink1 } from "react-icons/rx";
 import { FaWhatsapp } from "react-icons/fa";
 import { useToast } from "@/components/ui/use-toast";
 
-const ShareButton = ({ date, title, location, type, about, img }: any) => {
+const ShareButton = ({ date, time, title, location, type, about}: any) => {
 
   const toast = useToast();
   const copy_message = `${title}
   
 ${about}
 
-📅 ${date.dayOfWeek}, ${date.day} ${date.month} ${date.year} at ${date.from_time} - (${type})
+📅 ${date} at ${time}
 📍 Venue: ${location == "" ? "Will be Updated" : location}
   
 🌐 Checkout Now: ${window.location.href}`;
@@ -18,7 +18,7 @@ const whatsapp_message = `*${title}*
   
 ${about}
 
-📅 ${date.dayOfWeek}, ${date.day} ${date.month} ${date.year} at ${date.from_time} - (${type})
+📅 ${date} at ${time}
 📍 Venue: ${location == "" ? "Will be Updated" : location}
   
 
