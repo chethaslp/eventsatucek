@@ -193,13 +193,13 @@ export default function Home() {
                 <LuFilter className="size-4 md:size-6"/> Filter
                 <details className="dropdown">
                   <summary
-                    className="m-1 btn bg-transparent border-1 md:text-sm text-[10px]  dark:text-white dark:hover:bg-black overflow-hidden"
+                    className="m-1 btn bg-transparent border-1 md:text-sm text-[12px]  dark:text-white dark:hover:bg-black overflow-hidden"
                     ref={clubDropdownButton}
                   >
                     {clubDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content md:text-sm text-[10px] dark:text-white dark:bg-black  z-[1] bg-base-100 rounded-box w-52`}
+                    className={`p-2 shadow menu dropdown-content md:text-sm text-[12px] dark:text-white dark:bg-black  z-[1] bg-base-100 rounded-box w-52`}
                   >
                     {getClubs.map((club, idx) => (
                       <li key={idx}>
@@ -210,13 +210,13 @@ export default function Home() {
                 </details>
                 <details className="dropdown ">
                   <summary
-                    className="m-1 btn bg-transparent md:text-sm text-[10px]  dark:text-white dark:hover:bg-black border-1"
+                    className="m-1 btn bg-transparent md:text-sm text-[12px]  dark:text-white dark:hover:bg-black border-1"
                     ref={typeDropdownButton}
                   >
                     {typeDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content md:text-sm text-[10px] dark:text-white dark:bg-black z-[1] bg-base-100 rounded-box w-52 `}
+                    className={`p-2 shadow menu dropdown-content md:text-sm text-[12px] dark:text-white dark:bg-black z-[1] bg-base-100 rounded-box w-52 `}
                   >
                     {["Online", "Offline", "Both"].map((type, idx) => (
                       <li key={idx}>
@@ -229,13 +229,13 @@ export default function Home() {
                 </details>
                 <details className="dropdown ">
                   <summary
-                    className="m-1 btn bg-transparent md:text-sm text-[10px]   dark:text-white dark:hover:bg-black border-1"
+                    className="m-1 btn bg-transparent md:text-sm text-[12px]   dark:text-white dark:hover:bg-black border-1"
                     ref={timeDropdownButton}
                   >
                     {timeDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content md:text-sm text-[10px] dark:text-white dark:bg-black z-[1] bg-base-100 rounded-box w-52 `}
+                    className={`p-2 shadow menu dropdown-content md:text-sm text-[12px] dark:text-white dark:bg-black z-[1] bg-base-100 rounded-box w-52 `}
                   >
                     {["Upcoming", "Past", "All"].map((type, idx) => (
                       <li key={idx}>
@@ -282,7 +282,7 @@ export default function Home() {
             ))}
             <Link
               href={"/event/past"}
-              className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px] sm:text w-[10rem] h-[10rem] sm:w-[18rem] sm:h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
+              className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px]  w-[20rem] h-[20rem] sm:w-[18rem] sm:h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
             >
               <PiClockCounterClockwiseBold className="text-[30px] sm:text-[50px]" />{" "}
               View Past Events.

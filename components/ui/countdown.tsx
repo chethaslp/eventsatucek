@@ -2,6 +2,8 @@
 
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { Outfit } from "next/font/google";
+const inter = Outfit({ subsets: ['latin'] })
 
 export default function CountDown({
   bannerEvent,
@@ -11,7 +13,7 @@ export default function CountDown({
   date?: moment.Moment;
 }) {
   const [countdown, setCountdown] = useState<moment.Duration>();
-
+ 
   useEffect(() => {
     function updateCountdown() {
       if (bannerEvent && bannerEvent[7]) {
@@ -30,10 +32,12 @@ export default function CountDown({
   }, [bannerEvent]);
 
   return (
-    <div className={"grid grid-flow-col mt-4 gap-5 text-center auto-cols-max"}>
-      <div className="flex flex-col p-2 bg-[#dbdbdbc3] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
+    <div className={`${inter.className}`}>
+
+    <div className={`grid grid-flow-col mt-4 gap-5 text-center auto-cols-max `}>
+      <div className={`flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text`}>
         <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
-          <span
+          <span className={`${inter.className}`}
             style={
               {
                 "--value": countdown ? countdown.days() : 0,
@@ -41,11 +45,12 @@ export default function CountDown({
             }
           ></span>
         </span>
-        days
+        DAYS
+        
       </div>
-      <div className="flex flex-col p-2 bg-[#dbdbdbc3] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
+      <div className="flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
         <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
-          <span
+          <span className={`${inter.className}`}
             style={
               {
                 "--value": countdown ? countdown.hours() : 0,
@@ -53,11 +58,11 @@ export default function CountDown({
             }
           ></span>
         </span>
-        hours
+        HOURS
       </div>
-      <div className="flex flex-col p-2 bg-[#dbdbdbc3] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
+      <div className="flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
         <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
-          <span
+          <span className={`${inter.className}`}
             style={
               {
                 "--value": countdown ? countdown.minutes() : 0,
@@ -65,11 +70,11 @@ export default function CountDown({
             }
           ></span>
         </span>
-        min
+        MIN
       </div>
-      <div className="flex flex-col p-2 bg-[#dbdbdbc3] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
+      <div className="flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
         <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
-          <span
+          <span className={`${inter.className}`}
             style={
               {
                 "--value": countdown ? countdown.seconds() : 0,
@@ -77,8 +82,10 @@ export default function CountDown({
             }
           ></span>
         </span>
-        sec
+        SEC
       </div>
     </div>
+    </div>
+    
   );
 }
