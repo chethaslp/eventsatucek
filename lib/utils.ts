@@ -43,7 +43,15 @@ export function resolveClubIcon(clb: string,black:boolean ): any {
   }[clb];
 }
 
-export function countdownHelper(millisecond: any) {
+export function parseDate(dateString: string): Date {
+  const [day, month, year, hour, minute, second] = dateString
+    .split(/\/|\s|:/)
+    .map(Number);
+  // Note: month - 1 because JavaScript Date months are zero-based
+  return new Date(year, month - 1, day, hour, minute, second);
+}
+
+export function countdownHelper(millisecond: any):any {
   interface Time{
     days:number;
     hours:number;
