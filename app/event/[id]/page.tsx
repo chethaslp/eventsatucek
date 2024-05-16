@@ -91,7 +91,7 @@ function Page({ params }: { params: { id: string } }) {
                 <small className="text-muted-foreground">{data[6]}</small>
               </p>
               {clubIcon && <Image
-                className="rounded-full w-12 md:w-20 absolute md:right-28 right-0"
+                className="rounded-full w-12 md:w-20 absolute md:right-28 right-7"
                 referrerPolicy={"no-referrer"}
                 src={clubIcon}
                 alt="Club Icon"
