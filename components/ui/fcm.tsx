@@ -3,10 +3,11 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
-import { PUBLIC_KEY, firebaseConfig } from "@/lib/data";
+import { PUBLIC_KEY } from "@/lib/data";
 import { useEffect, useState } from "react";
 import { register } from "register-service-worker";
 import { useToast } from "./use-toast";
+import { app } from "../fb/config";
 
 export default function FCM(){
     const toast = useToast();
@@ -29,7 +30,7 @@ export default function FCM(){
                 },
                 registered(reg) {
                   console.log("Registered ServiceWorker.");
-                  getToken(getMessaging(initializeApp(firebaseConfig)), {
+                  getToken(getMessaging(app), {
                     vapidKey: PUBLIC_KEY,
                   })
                     // Sending FCM Token to the server
@@ -71,7 +72,7 @@ export default function FCM(){
       }, []);
     
       useEffect(() => {
-        onMessage(getMessaging(initializeApp(firebaseConfig)), (payload) => {
+        onMessage(getMessaging(app), (payload) => {
           toast.toast({
             title: "New Event Published!",
             description: "Refresh the page to view now.",

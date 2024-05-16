@@ -3,6 +3,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
 } from "./dropdown-menu";
 import { Separator } from "./separator";
 import { Sun, Moon, User, UserCheck2 } from "lucide-react";
@@ -14,20 +15,35 @@ import { usePathname } from "next/navigation";
 import { FaGithub } from "react-icons/fa";
 import { useToast } from "./use-toast";
 import { GITHUB_URL } from "@/lib/utils";
-import { RxAvatar } from "react-icons/rx";
+import { Avatar } from "./avatar";
+import { useAuthContext } from "../context/auth";
+import { signOut } from "firebase/auth";
+import { SigninDialog } from "../dialog/signin-dialog";
+import { SetStateAction, useState } from "react";
+import { auth } from "../fb/config";
+import Image from "next/image";
 
 export function Navbar({ qName }: { qName?: string }) {
   const { setTheme } = useTheme();
   const path = usePathname();
   const { toast } = useToast();
+  const user = useAuthContext()
+  const [open, setOpen] = useState(false)
+
+  function handleUserLogin(): void {
+    if(user) signOut(auth)
+    else setOpen(true)
+  }
+
   // if(!user) redirect("/signin?c="+path)
 
-  return (
+  return <>
+  <SigninDialog open={open} setOpen={setOpen}/>
     <div className="w-full backdrop-blur pr-5 pt-3 pl-5 pb-3 dark:bg-[#121212]">
       <div className="flex items-center justify-between gap-2 flex-row">
         <div className="flex items-center flex-row gap-2 hover:scale-105 transition-all scale-100">
           <Link href={"/"}>
-            <Logo size={"6xl"} />
+            <Logo className={"text-3xl md:text-5xl"} />
           </Link>
           {qName && <span className="text-lg ml-2">/&nbsp;{qName}</span>}
         </div>
@@ -49,6 +65,21 @@ export function Navbar({ qName }: { qName?: string }) {
               Contributors
             </Button>
           </a>
+          <DropdownMenu>
+              <DropdownMenuTrigger asChild className="cursor-pointer"> 
+                  {(user)? <Avatar><Image height={30} crossOrigin="anonymous" referrerPolicy="no-referrer" className="aspect-square h-full w-full" width={100} src={user.photoURL || ""} alt={user.displayName || ""}/></Avatar>:
+                  <Button variant="outline" size="icon"> <User/> </Button>}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {(user)?<>
+                  <DropdownMenuItem onClick={()=>location.href="/profile"} className="cursor-pointer">View Profile</DropdownMenuItem>
+                <DropdownMenuSeparator/>
+                </>:null}
+                <DropdownMenuItem onClick={handleUserLogin} className="cursor-pointer">
+                    {(user)?"Signout":"Signin"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+          </DropdownMenu>
           <a
             href={GITHUB_URL}
             target="_blank"
@@ -56,14 +87,6 @@ export function Navbar({ qName }: { qName?: string }) {
           >
             <Button variant="outline" className="text-lg" size="icon">
               <FaGithub />
-            </Button>
-          </a>
-          <a
-            href='/signup'
-            className="w-fill hidden md:block"
-          >
-            <Button variant="outline" className="text-lg" size="icon">
-            <RxAvatar />
             </Button>
           </a>
           <DropdownMenu>
@@ -90,5 +113,5 @@ export function Navbar({ qName }: { qName?: string }) {
       </div>
       <Separator className="mt-3 mb-4" />
     </div>
-  );
+    </>
 }

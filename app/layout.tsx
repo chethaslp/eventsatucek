@@ -4,6 +4,8 @@ import { ThemeProvider } from '@/components/context/theme'
 import { Toaster } from '@/components/ui/toaster'
 import { Metadata, ResolvingMetadata } from 'next'
 import { getEvent } from '@/lib/data'
+import { AuthContextProvider } from '@/components/context/auth'
+import { cn } from '@/lib/utils'
 
 const inter = Raleway({ subsets: ['latin'] })
 
@@ -29,15 +31,17 @@ export default function RootLayout({
   
   return (
     <html lang="en" className='h-screen'>
-      <body className={inter.className}>
+      <body className= {cn(inter.className, "h-[100dvh] w-[100dvw]")}>
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
+             <AuthContextProvider>
                 <Toaster/>
                 {children}
+              </AuthContextProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -4,13 +4,6 @@ import Papa from "papaparse";
 export const EVNTS_SHEET_ID = "1JF8JCd01dGp1s3iFiriOUHZxlMro63vCAf5Qsm7RNEE" /* PROD */
 
 export const PUBLIC_KEY = "BPpBelMiDJmKoVfUm-h_23puTUUsmQuhDV8wSih6vN8e9SjQ-a0gGEMUje_pOzoGPDNxNyLZcvEwmIXEW0iaZ5g"
-export const firebaseConfig = {
-  apiKey: "AIzaSyAdSmj_Dt2z3KTVDZcprly2GCT_0UGKZOk",
-  authDomain: "proj-eventsatucek.firebaseapp.com",
-  projectId: "proj-eventsatucek",
-  messagingSenderId: "747267605566",
-  appId: "1:747267605566:web:e6d8dbb9f4a16dbf2e7d6f"
-};
 
 export function getData(url:string): Promise<string[][]> {
   return new Promise((resolve, reject) => {
