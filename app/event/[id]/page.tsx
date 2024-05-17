@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 
@@ -11,6 +12,10 @@ import Loading from "@/components/ui/Loading";
 import CardGrid from "@/components/ui/CardGrid";
 import { Navbar } from "@/components/ui/navbar";
 import ShareButton from "@/components/ui/ShareButton";
+import { RsvpDialog } from "@/components/dialog/rsvp-dialog";
+import { SigninDialog } from "@/components/dialog/signin-dialog";
+import { useAuthContext } from "@/components/context/auth";
+import { getUserEventStatus } from "@/components/fb/db";
 
 import { BsClock } from "react-icons/bs";
 import { IoIosCloud } from "react-icons/io";
@@ -18,15 +23,16 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { IoCloudOfflineSharp } from "react-icons/io5";
+
+
 import { getImgLink, getEvent, getMoreClubEvents } from "@/lib/data";
 import { resolveClubIcon } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { Event_User } from "@/lib/types";
+
+import { InfoIcon, Loader2 } from "lucide-react";
 import moment from "moment";
-import { RsvpDialog } from "@/components/dialog/rsvp-dialog";
-import { useSearchParams } from "next/navigation";
 import NotFound from "@/app/not-found";
-import { SigninDialog } from "@/components/dialog/signin-dialog";
-import { useAuthContext } from "@/components/context/auth";
+import { HashLoader } from "react-spinners";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
@@ -70,9 +76,49 @@ function Page({ params }: { params: { id: string } }) {
   }, []);
 
 
-  function handleRSVP(){
-    
+  function UserEventInteractionPanel(){
+
+    const [userStatus, setUserStatus] = useState<Event_User['status'] | null>();
+  
+    useEffect(() =>{
+      if(!data || !user) return
+      
+      getUserEventStatus(user, params.id).then((d)=>{
+        if(d?.exists()){
+          setUserStatus(d.data()?.status)
+        }else setUserStatus(null)
+      })
+    },[])
+
+    return <div className="flex items-center justify-center mt-5">
+      {(()=>{
+        switch (userStatus) {
+          case "attended":
+            return <div className="border rounded-lg bg-success gap-3 flex flex-row p-3"><InfoIcon/> Wohooo! You have already attended this event.</div>
+          case "registered":
+              return <div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> You just RSVP&apos;d this event!</div>
+          case "missed":
+              return <div className="border rounded-lg bg-destructive gap-3 flex flex-row p-3"><InfoIcon/>You missed this event.</div>
+          case null:
+            return (!date?.isBefore() && data[9]) ? <button onClick={()=>{
+              if(!user) {
+                setOpenSignin(true)
+                return
+              }
+              setOpen(true)
+            }} 
+              className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+              RVSP Now!
+            </button>: <div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> This event is over.</div>
+          default:
+            return <HashLoader color={theme=="light"? undefined:"white"}/>
+          }
+      })()}
+    </div>
+
+      
   }
+
 
   if(!data) return <NotFound/>
 
@@ -146,20 +192,9 @@ function Page({ params }: { params: { id: string } }) {
               <p className="whitespace-break-spaces">{data[4]}</p>
             </div>
 
-            {!date?.isBefore() && data[9] ? (
-              <div className="justify-center flex items-center mt-5">
-                  <button onClick={()=>{
-                    if(!user) {
-                      setOpenSignin(true)
-                      return
-                    }
-                    setOpen(true)
-                  }} 
-                    className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                    RVSP Now!
-                  </button>
-              </div>
-            ) : null}
+
+            <UserEventInteractionPanel/>
+
           </div>
         </div>
       </div>

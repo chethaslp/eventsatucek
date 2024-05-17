@@ -46,3 +46,12 @@ export async function getUserEvents(user:User) {
         return null
     })
 }
+
+
+export async function getUserEventStatus(user:User, evntID: string) {
+    return getDoc(doc(db, "users", user.uid,'attendedEvents',evntID).withConverter(GenericConverter<Event_User>()))
+    .catch((err)=> {
+        console.error(err)
+        return null
+    })
+}

@@ -95,7 +95,8 @@ function RsvpForm({ evnt, setOpen }: { evnt:string[], setOpen: React.Dispatch<Re
       evntID: evnt[1],
       evntName: evnt[3],
       club: evnt[6],
-      status: "registered"
+      status: "registered",
+      dt: evnt[7]
     }).then(()=> {
       if(evnt[9] && evnt[9] !== ""){
         setLoading("You are being redirected to external RSVP link.")

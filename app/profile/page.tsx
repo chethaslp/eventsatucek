@@ -10,21 +10,28 @@ import React, { useEffect, useState } from "react";
 import { QueryDocumentSnapshot, DocumentData } from "firebase-admin/firestore";
 import { resolveClubIcon } from "@/lib/utils";
 import Image from "next/image";
+import Loading from "@/components/ui/Loading";
 
 function Page() {
   const user = useAuthContext()
 
   const [userData, setUserData] = useState<UserType>()
+  const [loading, setLoading] = useState(true)
   const [userEvents, setUserEvents] = useState<QueryDocumentSnapshot<DocumentData, DocumentData>[] | null>()
   
   useEffect(()=>{
     if(!user) return
     getUser(user).then((data)=>{
       setUserData(data)
-      getUserEvents(user).then((data=>setUserEvents(data as unknown as QueryDocumentSnapshot<DocumentData, DocumentData>[] | null)))
+      getUserEvents(user).then((data=> {
+        (data?.length == 0)?setUserEvents(null): setUserEvents(data as unknown as QueryDocumentSnapshot<DocumentData, DocumentData>[] | null)
+        setLoading(false)
+    }))
     })
   },[])
 
+
+  if(loading) return <Loading msg={"Getting your profile..."}/>
 
   return (!user)?<SigninDialog open={true} setOpen={function (value: React.SetStateAction<boolean>): void {} }/>:
     <div className="flex h-full flex-col dark:bg-[#121212]">
@@ -78,7 +85,7 @@ function Page() {
                       alt={evnt.club}
                     />
                     </div>
-                    {evnt.club}
+                    <span className="hidden sm:block">{evnt.club}</span>
                   </div>
                 </div>
               </td>
@@ -90,7 +97,7 @@ function Page() {
                   {evnt.status}
                 </span>
               </td>
-              <td>25 April 2024</td>
+              <td>{evnt.dt.split(" ")[0]}</td>
               <th>
                 <button onClick={()=> location.href = `/event/${evnt.evntID}`} className="btn btn-ghost btn-xs">View Details</button>
               </th>

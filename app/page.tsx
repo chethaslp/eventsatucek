@@ -137,25 +137,16 @@ export default function Home() {
                 </p>
                 {/* COUNTDOWN */}
                       <CountdownTimer bannerEvent={bannerEvent} date={date}/>
+                      
                 {/* ACTION BUTTONS */}
-                <div className="flex flex-row gap-3 mb-4 mt-4 justify-center md:gap-5">
+                <div className="flex flex-row gap-3 mt-5 justify-center">
                   <Link href={"/event/" + bannerEvent[1]}>
-                    <Button
-                      className="hover:scale-105 transition-all h-12"
-                      variant={"secondary"}
-                    >
-                      View More
-                    </Button>
-                  </Link>
-                  <Link
-                    href={"/event/" + bannerEvent[1] + "?rsvp"}
-                    className={bannerEvent[9] ? "" : "hidden"}
-                  >
                     <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                      RSVP Now!
+                      View More
                     </button>
                   </Link>
                 </div>
+                
               </div>
               <div>
                 <Image

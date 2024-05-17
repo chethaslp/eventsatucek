@@ -17,6 +17,7 @@ export type Event_User = {
     evntName: string;
     club: string;
     status: 'attended' | 'registered' | 'missed';
+    dt: string;
     updatedAt?: FieldValue;
 };
 

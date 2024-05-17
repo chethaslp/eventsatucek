@@ -70,7 +70,6 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
     e.preventDefault()
     if(!user) {
       setSigninStep(false)
-      console.log("Dvdsv")
       
       return false
     }
@@ -125,6 +124,7 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
               <SelectValue placeholder="Batch" />
             </SelectTrigger>
             <SelectContent>
+            <SelectItem value={'CSE'}>CSE</SelectItem>
               <SelectItem value={'CSE B1'}>CSE B1</SelectItem>
               <SelectItem value={'CSE B2'}>CSE B2</SelectItem>
               <SelectItem value={'IT'}>IT</SelectItem>
