@@ -20,8 +20,15 @@ export async function generateMetadata({params}:{params:{id:string}}): Promise<M
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
               + encodeURIComponent("select * where `B` = '"+params.id+"' limit 1");
-  const data = await fetch(url)  
-  const evnt = parse(await data.text()).data[1] as Array<string>
+  const data = parse(await (await fetch(url)).text())
+
+  if(!data.data[1]) return {
+    metadataBase: new URL('https://eventsatucek.vercel.app'),
+    title: "Events@UCEK",
+    description: 'An all-in-one place to know about all events at UCEK!',
+    icons: "/vercel.svg"}
+
+  const evnt = data.data[1] as Array<string>
 
  
   return {

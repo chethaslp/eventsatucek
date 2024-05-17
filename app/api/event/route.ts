@@ -15,9 +15,9 @@ import { Event } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
 
-  const {title, body, image, token, club, evntId, publish, editLink} = await req.json()
+  const {title, body, image, token, club, evntId, dt, publish, editLink} = await req.json()
 
-  if (!title ||  !body || !image || !club || (token != process.env.TOKEN)) {
+  if (!title ||  !body || !image || !club || !dt || (token != process.env.TOKEN)) {
     console.log(token, process.env.TOKEN)
     return NextResponse.json(
       { msg: 'Unauthorized.' },
@@ -35,10 +35,11 @@ export async function POST(req: NextRequest) {
       img: image,
       title: title,
       editLink: editLink,
+      dt: dt,
       status: publish? "open": "closed"
     } as Event, { merge: true})
   
-  // If publish status is false then, do not publish. 
+  // If publish status is false OR If the event already exists in the DB then, do not publish. 
   if (!publish || eventExists) return NextResponse.json({ msg: "Added." });
 
   const message : Message = {

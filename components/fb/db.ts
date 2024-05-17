@@ -29,7 +29,7 @@ export async function createUser(user:User,{admYear,batch,rollNumber}: {admYear 
 export async function rsvpEvent(user:User, data:Event_User){
     data.updatedAt = serverTimestamp()
     return setDoc(doc(db, "users", user.uid,'attendedEvents', data.evntID), data)
-    .then(()=> true)
+    .then(()=> setDoc(doc(db, "events", data.evntID, "regs", user.uid), { uid:user.uid, name: user.displayName, email: user.email, status: "registered", updatedAt: serverTimestamp(), createdAt: serverTimestamp() }))
     .catch((err)=> {
         console.error(err)
         return false
