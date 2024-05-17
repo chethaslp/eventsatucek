@@ -109,7 +109,8 @@ function Page({ params }: { params: { id: string } }) {
             }} 
               className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
               RVSP Now!
-            </button>: <div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> This event is over.</div>
+            </button>: 
+            (data[9])?<div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> This event is over.</div>:null
           default:
             return <HashLoader color={theme=="light"? undefined:"white"}/>
           }
