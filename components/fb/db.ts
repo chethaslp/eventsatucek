@@ -9,7 +9,7 @@ export async function getUser(user:User){
     return rslt.data() as UserType
 }
 
-export async function createUser(user:User,{admYear,batch,rollNumber}: {admYear : string, batch: string, rollNumber: string}){
+export async function createUser(user:User,{admYear, batch, rollNumber, gender, phoneNumber }: {admYear : string, batch: string, rollNumber: string, gender: string, phoneNumber: string}){
     const data = {
         uid: user.uid,
         email: user.email,
@@ -17,6 +17,8 @@ export async function createUser(user:User,{admYear,batch,rollNumber}: {admYear 
         role: "Student",
         admYear: admYear,
         batch: batch,
+        gender: gender,
+        ph: phoneNumber,
         rollNumber: rollNumber
      } as UserType
 

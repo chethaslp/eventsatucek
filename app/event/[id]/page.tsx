@@ -25,6 +25,8 @@ import moment from "moment";
 import { RsvpDialog } from "@/components/dialog/rsvp-dialog";
 import { useSearchParams } from "next/navigation";
 import NotFound from "@/app/not-found";
+import { SigninDialog } from "@/components/dialog/signin-dialog";
+import { useAuthContext } from "@/components/context/auth";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
@@ -33,7 +35,9 @@ function Page({ params }: { params: { id: string } }) {
   const [data, setData] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const s = useSearchParams()
+  const user = useAuthContext()
   const [open, setOpen] = useState(false);
+  const [openSignin, setOpenSignin] = useState(false);
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
 
   const [date, setDate] = useState<any>();
@@ -65,6 +69,11 @@ function Page({ params }: { params: { id: string } }) {
     });
   }, []);
 
+
+  function handleRSVP(){
+    
+  }
+
   if(!data) return <NotFound/>
 
   return data.length == 0 ? (
@@ -72,6 +81,7 @@ function Page({ params }: { params: { id: string } }) {
   ) : (
     <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
       <Navbar />
+      <SigninDialog open={openSignin} setOpen={setOpenSignin}/>
       <RsvpDialog open={open} setOpen={setOpen} evnt={data}/>
       <div className="flex-1  justify-center px-5 md:px-20 mb-7">
         <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:shadow-lg rounded-xl dark:bg-[#0c0c0c]">
@@ -138,7 +148,14 @@ function Page({ params }: { params: { id: string } }) {
 
             {!date?.isBefore() && data[9] ? (
               <div className="justify-center flex items-center mt-5">
-                  <button onClick={()=> setOpen(true)} className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                  <button onClick={()=>{
+                    if(!user) {
+                      setOpenSignin(true)
+                      return
+                    }
+                    setOpen(true)
+                  }} 
+                    className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
                     RVSP Now!
                   </button>
               </div>

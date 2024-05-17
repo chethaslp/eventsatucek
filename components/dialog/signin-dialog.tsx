@@ -49,9 +49,11 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
   const { toast } = useToast()
   const { theme } = useTheme()
 
-  const [admYear, setAdmYear] = React.useState<string>("####")
-  const [batch, setBatch] = React.useState<string>("###")
-  const [rollNumber, setRollNumber] = React.useState<string>("######")
+  const [admYear, setAdmYear] = React.useState<string>("")
+  const [batch, setBatch] = React.useState<string>("")
+  const [phoneNumber, setPhoneNumber] = React.useState<string>("")
+  const [gender, setGender] = React.useState<string>("")
+  const [rollNumber, setRollNumber] = React.useState<string>("")
   const [loading, setLoading] = React.useState("")
   const [signinStep, setSigninStep] = React.useState(false)
 
@@ -74,7 +76,7 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
     }
 
     setLoading("Getting you Signed Up!")
-    return createUser(user,{admYear:admYear, batch: batch, rollNumber: rollNumber}).then(()=>{
+    return createUser(user,{admYear:admYear, batch: batch, rollNumber: rollNumber, phoneNumber: phoneNumber, gender: gender}).then(()=>{
       setSigninStep(false)
       setOpen(false)
       return false
@@ -107,9 +109,9 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
                         Signin with Google
       </div>:   <form onSubmit={handleSubmit} className={"grid items-center justify-center gap-4"}>
       
-      <div className="grid gap-3 w-full mx-2 items-center justify-center flex-row">
-        <Label className="mx-1">Batch Info</Label>
-        <div className="grid gap-2 grid-flow-row sm:grid-flow-col">
+      <div className="grid gap-3 w-full items-center justify-center flex-row">
+        <Label className="mx-1">Course Info</Label>
+        <div className="grid gap-2 grid-flow-col sm:grid-flow-col">
           <Select required onValueChange={(v)=>setAdmYear(v)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Admission Year" />
@@ -120,7 +122,7 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
           </Select>
           <Select required onValueChange={(v)=>setBatch(v)}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Course" />
+              <SelectValue placeholder="Batch" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={'CSE B1'}>CSE B1</SelectItem>
@@ -131,15 +133,30 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
           </Select>
         </div>  
       </div>
-      <div className="grid gap-2 mx-4">
-        <Label htmlFor="rollnumber">Roll Number</Label>
-        <Input id="rollnumber" type="number" placeholder="Eg: 54" min={1} required onChange={(e)=>setRollNumber(e.currentTarget.value)}/>
+      <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
+        <div className="grid gap-2 grid-flow-row">
+          <Label htmlFor="rollnumber">Roll Number</Label>
+          <Input id="rollnumber" type="number" placeholder="Eg: 54" min={1} required onChange={(e)=>setRollNumber(e.currentTarget.value)}/>
+        </div>
+        <div className="grid gap-2 grid-flow-row">
+            <Label htmlFor="gender">Gender</Label>
+            <Select required onValueChange={(v)=>setGender(v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={'male'}>Male</SelectItem>
+                <SelectItem value={'female'}>Female</SelectItem>
+                <SelectItem value={'unknown'}>I Prefer not to disclose</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
       </div>
 
-      <div className="grid gap-2 mx-4">
+      <div className="grid gap-2">
         <Label htmlFor="rollnumber">Personal Info</Label>
-        <Input id="phone" type="tel" placeholder="Phone Number" min={1} required onChange={(e)=>setRollNumber(e.currentTarget.value)}/>
-        <Input id="email" type="email" placeholder="Email" disabled  value={user?.email as string} min={1} required onChange={(e)=>setRollNumber(e.currentTarget.value)}/>
+        <Input id="phone" type="tel" placeholder="Phone Number" min={1} required onChange={(e)=>setPhoneNumber(e.currentTarget.value)}/>
+        <Input id="email" type="email" placeholder="Email" disabled  value={user?.email as string}/>
       </div>
       <button
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
@@ -149,12 +166,9 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
             <BottomGradient />
       </button>
     </form>}
-
     </div>
   )}
-  
-        </CardContent>
-        
+        </CardContent>      
       </Card>
     </div>):null
 }
