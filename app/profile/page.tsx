@@ -1,22 +1,29 @@
 "use client";
 import { useAuthContext } from "@/components/context/auth";
 import { SigninDialog } from "@/components/dialog/signin-dialog";
-import { UserType, getUser } from "@/components/fb/db";
+import { getUser, getUserEvents } from "@/components/fb/db";
+import { Event, Event_User, UserType } from "@/lib/types";
 import Footer from "@/components/ui/Footer";
 import { Navbar } from "@/components/ui/navbar";
 import { Separator } from "@/components/ui/separator";
 import React, { useEffect, useState } from "react";
+import { QueryDocumentSnapshot, DocumentData } from "firebase-admin/firestore";
+import { resolveClubIcon } from "@/lib/utils";
+import Image from "next/image";
 
 function Page() {
   const user = useAuthContext()
-  const [userData, setUserData] = useState<UserType>()
 
+  const [userData, setUserData] = useState<UserType>()
+  const [userEvents, setUserEvents] = useState<QueryDocumentSnapshot<DocumentData, DocumentData>[] | null>()
+  
   useEffect(()=>{
     if(!user) return
     getUser(user).then((data)=>{
       setUserData(data)
+      getUserEvents(user).then((data=>setUserEvents(data as unknown as QueryDocumentSnapshot<DocumentData, DocumentData>[] | null)))
     })
-  })
+  },[])
 
 
   return (!user)?<SigninDialog open={true} setOpen={function (value: React.SetStateAction<boolean>): void {} }/>:
@@ -41,9 +48,9 @@ function Page() {
         <Separator orientation="vertical" className=" max-h-fit hidden md:flex"/>
 
         <div className="px-16 py-8 flex flex-1 h-full flex-col">
-            <h1 className="text-2xl ">Events Attented</h1>
+            <h1 className="text-2xl ">Events Attended</h1>
 
-        {(userData)? <div className="flex items-center justify-center flex-col h-full"><h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t been to any events so far. </div>:
+        {(!userEvents)? <div className="flex items-center justify-center flex-col h-full"><h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t been to any events so far. </div>:
         <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
@@ -56,30 +63,39 @@ function Page() {
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            <tr>
+            {userEvents.map((evntData)=>{
+              const evnt = evntData.data() as Event_User
+              return <tr key={evnt.evntID}>
               <td>
                 <div className="flex items-center gap-3">
-                  <div className="avatar">
+                  <div className="text-xs flex items-center flex-col text-muted-foreground">
                     <div className="mask mask-squircle w-12 h-12">
-                      <img src="https://eventsatucek.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgdsc.4b395dd8.png&w=640&q=75" alt="Avatar Tailwind CSS Component" />
+                    <Image
+                      width={48}
+                      height={48}
+                      referrerPolicy={"no-referrer"}
+                      src={resolveClubIcon(evnt.club,false)}
+                      alt={evnt.club}
+                    />
                     </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">GDSC</div>
+                    {evnt.club}
                   </div>
                 </div>
               </td>
+
               <td>
-              UCEverse
+              <div className="font-bold">{evnt.evntName}</div>
                 <br/>
-                <span className="badge badge-ghost badge-sm">open event</span>
+                <span className="badge badge-ghost badge-sm">
+                  {evnt.status}
+                </span>
               </td>
               <td>25 April 2024</td>
               <th>
-                <button className="btn btn-ghost btn-xs">details</button>
+                <button onClick={()=> location.href = `/event/${evnt.evntID}`} className="btn btn-ghost btn-xs">View Details</button>
               </th>
             </tr>
+          })}
           </tbody>
         </table>
       </div>}

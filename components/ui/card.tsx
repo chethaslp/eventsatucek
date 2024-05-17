@@ -24,7 +24,6 @@ const Card = ({
   venue?: string;
   club: string;
 }) => {
-  // 29/04/2024 11:00:0
   const dt = moment(date, "DD/MM/YYYY HH:mm:s");
   const clubIcon = resolveClubIcon(club, false);
 

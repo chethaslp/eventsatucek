@@ -19,6 +19,7 @@ import SFILogo from "../public/logos/sfi.png";
 import TRHLogo from "../public/logos/trh.png";
 import TRHLogoBlack from "../public/logos/trh_black.png";
 import moment from "moment";
+import { QueryDocumentSnapshot } from "firebase/firestore";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -75,3 +76,9 @@ export function countdownHelper(millisecond: any):any {
 
   return result
 }
+
+
+export const GenericConverter = <T>() => ({
+  toFirestore: (data: Partial<T>) => data,
+  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as T,
+});

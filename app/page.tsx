@@ -41,17 +41,7 @@ export default function Home() {
   const [timeDropdown, setTimeDropdown]: any = useState("Upcoming");
   const [typeDropdown, setTypeDropdown]: any = useState("Both");
   const [date, setDate] = useState<moment.Moment>();
-  const [bannerEvent, setBannerEvent] = useState<string[]>([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
+  const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""]);
 
   useEffect(() => {
     getUpcomingEvents()
@@ -61,7 +51,7 @@ export default function Home() {
           filterEvents(clubDropdown, typeDropdown, "Past").then((evnts) => setData(evnts));
         }
         setData(data);
-        const upcomingEvent = data.shift() || [""]; // Shift the first event from data
+        const upcomingEvent = data.shift() || [""]; // Remove and return the first event from data
         setBannerEvent(upcomingEvent);
         setDate(moment(upcomingEvent[7],"DD/MM/YYYY HH:mm:ss"))
         console.log(date)
@@ -96,7 +86,7 @@ export default function Home() {
   }
 
 
-  // If there is no events happening
+  // If there is no events in data
   if (data.length == 0 && !loading && bannerEvent.length == 0) {
     return <NoEvents />;
   }
@@ -250,10 +240,10 @@ export default function Home() {
           </div>
 
           <div
-            className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-2 md:gap-x-4 gap-y-6 mb-10" ${
+            className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mb-10" ${
               data.length == 0
                 ? ""
-                : "sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
+                : " sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
             }`}
           >
             {data.map((evnt, i) => (
@@ -281,7 +271,7 @@ export default function Home() {
             ))}
             <Link
               href={"/event/past"}
-              className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px] sm:text w-[10rem] h-[10rem] sm:w-[18rem] sm:h-[18rem] md:w-[25rem] md:h-[25rem] bg-glass"
+              className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px] sm:text w-[20rem] h-[20rem] sm:w-[25rem] sm:h-[25rem] md:w-[25rem] md:h-[25rem] bg-glass"
             >
               <PiClockCounterClockwiseBold className="text-[30px] sm:text-[50px]" />{" "}
               View Past Events.

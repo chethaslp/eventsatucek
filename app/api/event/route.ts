@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
 import { Message, getMessaging } from 'firebase-admin/messaging';
+import { getFirestore } from "firebase-admin/firestore";
+import { Event } from "@/lib/types";
 
 /*
   SEND NOTIFICATIONS:
@@ -13,7 +15,7 @@ import { Message, getMessaging } from 'firebase-admin/messaging';
 
 export async function POST(req: NextRequest) {
 
-  const {title, body, image, token, club, evntId} = await req.json()
+  const {title, body, image, token, club, evntId, publish, editLink} = await req.json()
 
   if (!title ||  !body || !image || !club || (token != process.env.TOKEN)) {
     console.log(token, process.env.TOKEN)
@@ -22,6 +24,23 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  const evntDoc = getFirestore().doc(`/events/${evntId}`)
+
+  const eventExists = (await evntDoc.get()).exists
+  
+  evntDoc.set({
+      evntID: evntId,
+      club: club,
+      img: image,
+      title: title,
+      editLink: editLink,
+      status: publish? "open": "closed"
+    } as Event, { merge: true})
+  
+  // If publish status is false then, do not publish. 
+  if (!publish || eventExists) return NextResponse.json({ msg: "Added." });
+
   const message : Message = {
     data: {
       title: title,

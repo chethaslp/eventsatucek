@@ -86,7 +86,7 @@ export function SigninDialog({open, setOpen}:{open: boolean, setOpen: React.Disp
     setSigninStep(!user)
   },[user])
 
-    return (open)?(<div className="h-[100dvh] w-full flex items-center justify-center flex-col fixed z-[50] dark:bg-[#121212] bg-slate-300">
+    return (open)?(<div className="h-full w-full flex items-center justify-center flex-col fixed z-[50] dark:bg-[#121212] bg-slate-300">
       <Logo className="text-6xl"/>
       {(signinStep)?<Button variant={"ghost"} onClick={()=>setOpen(false)} className="fixed top-0 right-0 m-3"><IoMdClose size={30}/></Button>:null}
       <Card className="m-4 ">

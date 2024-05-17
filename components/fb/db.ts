@@ -1,25 +1,8 @@
-import { CollectionReference, doc, getDoc, setDoc, collection, getDocs, FieldValue, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
 import { db } from "./config";
 import { User } from "firebase/auth";
-
-export type UserType = {
-    uid: string
-    displayName: string,
-    email: string,
-    role: 'Student' | 'Club' | 'Admin',
-    admYear : string,
-    batch : string,
-    rollNumber: string
-
-    attendedEvents?: CollectionReference,
-}
-
-export type attendedEvents = {
-    evntID : string,
-    evntName : string,
-    status : 'attended' | 'registered' | 'missed',
-    updatedAt? : FieldValue
-}
+import { UserType, Event_User } from "@/lib/types";
+import { GenericConverter } from "@/lib/utils";
 
 export async function getUser(user:User){
     const rslt = await getDoc(doc(db, "/users/" + user.uid));
@@ -43,7 +26,7 @@ export async function createUser(user:User,{admYear,batch,rollNumber}: {admYear 
         }).catch(()=> false)
 }
 
-export async function addUserEvent(user:User, data:attendedEvents){
+export async function rsvpEvent(user:User, data:Event_User){
     data.updatedAt = serverTimestamp()
     return setDoc(doc(db, "users", user.uid,'attendedEvents', data.evntID), data)
     .then(()=> true)
@@ -54,7 +37,7 @@ export async function addUserEvent(user:User, data:attendedEvents){
 }
 
 export async function getUserEvents(user:User) {
-    return getDocs(collection(doc(db, "users", user.uid),'attendedEvents'))
+    return getDocs(collection(doc(db, "users", user.uid),'attendedEvents').withConverter(GenericConverter<Event_User>()))
     .then((data)=> data.docs)
     .catch((err)=> {
         console.error(err)

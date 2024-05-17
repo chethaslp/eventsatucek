@@ -43,7 +43,6 @@ function Page({ params }: { params: { id: string } }) {
       })
   }, [data]);
 
-  console.log(date);
   
   useEffect(() => {
     getMoreClubEvents(data[6] ? data[6] : "nill", params.id)
