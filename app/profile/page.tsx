@@ -11,18 +11,27 @@ import { QueryDocumentSnapshot, DocumentData } from "firebase-admin/firestore";
 import { cn, resolveClubIcon } from "@/lib/utils";
 import Image from "next/image";
 import Loading from "@/components/ui/Loading";
+import { signOut } from "firebase/auth";
+import { useSearchParams } from "next/navigation";
 
 function Page() {
   const user = useAuthContext();
 
-  const [userData, setUserData] = useState<UserType>()
+  const [userData, setUserData] = useState<UserType | null>()
   const [loading, setLoading] = useState(true)
+  const [openSignin, setOpenSignin] = useState(false)
   const [infoText, setInfoText] = useState(<></>)
   
   useEffect(()=>{
-    if(!user) return
+    if(!user) {
+      location.href ="/?signin1"
+      return
+    }
     getUser(user).then((data)=>{
-      setUserData(data)
+      if(!data) setOpenSignin(true)
+      else{
+        setUserData(data)
+      }
       setLoading(false)
     })
   },[])
@@ -39,7 +48,7 @@ function Page() {
   // Profile Page
   if(loading) return <Loading msg={"Getting your profile..."}/>
 
-  return !user ? (
+  return (openSignin || !user) ? (
     <SigninDialog
       open={true}
       setOpen={function (value: React.SetStateAction<boolean>): void {}}

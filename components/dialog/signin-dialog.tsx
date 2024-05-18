@@ -64,10 +64,11 @@ import SSImage from "@/public/img/ss-signin.png";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
 import BottomGradient from "../ui/BottomGradient";
+import { useSearchParams } from "next/navigation";
 
 export function SigninDialog({
   open,
-  setOpen,
+  setOpen
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -76,6 +77,7 @@ export function SigninDialog({
 
   const user = useAuthContext();
   const { toast } = useToast();
+  const s = useSearchParams()
   const { theme } = useTheme();
 
   const [admYear, setAdmYear] = React.useState<string>("");
@@ -95,7 +97,7 @@ export function SigninDialog({
           setOpen(false);
           return
         }
-        setSigninStep(true);
+        setSigninStep(false);
         setLoading("");
       })
       .catch(() => setLoading(""));
@@ -125,10 +127,11 @@ export function SigninDialog({
       },
       body: JSON.stringify(data), // Stringify token object
     })).then(()=> {
+      if(s.has("r")) location.href = s.get("r") || ""
       setSigninStep(false);
       setOpen(false);
       return false;
-    });
+    }).catch((err)=>console.log(err));
   };
 
   React.useEffect(() => {

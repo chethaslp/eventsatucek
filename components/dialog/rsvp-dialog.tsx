@@ -45,7 +45,7 @@ import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { getImgLink } from "@/lib/data";
-import { rsvpEvent } from "../fb/db";
+import { getUser, rsvpEvent } from "../fb/db";
 
 export function RsvpDialog({
   open,
@@ -109,9 +109,15 @@ function RsvpForm({
 
   const [loading, setLoading] = React.useState("")
 
-  const handleRSVP = ()=>{
+  const handleRSVP = async ()=>{
     if(!user) return
     setLoading("Getting you in...")
+    
+    if(!(await getUser(user))){
+      setLoading("Redirecting you to profile page. Please complete your profile data.")
+      location.href = `/profile?r=/event/${evnt[1]}`
+      return
+    }
 
     rsvpEvent(user, {
       evntID: evnt[1],

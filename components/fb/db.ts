@@ -6,6 +6,7 @@ import { GenericConverter } from "@/lib/utils";
 
 export async function getUser(user:User){
     const rslt = await getDoc(doc(db, "/users/" + user.uid));
+    if(!rslt.exists()) return null
     return rslt.data() as UserType
 }
 
