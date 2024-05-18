@@ -47,6 +47,24 @@ export async function getUserEvents(user:User) {
     })
 }
 
+export async function getClubEvents(user:User) {
+    return getDocs(collection(doc(db, "users", user.uid),'attendedEvents').withConverter(GenericConverter<Event_User>()))
+    .then((data)=> data.docs)
+    .catch((err)=> {
+        console.error(err)
+        return null
+    })
+}
+
+export async function getClubEvent(user:User) {
+    return getDocs(collection(doc(db, "users", user.uid),'attendedEvents').withConverter(GenericConverter<Event_User>()))
+    .then((data)=> data.docs)
+    .catch((err)=> {
+        console.error(err)
+        return null
+    })
+}
+
 
 export async function getUserEventStatus(user:User, evntID: string) {
     return getDoc(doc(db, "users", user.uid,'attendedEvents',evntID).withConverter(GenericConverter<Event_User>()))

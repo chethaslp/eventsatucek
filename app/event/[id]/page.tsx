@@ -81,7 +81,11 @@ function Page({ params }: { params: { id: string } }) {
     const [userStatus, setUserStatus] = useState<Event_User['status'] | null>();
   
     useEffect(() =>{
-      if(!data || !user) return
+      if(!data) return
+      if(!user) {
+        setUserStatus(null)
+        return
+      }
       
       getUserEventStatus(user, params.id).then((d)=>{
         if(d?.exists()){
