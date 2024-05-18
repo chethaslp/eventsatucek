@@ -31,7 +31,7 @@ export default function RootLayout({
   
   return (
     <html lang="en" className='h-screen'>
-      <body className= {cn(inter.className, "h-[100dvh] w-[100dvw]")}>
+      <body className= {cn(inter.className, "h-[100dvh] w-[100dvw] overflow-x-hidden")}>
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"

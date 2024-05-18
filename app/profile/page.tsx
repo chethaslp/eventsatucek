@@ -22,6 +22,12 @@ function Page() {
   useEffect(()=>{
     if(!user) return
     getUser(user).then((data)=>{
+
+      if(!data){
+       
+      }
+      console.log(data);
+      
       setUserData(data)
       getUserEvents(user).then((data=> {
         (data?.length == 0)?setUserEvents(null): setUserEvents(data as unknown as QueryDocumentSnapshot<DocumentData, DocumentData>[] | null)
