@@ -62,8 +62,8 @@ export function Navbar({ qName }: { qName?: string }) {
                 Contributors
               </Button>
             </a>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="cursor-pointer">
+            <DropdownMenu >
+              <DropdownMenuTrigger asChild className="cursor-pointer ">
                 {user ? (
                   <Avatar className="w-9 h-9">
                     <Image
@@ -82,12 +82,12 @@ export function Navbar({ qName }: { qName?: string }) {
                   </Button>
                 )}
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="dark:bg-[#121212]">
                 {user ? (
                   <>
                     <DropdownMenuItem
                       onClick={() => (location.href = "/profile")}
-                      className="cursor-pointer"
+                      className="cursor-pointer "
                     >
                       View Profile
                     </DropdownMenuItem>
