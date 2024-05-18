@@ -40,7 +40,7 @@ export function Navbar({ qName }: { qName?: string }) {
   return (
     <>
       <SigninDialog open={open} setOpen={setOpen} />
-      <div className="w-full backdrop-blur px-5 py-3 dark:bg-[#121212]">
+      <div className="w-full backdrop-blur px-5 py-3 dark:bg-[#0a0a0a]">
         <div className="flex items-center justify-between gap-2 flex-row">
           <div className="flex items-center flex-row gap-2 hover:scale-105 transition-all scale-100">
             <Link href={"/"}>
@@ -119,7 +119,7 @@ export function Navbar({ qName }: { qName?: string }) {
                   <span className="sr-only">Toggle theme</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="dark:bg-[#121212]">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
                   Light
                 </DropdownMenuItem>

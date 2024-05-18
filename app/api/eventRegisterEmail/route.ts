@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     
     try{
   const templateSource = readFileSync(
-    "./components/templates/register_notification.hbs",
+    "./components/templates/event_register_notification.hbs",
     "utf8"
   );
   const template = Handlebars.compile(templateSource);
