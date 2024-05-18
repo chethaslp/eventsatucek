@@ -58,7 +58,7 @@ import {
   signInWithCredential,
   signInWithPopup,
 } from "firebase/auth";
-import { createUser } from "../fb/db";
+import { createUser, getUser } from "../fb/db";
 import { Logo } from "../ui/logo";
 import SSImage from "@/public/img/ss-signin.png";
 import Image from "next/image";
@@ -89,47 +89,42 @@ export function SigninDialog({
   function handleSignin() {
     setLoading("Authenticating...");
     signInWithPopup(auth, new GoogleAuthProvider())
-      .then((user) => {
+      .then(async (user) => {
+        if(await getUser(user.user)) {
+          setSigninStep(false);
+          setOpen(false);
+          return
+        }
         setSigninStep(true);
         setLoading("");
       })
       .catch(() => setLoading(""));
   }
-  const sendEmail = (userData:any) => {
-    console.log("sending...");
-
-    fetch("/api/registerEmail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Set Content-Type header
-      },
-      body: JSON.stringify(userData), // Stringify token object
-    })
-      .then((resp) => {
-        console.log(resp);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (!user) {
       setSigninStep(false);
-
       return false;
     }
-
+    
     setLoading("Getting you Signed Up!");
+    // Sending Userdata to DB
     return createUser(user, {
       admYear: admYear,
       batch: batch,
       rollNumber: rollNumber,
       phoneNumber: phoneNumber,
       gender: gender,
-    }).then((data) => {
-      sendEmail(data)
+    })
+    // Sending welcome mail.
+    .then((data) => fetch("/api/registerEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Set Content-Type header
+      },
+      body: JSON.stringify(data), // Stringify token object
+    })).then(()=> {
       setSigninStep(false);
       setOpen(false);
       return false;
