@@ -13,7 +13,7 @@ import Image from "next/image";
 import Loading from "@/components/ui/Loading";
 
 function Page() {
-  const user = useAuthContext()
+  const user = useAuthContext();
 
   const [userData, setUserData] = useState<UserType>()
   const [loading, setLoading] = useState(true)
@@ -39,14 +39,19 @@ function Page() {
   // Profile Page
   if(loading) return <Loading msg={"Getting your profile..."}/>
 
-  return (!user)?<SigninDialog open={true} setOpen={function (value: React.SetStateAction<boolean>): void {} }/>:
-    <div className="flex h-full flex-col dark:bg-[#121212]">
+  return !user ? (
+    <SigninDialog
+      open={true}
+      setOpen={function (value: React.SetStateAction<boolean>): void {}}
+    />
+  ) : (
+    <div className="flex h-full flex-col dark:bg-[#0a0a0a]">
       <Navbar />
       <div className="flex flex-1 mt-5 mr-3 flex-col sm:flex-row items-center md:items-start dark:bg-[#121212]">
           <div className="flex flex-col px-16 py-8 h-full">
             <div className="avatar">
               <div className="w-44 h-44 rounded-full">
-                <img src={user.photoURL?.replace("w=s96","w=s400") || ""} />
+                <img src={user.photoURL || ""} />
               </div>
             </div>
               <h2 className="text-xl mt-1 font-semibold">{user.displayName}</h2>
@@ -55,12 +60,13 @@ function Page() {
                 <h2 className="text-md font-semibold mb-2 text-white">ABOUT</h2>
                 <p>{userData?.batch} ({userData?.admYear} Admission)</p>
                 <p>Roll Number: {userData?.rollNumber}</p>
-                <br/>
-                <p>{infoText}</p>
               </div>
         </div>
 
-        <Separator orientation="vertical" className=" max-h-fit hidden md:flex"/>
+        <Separator
+          orientation="vertical"
+          className=" max-h-fit hidden md:flex"
+        />
 
         <div className="px-16 py-8 flex flex-1 h-full flex-col">
 
@@ -98,9 +104,9 @@ function UserEvents({setLoading, setInfoText}:{setLoading:React.Dispatch<React.S
     {/* head */}
     <thead>
       <tr>
-        <th>Event</th>
-        <th>Status</th>
-        <th>Date</th>
+        <th className="px-1 sm:px-4">Event</th>
+        <th className="px-1 sm:px-4">Status</th>
+        <th className="px-1 sm:px-4">Date</th>
         <th></th>
       </tr>
     </thead>
@@ -108,7 +114,7 @@ function UserEvents({setLoading, setInfoText}:{setLoading:React.Dispatch<React.S
       {userEvents.map((evntData)=>{
         const evnt = evntData.data() as Event_User
         return <tr key={evnt.evntID}>
-        <td>
+        <td className="px-1 sm:px-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center flex-row">
               <div className="mask mask-squircle w-12 h-12">

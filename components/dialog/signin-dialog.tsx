@@ -95,6 +95,23 @@ export function SigninDialog({
       })
       .catch(() => setLoading(""));
   }
+  const sendEmail = (userData:any) => {
+    console.log("sending...");
+
+    fetch("/api/registerEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Set Content-Type header
+      },
+      body: JSON.stringify(userData), // Stringify token object
+    })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -111,7 +128,8 @@ export function SigninDialog({
       rollNumber: rollNumber,
       phoneNumber: phoneNumber,
       gender: gender,
-    }).then(() => {
+    }).then((data) => {
+      sendEmail(data)
       setSigninStep(false);
       setOpen(false);
       return false;
