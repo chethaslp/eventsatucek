@@ -78,7 +78,6 @@ export function SigninDialog({
   const { toast } = useToast();
   const { theme } = useTheme();
 
-  
   const [admYear, setAdmYear] = React.useState<string>("");
   const [batch, setBatch] = React.useState<string>("");
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
@@ -123,9 +122,20 @@ export function SigninDialog({
     setSigninStep(!user);
   }, [user]);
 
+  React.useEffect(() => {
+    if (open) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [open]);
+
   return open ? (
-    <div className="h-full w-full flex items-center justify-center flex-col fixed z-[50] dark:bg-[#121212] bg-slate-300">
-      <Logo className="text-6xl" />
+    <div className="transition-all h-full w-full flex items-center justify-center flex-col fixed z-[50]  bg-transparent backdrop-blur-md">
+      <Logo className="text-4xl md:text-6xl " />
       {signinStep ? (
         <Button
           variant={"ghost"}
@@ -135,10 +145,12 @@ export function SigninDialog({
           <IoMdClose size={30} />
         </Button>
       ) : null}
-      <Card className="m-4 ">
+      <Card className="m-4 dark:bg-[#121212] shadow-lg bg-[#ffffff]">
         <CardHeader>
           <CardTitle>
-            {signinStep ? <>Let&apos;s Get Started!</> : <>Just a sec...</>}
+            <p className="text-xl md:text-2xl">
+              {signinStep ? <>Let&apos;s Get Started!</> : <>Just a sec...</>}
+            </p>
           </CardTitle>
           <CardDescription>
             {signinStep ? (
@@ -158,7 +170,7 @@ export function SigninDialog({
             <div className={"flex items-center justify-center flex-col gap-4"}>
               {signinStep ? (
                 <div
-                  className="flex w-full p-2 cursor-pointer border rounded-md flex-row justify-center items-center hover:bg-slate-900 transition-all"
+                  className="flex w-full p-2 cursor-pointer border rounded-md flex-row justify-center items-center dark:hover:bg-[#0000008e] hover:bg-[#cbcbcb8e] transition-all border-[#000]"
                   onClick={handleSignin}
                 >
                   <FcGoogle size={20} className="mr-2" />
@@ -169,42 +181,73 @@ export function SigninDialog({
                   onSubmit={handleSubmit}
                   className={"grid items-center justify-center gap-4"}
                 >
-                  <div className="grid gap-3 w-full items-center justify-center flex-row">
-                    <Label className="mx-1">Course Info</Label>
-                    <div className="grid gap-2 grid-flow-col sm:grid-flow-col">
+                  <Label className="border-l-2  p-2">Course Info</Label>
+                  <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
+                    <div className="grid gap-2 grid-flow-row ">
+                      <Label htmlFor="admissionyear">Admission Year</Label>
                       <Select required onValueChange={(v) => setAdmYear(v)}>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Admission Year" />
+                        <SelectTrigger>
+                          <SelectValue placeholder="2020" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="dark:bg-[#0e0e0e] ">
                           {[...new Array(5)].map((x, i) => (
                             <SelectItem
                               key={`Y${i + 2019}`}
                               value={(i + 2019).toString()}
+                              className="hover:dark:bg-[#000000a5]"
                             >
                               {i + 2019}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
+                    </div>
+                    <div className="grid gap-2 grid-flow-row ">
+                    <Label htmlFor="batch">Batch</Label>
                       <Select required onValueChange={(v) => setBatch(v)}>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Batch" />
+                        <SelectTrigger>
+                          <SelectValue placeholder="IT" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={"CSE"}>CSE</SelectItem>
-                          <SelectItem value={"CSE B1"}>CSE B1</SelectItem>
-                          <SelectItem value={"CSE B2"}>CSE B2</SelectItem>
-                          <SelectItem value={"IT"}>IT</SelectItem>
-                          <SelectItem value={"ECE"}>ECE</SelectItem>
+                        <SelectContent className="dark:bg-[#0e0e0e]">
+                          <SelectItem
+                            value={"CSE"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
+                            CSE
+                          </SelectItem>
+                          <SelectItem
+                            value={"CSE B1"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
+                            CSE B1
+                          </SelectItem>
+                          <SelectItem
+                            value={"CSE B2"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
+                            CSE B2
+                          </SelectItem>
+                          <SelectItem
+                            value={"IT"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
+                            IT
+                          </SelectItem>
+                          <SelectItem
+                            value={"ECE"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
+                            ECE
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
                   <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
-                    <div className="grid gap-2 grid-flow-row">
+                    <div className="grid gap-2 grid-flow-row ">
                       <Label htmlFor="rollnumber">Roll Number</Label>
                       <Input
+                        className="dark:bg-[#121212] bg-[#ffff]"
                         id="rollnumber"
                         type="number"
                         placeholder="Eg: 54"
@@ -219,10 +262,23 @@ export function SigninDialog({
                         <SelectTrigger>
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={"male"}>Male</SelectItem>
-                          <SelectItem value={"female"}>Female</SelectItem>
-                          <SelectItem value={"unknown"}>
+                        <SelectContent className="dark:bg-[#0e0e0e] ">
+                          <SelectItem
+                            value={"male"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
+                            Male
+                          </SelectItem>
+                          <SelectItem
+                            value={"female"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
+                            Female
+                          </SelectItem>
+                          <SelectItem
+                            value={"unknown"}
+                            className="hover:dark:bg-[#000000a5]"
+                          >
                             I Prefer not to disclose
                           </SelectItem>
                         </SelectContent>
@@ -233,6 +289,7 @@ export function SigninDialog({
                   <div className="grid gap-2">
                     <Label htmlFor="rollnumber">Personal Info</Label>
                     <Input
+                      className="dark:bg-[#121212]  bg-[#ffff]"
                       id="phone"
                       type="tel"
                       placeholder="Phone Number"
@@ -241,6 +298,7 @@ export function SigninDialog({
                       onChange={(e) => setPhoneNumber(e.currentTarget.value)}
                     />
                     <Input
+                      className="dark:bg-[#121212]"
                       id="email"
                       type="email"
                       placeholder="Email"

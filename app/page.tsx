@@ -98,7 +98,7 @@ export default function Home() {
       <div className="">
         <FCM/>
         <Navbar />
-        <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#121212]">
+        <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a]">
           <BackgroundGradient
             className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900"
             containerClassName="m-5 md:w-[70%] w-[95%]"
@@ -172,13 +172,13 @@ export default function Home() {
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
                   <summary
-                    className="m-1 btn bg-transparent border-1"
+                    className="m-1 btn bg-transparent border-1 dark:text-white dark:hover:bg-[#242424]"
                     ref={clubDropdownButton}
                   >
                     {clubDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52`}
+                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 dark:bg-black `}
                   >
                     {getClubs.map((club, idx) => (
                       <li key={idx}>
@@ -189,13 +189,13 @@ export default function Home() {
                 </details>
                 <details className="dropdown ">
                   <summary
-                    className="m-1 btn bg-transparent border-1"
+                    className="m-1 btn bg-transparent border-1 dark:text-white dark:hover:bg-[#242424]"
                     ref={typeDropdownButton}
                   >
                     {typeDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 `}
+                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 dark:bg-black `}
                   >
                     {["Online", "Offline", "Both"].map((type, idx) => (
                       <li key={idx}>
@@ -208,13 +208,13 @@ export default function Home() {
                 </details>
                 <details className="dropdown ">
                   <summary
-                    className="m-1 btn bg-transparent border-1"
+                    className="m-1 btn bg-transparent border-1 dark:text-white dark:hover:bg-[#242424]"
                     ref={timeDropdownButton}
                   >
                     {timeDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 `}
+                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52  dark:bg-black`}
                   >
                     {["Upcoming", "Past", "All"].map((type, idx) => (
                       <li key={idx}>
