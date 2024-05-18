@@ -66,3 +66,6 @@
   backdrop-filter: blur( 4px );
   -webkit-backdrop-filter: blur( 4px );
 }
+.overflow-hidden {
+  overflow: hidden;
+}

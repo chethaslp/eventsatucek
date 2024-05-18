@@ -49,6 +49,11 @@ function Page({ params }: { params: { id: string } }) {
   const [date, setDate] = useState<any>();
   const [clubIcon, setClubIcon] = useState<string>("");
 
+  const handleClubIcon = async(data:any)=>{
+    const resolvedIcon = await resolveClubIcon(data[6], themeToDark) ;
+    setClubIcon(resolvedIcon)
+  }
+
   useEffect(() => {
     getEvent(params.id)
       .then((evnt) => {
@@ -56,11 +61,11 @@ function Page({ params }: { params: { id: string } }) {
 
         if(!data) return
         setDate(moment(evnt[0][7], "DD/MM/YYYY HH:mm:ss"))
-        setClubIcon( data ? resolveClubIcon(data[6], themeToDark) : null)
+        handleClubIcon(data)
 
         if(s.has("rsvp")) setOpen(true)
       })
-  }, []);
+  }, [clubIcon]);
 
   
   useEffect(() => {

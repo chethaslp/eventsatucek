@@ -1,5 +1,4 @@
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 import useMediaQuery from "@/components/hooks/use-media-query"
 import { Button } from "@/components/ui/button"
@@ -85,11 +84,29 @@ function RsvpForm({ evnt, setOpen }: { evnt:string[], setOpen: React.Dispatch<Re
 
   const [loading, setLoading] = React.useState("")
 
+  const sendEmail = (user:any,evnt:string[] ):any=>{
+    
+    console.log("sending...");
+
+    fetch("/api/eventRegisterEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Set Content-Type header
+      },
+      body: JSON.stringify({...user, evnt}), // Stringify token object
+    })
+      .then((resp) => {
+        console.log(resp);
+        localStorage.setItem("sw-registered", "1");
+      })
+      .catch((error) => {
+        console.error("Error sending token to server:", error);
+      });
+    
+  }
 
   const handleRSVP = ()=>{
     if(!user) return
-
-
     setLoading("Getting you in...")
     rsvpEvent(user, {
       evntID: evnt[1],
@@ -98,6 +115,7 @@ function RsvpForm({ evnt, setOpen }: { evnt:string[], setOpen: React.Dispatch<Re
       status: "registered",
       dt: evnt[7]
     }).then(()=> {
+      sendEmail(user, evnt)
       if(evnt[9] && evnt[9] !== ""){
         setLoading("You are being redirected to external RSVP link.")
         location.href = evnt[9]
