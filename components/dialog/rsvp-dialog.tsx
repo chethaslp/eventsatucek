@@ -46,7 +46,7 @@ export function RsvpDialog({open, setOpen, evnt}:{open: boolean, setOpen: React.
           <DialogHeader>
             <DialogTitle>RSVP?</DialogTitle>
             <DialogDescription>
-              Requisite data for processing the RSVP will be shared with the respective clubs. 
+              Requisite datas for processing the RSVP will be shared with the respective clubs. 
             </DialogDescription>
           </DialogHeader>
           <RsvpForm evnt={evnt} setOpen={setOpen}/>
@@ -61,7 +61,7 @@ export function RsvpDialog({open, setOpen, evnt}:{open: boolean, setOpen: React.
         <DrawerHeader className="text-left">
           <DrawerTitle>RSVP?</DrawerTitle>
           <DrawerDescription>
-            Requisite data for processing the RSVP will be shared with the respective clubs. 
+            Requisite datas for processing the RSVP will be shared with the respective clubs. 
           </DrawerDescription>
         </DrawerHeader>
         <RsvpForm evnt={evnt} setOpen={setOpen}/>
@@ -84,43 +84,36 @@ function RsvpForm({ evnt, setOpen }: { evnt:string[], setOpen: React.Dispatch<Re
 
   const [loading, setLoading] = React.useState("")
 
-  const sendEmail = (user:any,evnt:string[] ):any=>{
-    
-    console.log("sending...");
-
-    fetch("/api/eventRegisterEmail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Set Content-Type header
-      },
-      body: JSON.stringify({...user, evnt}), // Stringify token object
-    })
-      .then((resp) => {
-        console.log(resp);
-        localStorage.setItem("sw-registered", "1");
-      })
-      .catch((error) => {
-        console.error("Error sending token to server:", error);
-      });
-    
-  }
-
   const handleRSVP = ()=>{
     if(!user) return
     setLoading("Getting you in...")
+
     rsvpEvent(user, {
       evntID: evnt[1],
       evntName: evnt[3],
       club: evnt[6],
-      status: "registered",
+      status: "Registered",
       dt: evnt[7]
-    }).then(()=> {
-      sendEmail(user, evnt)
+    })
+    // Sending mail to the registered User.
+    .then(()=> fetch("/api/eventRegisterEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({...user, evnt}),
+    }))
+    // Checking if the event has a external RSVP link and redirecting to it.
+    .then(()=>{
       if(evnt[9] && evnt[9] !== ""){
         setLoading("You are being redirected to external RSVP link.")
         location.href = evnt[9]
-      } else setOpen(false);
+      } 
+      setOpen(false);
     })
+    .catch((error) => {
+      console.error("Error sending token to server:", error);
+    });
 
     return false
   }

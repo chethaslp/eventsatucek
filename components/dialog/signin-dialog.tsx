@@ -134,7 +134,7 @@ export function SigninDialog({
   }, [open]);
 
   return open ? (
-    <div className="transition-all h-full w-full flex items-center justify-center flex-col fixed z-[50]  bg-transparent backdrop-blur-md">
+    <div className="transition-all animate-in h-full w-full flex items-center justify-center flex-col fixed z-[50]  bg-transparent backdrop-blur-md">
       <Logo className="text-4xl md:text-6xl " />
       {signinStep ? (
         <Button

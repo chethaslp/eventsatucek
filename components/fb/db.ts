@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp, query, where } from "firebase/firestore";
 import { db } from "./config";
 import { User } from "firebase/auth";
 import { UserType, Event_User } from "@/lib/types";
@@ -47,17 +47,8 @@ export async function getUserEvents(user:User) {
     })
 }
 
-export async function getClubEvents(user:User) {
-    return getDocs(collection(doc(db, "users", user.uid),'attendedEvents').withConverter(GenericConverter<Event_User>()))
-    .then((data)=> data.docs)
-    .catch((err)=> {
-        console.error(err)
-        return null
-    })
-}
-
-export async function getClubEvent(user:User) {
-    return getDocs(collection(doc(db, "users", user.uid),'attendedEvents').withConverter(GenericConverter<Event_User>()))
+export async function getClubEvents(user:User, club:string) {
+    return getDocs(query(collection(db, "events"), where("club","==",club)))
     .then((data)=> data.docs)
     .catch((err)=> {
         console.error(err)

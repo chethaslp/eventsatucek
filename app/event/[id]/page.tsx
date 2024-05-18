@@ -102,11 +102,11 @@ function Page({ params }: { params: { id: string } }) {
     return <div className="flex items-center justify-center mt-5">
       {(()=>{
         switch (userStatus) {
-          case "attended":
+          case "Attended":
             return <div className="border rounded-lg bg-success gap-3 flex flex-row p-3"><InfoIcon/> Wohooo! You have already attended this event.</div>
-          case "registered":
+          case "Registered":
               return <div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> You just RSVP&apos;d this event!</div>
-          case "missed":
+          case "Missed":
               return <div className="border rounded-lg bg-destructive gap-3 flex flex-row p-3"><InfoIcon/>You missed this event.</div>
           case null:
             return (!date?.isBefore() && data[9]) ? <button onClick={()=>{
