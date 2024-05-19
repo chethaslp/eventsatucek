@@ -127,12 +127,13 @@ function RsvpForm({
       dt: evnt[7]
     })
     // Sending mail to the registered User.
-    .then(()=> fetch("/api/eventRegisterEmail", {
+    .then(async ()=> fetch("/api/mailService/rsvp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-Token": await user.getIdToken()
       },
-      body: JSON.stringify({...user, evnt}),
+      body: JSON.stringify({user, evnt}),
     }))
     // Checking if the event has a external RSVP link and redirecting to it.
     .then(()=>{

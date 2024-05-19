@@ -25,9 +25,19 @@ export type Event_User = {
 export type Event = {
     evntID: string;
     title: string;
-    status: 'open' | 'closed' | 'cancelled';
     club: string;
     img: string;
     editLink: string;
+    
+    rsvp: {
+        status: 'open' | 'closed' | 'cancelled';
+        type: 'internal' | 'external' | 'none';
+        custom_text?: string;
+        link?: string;
+        tpa?: number;
+        checkins: boolean;
+        custom_quest?: string;
+    }
+
     updatedAt?: FieldValue;
 };
