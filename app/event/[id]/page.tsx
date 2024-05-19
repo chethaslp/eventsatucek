@@ -135,7 +135,7 @@ function Page({ params }: { params: { id: string } }) {
   return data.length == 0 ? (
     <Loading msg="Loading..." />
   ) : (
-    <div className="flex flex-col dark:bg-[#121212] min-h-[50rem] ">
+    <div className="flex flex-col min-h-[50rem] dark:bg-[#0a0a0a]">
       <Navbar />
       <SigninDialog open={openSignin} setOpen={setOpenSignin}/>
       <RsvpDialog open={open} setOpen={setOpen} evnt={data}/>
