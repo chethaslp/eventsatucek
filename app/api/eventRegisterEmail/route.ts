@@ -4,6 +4,7 @@ import { readFileSync } from "fs";
 import Handlebars from "handlebars";
 import { getImgLink } from "@/lib/data";
 import moment from "moment";
+import path from "path";
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
@@ -11,7 +12,7 @@ export async function POST(req: NextRequest) {
   
   try {
     const templateSource = readFileSync(
-      "public/templates/event_register_notification.hbs",
+      path.join(process.cwd(), "components/templates/event_register_notification.hbs"),
       "utf8"
     );
     const template = Handlebars.compile(templateSource);
