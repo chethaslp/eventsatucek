@@ -61,12 +61,12 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   }else if(params.t == "rsvp"){
     // For RSVP Mail
 
-    const rsvpData = (await getFirestore().doc(`events/${data.evnt[1]}/rsvp`).get()).data as unknown as Event['rsvp']  // Getting the RSVP infos of the event from the DB
+    const evntData = (await getFirestore().doc(`events/${data.evnt[1]}`).get()).data as unknown as Event  // Getting the RSVP infos of the event from the DB
     
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
-    if(rsvpData.type == "external"){
+    if(evntData.rsvp.type == "external"){
       templateFile = "components/templates/mail_rsvp_external.hbs"
-    } else if(rsvpData.type == "internal"){
+    } else if(evntData.rsvp.type == "internal"){
       templateFile = "components/templates/mail_rsvp_internal.hbs"
     } else {
       // RSVP is set to none. In this case no need to sent the mail.
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     }
     
     replacements = {
-      rsvpData: rsvpData,
+      rsvpData: evntData.rsvp,
       eventName: data.evnt[3],
       eventID: data.evnt[1],
       userName: data.user.displayName,
