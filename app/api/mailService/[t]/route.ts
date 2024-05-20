@@ -14,6 +14,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
   const data = await req.json();
   const token = req.headers.get("X-Token")
+  let evntData;
 
   if (!token) return NextResponse.json(
     { msg: 'Missing required arguments.' },
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   }else if(params.t == "rsvp"){
     // For RSVP Mail
 
-    const evntData = (await getFirestore().doc(`events/${data.evnt[1]}`).get()).data as unknown as Event  // Getting the RSVP infos of the event from the DB
+    evntData = (await getFirestore().doc(`events/${data.evnt[1]}`).get()).data() as unknown as Event  // Getting the RSVP infos of the event from the DB
     
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
     if(evntData.rsvp.type == "external"){
@@ -106,10 +107,10 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     const template = Handlebars.compile(templateSource);
     mailOptions.html = template(replacements);
 
-    // Send email and await the result
-    const info = await transporter.sendMail(mailOptions);
+    // Send email
+    await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ status: 200 });
+    return NextResponse.json({ ...evntData?.rsvp });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
