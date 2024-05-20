@@ -8,8 +8,15 @@ export type UserType = {
     admYear: string;
     batch: string;
     rollNumber: string;
-
     attendedEvents?: CollectionReference;
+};
+
+export type ClubType = {
+    displayName: string;
+    email: string;
+    role: 'Club';
+    about: string;
+    hostedEvents?: CollectionReference;
 };
 
 export type Event_User = {
@@ -24,6 +31,7 @@ export type Event_User = {
 
 export type Event = {
     evntID: string;
+    clubEmail:string;
     title: string;
     club: string;
     img: string;

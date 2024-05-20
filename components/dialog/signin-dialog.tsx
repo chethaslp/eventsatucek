@@ -58,7 +58,7 @@ import {
   signInWithCredential,
   signInWithPopup,
 } from "firebase/auth";
-import { createUser, getUser } from "../fb/db";
+import { createUser, getClub, getUser } from "../fb/db";
 import { Logo } from "../ui/logo";
 import SSImage from "@/public/img/ss-signin.png";
 import Image from "next/image";
@@ -92,7 +92,7 @@ export function SigninDialog({
     setLoading("Authenticating...");
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (user) => {
-        if(await getUser(user.user)) {
+        if(await getUser(user.user) || await getClub(user.user)) {
           setSigninStep(false);
           setOpen(false);
           return

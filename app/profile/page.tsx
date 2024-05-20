@@ -1,8 +1,8 @@
 "use client";
 import { useAuthContext } from "@/components/context/auth";
 import { SigninDialog } from "@/components/dialog/signin-dialog";
-import { getUser, getUserEvents } from "@/components/fb/db";
-import { Event, Event_User, UserType } from "@/lib/types";
+import { getProfileData, getUser, getUserEvents } from "@/components/fb/db";
+import { ClubType, Event, Event_User, UserType } from "@/lib/types";
 import Footer from "@/components/ui/Footer";
 import { Navbar } from "@/components/ui/navbar";
 import { Separator } from "@/components/ui/separator";
@@ -17,7 +17,7 @@ import { useSearchParams } from "next/navigation";
 function Page() {
   const user = useAuthContext();
 
-  const [userData, setUserData] = useState<UserType | null>();
+  const [userData, setUserData] = useState<UserType | ClubType>();
   const [loading, setLoading] = useState(true);
   const [openSignin, setOpenSignin] = useState(false);
   const [infoText, setInfoText] = useState(<></>);
@@ -27,10 +27,12 @@ function Page() {
       location.href = "/?signin1";
       return;
     }
-    getUser(user).then((data) => {
-      if (!data) setOpenSignin(true);
-      else {
-        setUserData(data);
+    getProfileData(user).then((data: any) => {
+      console.log(data);
+      if (!data.ok) {
+        setOpenSignin(true);
+      } else {
+        setUserData(data.data);
       }
       setLoading(false);
     });
@@ -39,7 +41,9 @@ function Page() {
   function getUserAvatar(user: any): string {
     return user?.photoURL ? user.photoURL.replace("s96-c", "s384-c") : "";
   }
-
+  function isClub(user: UserType | ClubType): user is ClubType {
+    return (user as ClubType).about !== undefined;
+}
   // Function to return Club's Events
   function ClubEvents() {
     return null;
@@ -65,14 +69,19 @@ function Page() {
           </div>
           <h2 className="text-xl mt-1 font-semibold">{user.displayName}</h2>
           <p className="text-muted-foreground">{userData?.role}</p>
-          <div className="mt-4 border-l-4 text-muted-foreground p-1 border-blue-700 pl-3">
+          <div className="mt-4 border-l-4 text-muted-foreground p-1 border-blue-700 pl-3 w-40">
             <h2 className="text-md font-semibold mb-2 dark:text-white">
               ABOUT
             </h2>
-            <p>
+            {userData && isClub(userData) ? (
+                <p>{userData.about}</p>
+            ) : (
+              <p>
               {userData?.batch} ({userData?.admYear} Admission)
+              <p>Roll Number: {userData?.rollNumber}</p>
             </p>
-            <p>Roll Number: {userData?.rollNumber}</p>
+            )}
+            
           </div>
         </div>
 
@@ -132,73 +141,73 @@ function UserEvents({
   return (
     <>
       <h1 className="sm:text-2xl text-xl ">Events Attended</h1>
-        {!userEvents ? (
-          <div className="flex items-center justify-center flex-col h-full">
-            <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t
-            been to any events so far.{" "}
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="table">
-              {/* head */}
-              <thead>
-                <tr className="dark:text-white ">
-                  <th className="px-1 sm:px-4">Club</th>
-                  <th className="px-1 sm:px-4">Event</th>
-                  <th className="px-1 sm:px-4">Date</th>
-                  <th className="px-1 sm:px-4">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {userEvents.map((evntData) => {
-                  const evnt = evntData.data() as Event_User;
-                  return (
-                    <tr key={evnt.evntID}>
-                      <td className="px-1 sm:px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="text-xs flex items-center flex-row text-muted-foreground">
-                            <div className="mask mask-squircle w-12 h-12">
-                              <Image
-                                width={48}
-                                height={48}
-                                referrerPolicy={"no-referrer"}
-                                src={resolveClubIcon(evnt.club, false)}
-                                alt={evnt.club}
-                              />
-                            </div>
-                            <span className="hidden sm:block">{evnt.club}</span>
+      {!userEvents ? (
+        <div className="flex items-center justify-center flex-col h-full">
+          <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t
+          been to any events so far.{" "}
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr className="dark:text-white ">
+                <th className="px-1 sm:px-4">Club</th>
+                <th className="px-1 sm:px-4">Event</th>
+                <th className="px-1 sm:px-4">Date</th>
+                <th className="px-1 sm:px-4">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userEvents.map((evntData) => {
+                const evnt = evntData.data() as Event_User;
+                return (
+                  <tr key={evnt.evntID}>
+                    <td className="px-1 sm:px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="text-xs flex items-center flex-row text-muted-foreground">
+                          <div className="mask mask-squircle w-12 h-12">
+                            <Image
+                              width={48}
+                              height={48}
+                              referrerPolicy={"no-referrer"}
+                              src={resolveClubIcon(evnt.club, false)}
+                              alt={evnt.club}
+                            />
                           </div>
+                          <span className="hidden sm:block">{evnt.club}</span>
                         </div>
-                      </td>
-                      <td className="px-1 sm:px-4">
-                        <div
-                          className="font-bold underline cursor-pointer hover:no-underline"
-                          onClick={() =>
-                            (location.href = `/event/${evnt.evntID}`)
-                          }
-                        >
-                          {evnt.evntName}
-                        </div>
-                      </td>
-                      <td className="px-1 sm:px-4">{evnt.dt.split(" ")[0]}</td>
-                      <td className="px-1 sm:px-4">
-                        <span
-                          className={`badge badge-ghost badge-sm text-white p-2 ${
-                            evnt.status == "Registered"
-                              ? "bg-green-700"
-                              : "bg-blue-700"
-                          }`}
-                        >
-                          {evnt.status}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+                      </div>
+                    </td>
+                    <td className="px-1 sm:px-4">
+                      <div
+                        className="font-bold underline cursor-pointer hover:no-underline"
+                        onClick={() =>
+                          (location.href = `/event/${evnt.evntID}`)
+                        }
+                      >
+                        {evnt.evntName}
+                      </div>
+                    </td>
+                    <td className="px-1 sm:px-4">{evnt.dt.split(" ")[0]}</td>
+                    <td className="px-1 sm:px-4">
+                      <span
+                        className={`badge badge-ghost badge-sm text-white p-2 ${
+                          evnt.status == "Registered"
+                            ? "bg-green-700"
+                            : "bg-blue-700"
+                        }`}
+                      >
+                        {evnt.status}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }
