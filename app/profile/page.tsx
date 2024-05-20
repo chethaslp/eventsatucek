@@ -41,7 +41,9 @@ function Page() {
   function getUserAvatar(user: any): string {
     return user?.photoURL ? user.photoURL.replace("s96-c", "s384-c") : "";
   }
-
+  function isClub(user: UserType | ClubType): user is ClubType {
+    return (user as ClubType).about !== undefined;
+}
   // Function to return Club's Events
   function ClubEvents() {
     return null;
@@ -67,21 +69,17 @@ function Page() {
           </div>
           <h2 className="text-xl mt-1 font-semibold">{user.displayName}</h2>
           <p className="text-muted-foreground">{userData?.role}</p>
-          <div className="mt-4 border-l-4 text-muted-foreground p-1 border-blue-700 pl-3 w-36">
+          <div className="mt-4 border-l-4 text-muted-foreground p-1 border-blue-700 pl-3 w-40">
             <h2 className="text-md font-semibold mb-2 dark:text-white">
               ABOUT
             </h2>
-            {userData?.role === "Club" ? (
-              <p>{userData?.about}</p>
+            {userData && isClub(userData) ? (
+                <p>{userData.about}</p>
             ) : (
               <p>
-                {userData?.batch} ({userData?.admYear} Admission)
-              </p>
-            )}
-            {userData?.rollNumber ? (
+              {userData?.batch} ({userData?.admYear} Admission)
               <p>Roll Number: {userData?.rollNumber}</p>
-            ) : (
-              null
+            </p>
             )}
             
           </div>
