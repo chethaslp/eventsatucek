@@ -68,8 +68,7 @@ export default function Home() {
         setData(data);
         const upcomingEvent = data.shift() || [""]; // Remove and return the first event from data
         setBannerEvent(upcomingEvent);
-        setDate(moment(upcomingEvent[7], "DD/MM/YYYY HH:mm:ss"));
-        console.log(date);
+        setDate(moment(upcomingEvent[7],"DD/MM/YYYY HH:mm:ss"))
         setLoading(false);
       })
       .catch((error) => {

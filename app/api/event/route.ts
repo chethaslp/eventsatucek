@@ -15,7 +15,7 @@ import { Event } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
 
-  const {title, body, image, token, club, evntId, dt, publish, editLink} = await req.json()
+  const {title, body, image, token, club, evntId, dt, publish, editLink, rsvp, rsvp_custom_text, rsvp_link, rsvp_total_allowed, rsvp_custom_quest, checkins} = await req.json()
 
   if (!title ||  !body || !image || !club || !dt || (token != process.env.TOKEN)) {
     console.log(token, process.env.TOKEN)
@@ -28,6 +28,20 @@ export async function POST(req: NextRequest) {
   const evntDoc = getFirestore().doc(`/events/${evntId}`)
 
   const eventExists = (await evntDoc.get()).exists
+
+
+  let rsvp_data: Event['rsvp'] = {
+    type: rsvp, 
+    status: publish? "open": "closed",
+    checkins: checkins
+  }
+  if (rsvp_data.type == "internal"){
+    rsvp_data.custom_quest = rsvp_custom_quest;
+    rsvp_data.custom_text = rsvp_custom_text;
+    rsvp_data.tpa = rsvp_total_allowed;
+  }else if(rsvp_data.type == "external"){
+    rsvp_data.link = rsvp_link;
+  }
   
   evntDoc.set({
       evntID: evntId,
@@ -37,7 +51,7 @@ export async function POST(req: NextRequest) {
       title: title,
       editLink: editLink,
       dt: dt,
-      status: publish? "open": "closed"
+      rsvp: rsvp_data
     } as Event, { merge: true})
   
   // If publish status is false OR If the event already exists in the DB then, do not publish. 

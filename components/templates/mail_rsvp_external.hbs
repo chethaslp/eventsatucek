@@ -21,7 +21,9 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
       .header {
-        background-image: url("https://img.freepik.com/free-vector/gradient-grid-background_23-2150533908.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1715731200&semt=ais_user");
+        background-color: #5C427C;
+        background-size: cover;
+        background: linear-gradient(45deg, #121212, #2c2c2c);
         color: #fff;
         text-align: center;
         padding: 20px 0;
@@ -57,58 +59,69 @@
         list-style: none;
         padding:5px
       }
+
+      a {
+      background-color: #121212;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+      margin: 20px 0;
+    }
+
+    a:hover {
+      background-color: #2c2c2c;
+    }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>Event Registration Confirmation</h1>
+        <img src="{{clubIcon}}" style="border-radius: 4px;" alt="Club Logo" />
       </div>
       <div class="content">
-        <h3>Dear {{userName}},</h3>
+        <h3>Hey {{userName}}! 👋</h3>
         <h4>
-          Thank you for registering for {{eventName}}. We're thrilled to have
-          you join us!
+          We've received your initial RSVP request for <span style="font-weight: bold;">{{eventName}}</span>, but there's just one more step to complete the process. 🙌. Read below.
         </h4>
         <div class="event-poster">
           <img src="{{eventPoster}}" style="border-radius: 4px;" alt="Event Poster" />
         </div>
-        <h4>Below are the details of the event:</h4>
+        <h4>Here are the deets you need to know:</h4>
         <ul >
           <li class="list">
-            <img style="width: 20px;  margin-right: 1px;" src="https://icons.veryicon.com/png/o/miscellaneous/esgcc-basic-icon-library/date-71.png" alt="Event Poster" />
-            <strong>Date:</strong>
+            <img style="width: 20px;  margin-right: 1px;" src="https://icons.veryicon.com/png/o/miscellaneous/esgcc-basic-icon-library/date-71.png" alt="Event Poster" />&nbsp;
+            <strong>Date:</strong>&nbsp;
             {{eventDate}}
           </li>
           <li class="list">
-            <img style="width: 17px; margin-right: 1px;" src="https://icons.veryicon.com/png/o/commerce-shopping/online-retailers/clock-136.png" alt="Event Poster" />
-            <strong>Time:</strong>
-            {{eventTime}}
+            <img style="width: 17px; margin-right: 1px;" src="https://icons.veryicon.com/png/o/commerce-shopping/online-retailers/clock-136.png" alt="Event Poster" />&nbsp;
+            <strong>Time:</strong>&nbsp;
+            {{eventTime}}&nbsp;
           </li>
           <li class="list">
-            <img style="width: 20px; margin-right: 1px;" src="https://icons.veryicon.com/png/o/business/classic-icon/location-56.png" alt="Event Poster" />
-            <strong>Venue:</strong>
-            {{eventVenue}}
+            <img style="width: 20px; margin-right: 1px;" src="https://icons.veryicon.com/png/o/business/classic-icon/location-56.png" alt="Event Poster" />&nbsp;
+            <strong>Venue:</strong>&nbsp;
+            {{eventVenue}}&nbsp;
           </li>
         </ul>
-        <div>
-            <h4>About</h4>
-            <p style="white-space: break-spaces;">{{eventDescription}}</p>
-        </div>
         <p>
-          We look forward to seeing you at the event. If you have any questions
-          or need further assistance, feel free to contact us.
+          This event handles RSVPs in an external site. So, it is crucial that you go to the below link and confirm your RSVP.
+          <div>
+            <a href="{{rsvpData.link}}">RVSP Here</a>
+          </div>
         </p>
         <p>
-          Best regards,<br />
-          Events At Ucek
+          Cheers!<br />
+          The Events@UCEK Crew
         </p>
       </div>
       <div class="footer">
-        <p>
+        <small style="padding: 5px;">
           This email was sent to {{userEmail}}. If you believe you received this
           email by mistake, please contact us.
-        </p>
+        </small>
       </div>
     </div>
   </body>

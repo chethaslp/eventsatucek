@@ -120,12 +120,13 @@ export function SigninDialog({
       gender: gender,
     })
     // Sending welcome mail.
-    .then((data) => fetch("/api/registerEmail", {
+    .then(async (data) => fetch("/api/mailService/welcome/", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set Content-Type header
+        "Content-Type": "application/json",
+        "X-Token": await user.getIdToken()
       },
-      body: JSON.stringify(data), // Stringify token object
+      body: JSON.stringify({user: data}),
     })).then(()=> {
       if(s.has("r")) location.href = s.get("r") || ""
       setSigninStep(false);
