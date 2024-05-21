@@ -26,7 +26,7 @@ function Page() {
   ) : (
     <div className="flex flex-col dark:bg-[#0a0a0a] min-h-[50rem] h-full">
       <Navbar />
-      <div className="flex-1 justify-center mb-8 flex-col">
+      <div className="mt-40 flex-1 justify-center mb-8 flex-col">
         <div className="text-2xl flex items-center justify-center mb-5">
           Contributors
         </div>

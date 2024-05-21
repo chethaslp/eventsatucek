@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
 } from "./dropdown-menu";
 import { Separator } from "./separator";
-import { Sun, Moon, CircleUser } from "lucide-react";
+import { Sun, Moon, CircleUser, ScanLine } from "lucide-react";
 import { Button } from "./button";
 import { Logo } from "./logo";
 import { useTheme } from "next-themes";
@@ -19,9 +19,10 @@ import { Avatar } from "./avatar";
 import { useAuthContext } from "../context/auth";
 import { signOut } from "firebase/auth";
 import { SigninDialog } from "../dialog/signin-dialog";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useRef, useState } from "react";
 import { auth } from "../fb/config";
 import Image from "next/image";
+import { QrReader } from "react-qr-reader";
 
 export function Navbar({ qName }: { qName?: string }) {
   const { setTheme } = useTheme();
@@ -30,17 +31,30 @@ export function Navbar({ qName }: { qName?: string }) {
   const user = useAuthContext();
   const [open, setOpen] = useState(false);
 
+
+  const [openScanner, setOpenScanner]  =useState(false)
   function handleUserLogin(): void {
     if (user) signOut(auth);
     else setOpen(true);
   }
 
   // if(!user) redirect("/signin?c="+path)
+  const handleScan = () => {
+    setOpenScanner(!openScanner)
+  };
+  const handleError = (err:any) => {
+    console.log(err);
+    
+  };
+  const handleSuccess = (result:any) => {
+    console.log(result);
+    
+  };
 
   return (
     <>
       <SigninDialog open={open} setOpen={setOpen} />
-      <div className="w-full backdrop-blur px-5 py-3 dark:bg-[#0a0a0a]">
+      <div className="w-full backdrop-blur px-5 py-3 dark:bg-[#181818fe] bg-[#f5f5f5df] shadow-sm fixed z-20 ">
         <div className="flex items-center justify-between gap-2 flex-row">
           <div className="flex items-center flex-row gap-2 hover:scale-105 transition-all scale-100">
             <Link href={"/"}>
@@ -62,7 +76,7 @@ export function Navbar({ qName }: { qName?: string }) {
                 Contributors
               </Button>
             </a>
-            <DropdownMenu >
+            <DropdownMenu>
               <DropdownMenuTrigger asChild className="cursor-pointer ">
                 {user ? (
                   <Avatar className="w-9 h-9">
@@ -111,6 +125,14 @@ export function Navbar({ qName }: { qName?: string }) {
                 <FaGithub />
               </Button>
             </a>
+            <Button
+              variant="outline"
+              className="text-lg  md:hidden visible"
+              size="icon"
+              onClick={handleScan}
+            >
+              <ScanLine />
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -133,7 +155,17 @@ export function Navbar({ qName }: { qName?: string }) {
             </DropdownMenu>
           </div>
         </div>
-        <Separator className="mt-3 mb-4" />
+
+        {openScanner ? (
+          <QrReader 
+            delay={300}
+            onError={handleError}
+            onScan={handleSuccess}
+            style={{ width: "100%" }}
+          />
+        ) : (
+          null
+        )}
       </div>
     </>
   );

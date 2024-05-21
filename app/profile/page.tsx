@@ -60,7 +60,7 @@ function Page() {
   ) : (
     <div className="flex h-full flex-col dark:bg-[#0a0a0a]">
       <Navbar />
-      <div className="flex flex-1 flex-col sm:flex-row items-center md:items-start dark:bg-[#0a0a0a]">
+      <div className="mt-40 flex flex-1 flex-col sm:flex-row items-center md:items-start dark:bg-[#0a0a0a]">
         <div className="flex flex-col px-16 py-8">
           <div className="avatar">
             <div className="w-44 h-44 rounded-full">

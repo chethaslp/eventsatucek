@@ -46,7 +46,7 @@ export default function Home() {
     <div className="">
       <Navbar />
       <div className="flex dark:bg-[#0a0a0a] flex-col w-full h-full p-1 md:p-5 items-center">
-        <div className="m-7">
+        <div className="m-7  mt-36">
           <p className="text-3xl">Past Events</p>
         </div>
         <CardGrid>
