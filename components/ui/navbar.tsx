@@ -42,7 +42,7 @@ export function Navbar({ qName }: { qName?: string }) {
   const handleScan = () => {
     setOpenScanner(!openScanner)
   };
-  const handleError = (err) => {
+  const handleError = (err:any) => {
     console.log(err);
     
   };
