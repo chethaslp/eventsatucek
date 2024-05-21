@@ -158,10 +158,14 @@ export function Navbar({ qName }: { qName?: string }) {
 
         {openScanner ? (
           <QrReader 
-            delay={300}
-            onError={handleError}
-            onScan={handleSuccess}
-            style={{ width: "100%" }}
+            scanDelay={300}
+            onResult={handleSuccess}
+            constraints={{
+              facingMode:"environment",
+              
+              
+            }}
+            containerStyle={{ width: "100%" }}
           />
         ) : (
           null
