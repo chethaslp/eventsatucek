@@ -4,8 +4,13 @@ import { Navbar } from "@/components/ui/navbar";
 import Card from "@/components/ui/card";
 import { BackgroundGradient } from "@/components/ui/banner";
 import Footer from "@/components/ui/Footer";
-
-import { getImgLink, getUpcomingEvents, getClubs, filterEvents } from "@/lib/data";
+import { Html5QrcodeScanner } from "html5-qrcode";
+import {
+  getImgLink,
+  getUpcomingEvents,
+  getClubs,
+  filterEvents,
+} from "@/lib/data";
 import Loading from "../components/ui/Loading";
 
 import { useEffect, useState, useRef } from "react";
@@ -21,12 +26,10 @@ import { IoCloudOfflineSharp } from "react-icons/io5";
 import { BsClock } from "react-icons/bs";
 import { LuFilter } from "react-icons/lu";
 
-
 import NoEvents from "./NoEvents";
 import FCM from "@/components/ui/fcm";
 import moment from "moment";
 import CountdownTimer from "@/components/ui/CountDown";
-
 const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
 export default function Home() {
@@ -41,20 +44,32 @@ export default function Home() {
   const [timeDropdown, setTimeDropdown]: any = useState("Upcoming");
   const [typeDropdown, setTypeDropdown]: any = useState("Both");
   const [date, setDate] = useState<moment.Moment>();
-  const [bannerEvent, setBannerEvent] = useState<string[]>(["","","","","","","","",""]);
+  const [bannerEvent, setBannerEvent] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
   useEffect(() => {
     getUpcomingEvents()
       .then((data) => {
-        if(data.length <=1){
+        if (data.length <= 1) {
           setTimeDropdown("Past");
-          filterEvents(clubDropdown, typeDropdown, "Past").then((evnts) => setData(evnts));
+          filterEvents(clubDropdown, typeDropdown, "Past").then((evnts) =>
+            setData(evnts)
+          );
         }
         setData(data);
         const upcomingEvent = data.shift() || [""]; // Remove and return the first event from data
         setBannerEvent(upcomingEvent);
-        setDate(moment(upcomingEvent[7],"DD/MM/YYYY HH:mm:ss"))
-        console.log(date)
+        setDate(moment(upcomingEvent[7], "DD/MM/YYYY HH:mm:ss"));
+        console.log(date);
         setLoading(false);
       })
       .catch((error) => {
@@ -62,30 +77,36 @@ export default function Home() {
       });
   }, []);
 
-
   function clubDropdownHandle(club: string): any {
     clubDropdownButton.current.click();
     if (club != clubDropdown) {
       setClubDropdown(club);
-      filterEvents(club, typeDropdown, timeDropdown).then((evnts) => setData(evnts));
+      filterEvents(club, typeDropdown, timeDropdown).then((evnts) =>
+        setData(evnts)
+      );
     }
   }
   function typeDropdownHandle(type: string): any {
     typeDropdownButton.current.click();
     if (type != typeDropdown) {
       setTypeDropdown(type);
-      filterEvents(clubDropdown, type, timeDropdown).then((evnts) => setData(evnts));
+      filterEvents(clubDropdown, type, timeDropdown).then((evnts) =>
+        setData(evnts)
+      );
     }
   }
   function timeDropdownHandle(time: string): any {
     timeDropdownButton.current.click();
     if (time != timeDropdown) {
       setTimeDropdown(time);
-      filterEvents(clubDropdown, typeDropdown, time).then((evnts) => setData(evnts));
+      filterEvents(clubDropdown, typeDropdown, time).then((evnts) =>
+        setData(evnts)
+      );
     }
   }
 
-
+  function handleError() {}
+  function handleScan() {}
   // If there is no events in data
   if (data.length == 0 && !loading && bannerEvent.length == 0) {
     return <NoEvents />;
@@ -96,79 +117,80 @@ export default function Home() {
   ) : (
     <>
       <div className="">
-        <FCM/>
+        <FCM />
         <Navbar />
-        <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a]">
-          <BackgroundGradient
-            className="rounded-[22px] w-full p-2 sm:p-6 bg-white dark:bg-zinc-900"
-            containerClassName="m-5 md:w-[70%] w-[95%]"
-          >
-            <div className="flex flex-col-reverse  md:flex-row items-center gap-4 justify-around">
-              <div className="max-w-full m-3">
-                <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
-                  Next Event
-                </p>
+        <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a] ">
+          <div className="flex flex-col mt-20 md:mt-40  md:flex-row items-center gap-4 justify-around bg-[#f5f5f5df] dark:bg-[#181818fe] p-1 sm:p-10  md:px-24 md:py-8 rounded-2xl">
+            <div className="">
+              <Image
+                width={350}
+                height={350}
+                referrerPolicy={"no-referrer"}
+                src={getImgLink(bannerEvent[5])}
+                onClick={() =>
+                  (window.location.href = "/event/" + bannerEvent[1])
+                }
+                className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out aspect-square"
+                alt="Event Poster"
+              ></Image>
+            </div>
+            <div className="max-w-full m-3">
+              <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
+                Coming Next
+              </p>
 
-                <p className="flex flex-col mb-3"> 
-                  <span className="font-bold text-xl md:text-3xl">{bannerEvent[3]}</span>
-                  <small className="text-muted-foreground">{bannerEvent[6]}</small>
-                </p>
-                <p className="flex items-center mb-1 ">
-                  <FaCalendarAlt className="mr-2" />
-                  {date?.format("dddd, Do MMM YYYY")} ({date?.fromNow()})
-                </p>
-                <p className="flex break-words items-center mb-1">
-                  <IoLocationSharp className="mr-2" />{" "}
-                  {bannerEvent[10] == "" ? "Will be updated." : bannerEvent[10]}
-                </p>
-                {bannerEvent[8] == "Online" ? (
-                  <p className="flex items-center mb-1">
-                    <IoIosCloud className="mr-2" /> Online
-                  </p>
-                ) : (
-                  <p className="flex items-center mb-1">
-                    <IoCloudOfflineSharp className="mr-2" /> Offline{" "}
-                  </p>
-                )}
+              <p className="flex flex-col mb-3">
+                <span className="font-bold text-xl md:text-3xl">
+                  {bannerEvent[3]}
+                </span>
+                <small className="text-muted-foreground">
+                  {bannerEvent[6]}
+                </small>
+              </p>
+              <p className="flex items-center mb-1 ">
+                <FaCalendarAlt className="mr-2" />
+                {date?.format("dddd, Do MMM YYYY")} ({date?.fromNow()})
+              </p>
+              <p className="flex break-words items-center mb-1">
+                <IoLocationSharp className="mr-2" />{" "}
+                {bannerEvent[10] == "" ? "Will be updated." : bannerEvent[10]}
+              </p>
+              {bannerEvent[8] == "Online" ? (
                 <p className="flex items-center mb-1">
-                  {" "}
-                  <BsClock className="mr-2" />
-                  {date?.format("h:mm a")}
+                  <IoIosCloud className="mr-2" /> Online
                 </p>
-                {/* COUNTDOWN */}
-                      <CountdownTimer bannerEvent={bannerEvent} date={date}/>
-                      
-                {/* ACTION BUTTONS */}
-                <div className="flex flex-row gap-3 mt-5 justify-center">
-                  <Link href={"/event/" + bannerEvent[1]}>
-                    <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                      View More
-                    </button>
-                  </Link>
-                </div>
-                
+              ) : (
+                <p className="flex items-center mb-1">
+                  <IoCloudOfflineSharp className="mr-2" /> Offline{" "}
+                </p>
+              )}
+              <p className="flex items-center mb-1">
+                {" "}
+                <BsClock className="mr-2" />
+                {date?.format("h:mm a")}
+              </p>
+              {/* COUNTDOWN */}
+              <div className="flex justify-center">
+                <CountdownTimer bannerEvent={bannerEvent} date={date} />
               </div>
-              <div>
-                <Image
-                  width={350}
-                  height={350}
-                  referrerPolicy={"no-referrer"}
-                  src={getImgLink(bannerEvent[5])}
-                  onClick={() =>
-                    (window.location.href = "/event/" + bannerEvent[1])
-                  }
-                  className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out"
-                  alt="Event Poster"
-                ></Image>
+
+              {/* ACTION BUTTONS */}
+              <div className="flex flex-row gap-3 mt-5 justify-center">
+                <Link href={"/event/" + bannerEvent[1]}>
+                  <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                    View More
+                  </button>
+                </Link>
               </div>
             </div>
-          </BackgroundGradient>
-          <div
-            className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row`}
-          >
-            <p className="text-3xl">{timeDropdown} Events</p>
-            <div className="md:left-28 z-30 absolute md:my-7 my-12 text-xs md:text-lg pt-6">
-              <div className="flex flex-row items-center gap-1 md:gap-2">
+          </div>
+
+          <div className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row`}>
+            <p className="text-3xl md:text-5xl font-semibold pt-6">
+              {timeDropdown} Events
+            </p>
+            <div className="md:left-28 z-10 absolute md:my-7 my-12 text-xs md:text-lg pt-6">
+              <div className="flex flex-row items-center gap-1 md:gap-2 pt-12 ">
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
                   <summary
@@ -199,9 +221,7 @@ export default function Home() {
                   >
                     {["Online", "Offline", "Both"].map((type, idx) => (
                       <li key={idx}>
-                        <a onClick={() => typeDropdownHandle(type)}>
-                          {type}
-                        </a>
+                        <a onClick={() => typeDropdownHandle(type)}>{type}</a>
                       </li>
                     ))}
                   </ul>
@@ -218,9 +238,7 @@ export default function Home() {
                   >
                     {["Upcoming", "Past", "All"].map((type, idx) => (
                       <li key={idx}>
-                        <a onClick={() => timeDropdownHandle(type)}>
-                          {type}
-                        </a>
+                        <a onClick={() => timeDropdownHandle(type)}>{type}</a>
                       </li>
                     ))}
                   </ul>
@@ -230,7 +248,7 @@ export default function Home() {
           </div>
 
           <div
-            className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mb-10" ${
+            className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mt-4" ${
               data.length == 0
                 ? ""
                 : " sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
@@ -268,6 +286,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
+
+        
         <Footer />
       </div>
     </>
