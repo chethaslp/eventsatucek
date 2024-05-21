@@ -44,10 +44,7 @@ function Page() {
   function isClub(user: UserType | ClubType): user is ClubType {
     return (user as ClubType).about !== undefined;
 }
-  // Function to return Club's Events
-  function ClubEvents() {
-    return null;
-  }
+  
 
   // Profile Page
   if (loading) return <Loading msg={"Getting your profile..."} />;
@@ -103,6 +100,11 @@ function Page() {
       </div>
     </div>
   );
+}
+
+// Function to return Club's Events
+function ClubEvents() {
+  return null;
 }
 
 // Function to return User's Events

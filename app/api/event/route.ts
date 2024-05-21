@@ -15,7 +15,7 @@ import { Event } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
 
-  const {title, body, image, token, club, evntId, dt, publish, editLink, rsvp, rsvp_custom_text, rsvp_link, rsvp_total_allowed, rsvp_custom_quest, checkins} = await req.json()
+  const {title, body, image, token, club, evntId, dt, publish, editLink, rsvp, rsvp_custom_text, rsvp_link, rsvp_total_allowed, rsvp_custom_quest, checkins, hostMail} = await req.json()
 
   if (!title ||  !body || !image || !club || !dt || (token != process.env.TOKEN)) {
     console.log(token, process.env.TOKEN)
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
   evntDoc.set({
       evntID: evntId,
       club: club,
-      clubEmail:resolveClubEmail(club),
+      host: hostMail,
       img: image,
       title: title,
       editLink: editLink,

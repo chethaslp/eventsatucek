@@ -31,7 +31,7 @@ export type Event_User = {
 
 export type Event = {
     evntID: string;
-    clubEmail:string;
+    host:string;
     title: string;
     club: string;
     img: string;
