@@ -134,5 +134,6 @@ function resolveClubIcon(clb: string): any {
     "Music Club - UCEK": "/logos/mcc.png",
     "Film Club - UCEK": "/logos/fmc.png",
     "NSS - UCEK": "/logos/nss.png",
+    "Renvnza '24": "/logos/renvnza.png",
   }[clb];
 }

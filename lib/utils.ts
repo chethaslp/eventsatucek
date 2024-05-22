@@ -18,6 +18,8 @@ import NSSLogo from "../public/logos/nss.png";
 import SFILogo from "../public/logos/sfi.png";
 import TRHLogo from "../public/logos/trh.png";
 import TRHLogoBlack from "../public/logos/trh_black.png";
+import RenvnzaLogo from "../public/logos/renvnza.png";
+import RenvnzaLogoBlack from "../public/logos/renvnza_black.png";
 import moment from "moment";
 import { QueryDocumentSnapshot } from "firebase/firestore";
 
@@ -41,6 +43,7 @@ export function resolveClubIcon(clb: string,black:boolean ): any {
     "Music Club - UCEK": black ? MCCLogoBlack : MCCLogo,
     "Film Club - UCEK": black ? FMCLogoBlack : FMCLogo,
     "NSS - UCEK": NSSLogo,
+    "Renvnza '24": black ? RenvnzaLogoBlack : RenvnzaLogo,
   }[clb];
 }
 

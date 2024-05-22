@@ -107,4 +107,5 @@ export const getClubs = [
   "Music Club - UCEK",
   "Film Club - UCEK",
   "NSS - UCEK",
+  "Renvnza '24",
 ]
