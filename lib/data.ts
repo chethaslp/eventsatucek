@@ -82,9 +82,9 @@ export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Pro
     else if(time == 'Past') t = "H < now() order by(`H`)"
 
     if(clb == getClubs[0] && type == "Both") return "select * where L = 'Yes' and "+ t /* Returns if club is set to "All" and type is "Both" */
-    if(clb == getClubs[0]) return "select * where `I` = '"+ type + "' and L = 'Yes' and "+ t /* Returns if club is set to "All" and type is different */
-    if(type == "Both")  return "select * where `G` = '"+ clb + "' and L = 'Yes' and "+ t /* Returns if club is different and type is set to "Both" */
-    return "select * where `G` = '"+ clb + "' and  `I` = '"+ type + "' and L = 'Yes' and "+ t /* Returns if club and type is different. */
+    if(clb == getClubs[0]) return `select * where I = '${type}' and L = 'Yes' and ${t} `/* Returns if club is set to "All" and type is different */
+    if(type == "Both")  return `select * where G like '%${clb}%' and L = 'Yes' and ${t}` /* Returns if club is different and type is set to "Both" */
+    return `select * where G like '%${clb}%' and  I = '${type}' and L = 'Yes' and ${t}` /* Returns if club and type is different. */
   }
 
   const url = "https://docs.google.com/spreadsheets/d/"
@@ -96,7 +96,7 @@ export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Pro
 
 export const getClubs = [
   "All Clubs",
-  "GDSC - UCEK",
+  "Google Developers Student Club - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",
   "μlearn - UCEK",

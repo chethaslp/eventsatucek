@@ -47,30 +47,35 @@ function Page({ params }: { params: { id: string } }) {
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
 
   const [date, setDate] = useState<any>();
-  const [clubIcon, setClubIcon] = useState<string>("");
+  const [clubIcon, setClubIcon] = useState<any[]>();
 
-  const handleClubIcon = async(data:any)=>{
-    const resolvedIcon = await resolveClubIcon(data[6], themeToDark) ;
-    setClubIcon(resolvedIcon)
+  const handleClubIcon = async(d:string[])=>{
+    
   }
 
   useEffect(() => {
     getEvent(params.id)
       .then((evnt) => {
-        setData(evnt[0]);
+        const d = evnt[0]
 
-        if(!data) return
-        setDate(moment(evnt[0][7], "DD/MM/YYYY HH:mm:ss"))
-        handleClubIcon(data)
+        setData(d);
+        setDate(moment(d[7], "DD/MM/YYYY HH:mm:ss"))
+
+        const clubList  = d[6].split(",")
+        let logoList:any[] = []
+        clubList.forEach(async (cl:string)=>{
+          logoList.push(await resolveClubIcon(cl.trim(), themeToDark))
+        })
+        setClubIcon(logoList)
 
         if(s.has("rsvp")) setOpen(true)
       })
-  }, [clubIcon]);
+  }, []);
 
   
   useEffect(() => {
-    if(!data) return
-    getMoreClubEvents(data[6] ? data[6] : "nill", params.id)
+    if(!data[6]) return
+    getMoreClubEvents(data[6] ? data[6] : "*", params.id)
     .then((upcomingEvents) => {
       setMoreEvents(upcomingEvents);
       setLoading(false);
@@ -78,7 +83,7 @@ function Page({ params }: { params: { id: string } }) {
     .catch((error) => {
       console.error("An error occurred:", error);
     });
-  }, []);
+  }, [data]);
 
 
   function UserEventInteractionPanel(){
@@ -167,15 +172,24 @@ function Page({ params }: { params: { id: string } }) {
           ></Image>
 
           <div className="p-9">
+            <div className="flex flex-row gap-2">
+             {clubIcon && clubIcon.length>1 && clubIcon.map((cl,i)=> <Image
+                className="rounded-full w-8 md:w-10"
+                key={`cIcon${i}`}
+                referrerPolicy={"no-referrer"}
+                src={cl}
+                alt="Club Icon"
+              ></Image>)}
+            </div>
             <div className="flex justify-between items-center">
               <p className="flex flex-col mb-1"> 
                 <span className="font-bold text-2xl md:text-3xl">{data[3]}</span>
                 <small className="text-muted-foreground">{data[6]}</small>
               </p>
-              {clubIcon && <Image
+              {clubIcon && clubIcon.length==1 && <Image
                 className="rounded-full w-12 md:w-20 absolute md:right-28 right-7"
                 referrerPolicy={"no-referrer"}
-                src={clubIcon}
+                src={clubIcon[0]}
                 alt="Club Icon"
               ></Image>}
             </div>

@@ -118,9 +118,8 @@ export default function Home() {
       <div className="">
         <FCM />
         <Navbar />
-        <div className="flex flex-col w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a] ">
-          <div className="flex flex-col mt-20 md:mt-40  md:flex-row items-center gap-4 justify-around bg-[#f5f5f5df] dark:bg-[#181818fe] p-1 sm:p-10  md:px-24 md:py-8 rounded-2xl">
-            <div className="">
+        <div className="flex flex-col lg:flex-row w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a] ">
+          <div className="flex flex-col mt-20 md:mt-40 lg:mt-10  md:flex-row lg:flex-col items-center gap-4 justify-around bg-[#f5f5f5df] dark:bg-[#181818fe] p-1 sm:p-10  md:px-24 md:py-8 rounded-2xl">
               <Image
                 width={350}
                 height={350}
@@ -132,7 +131,6 @@ export default function Home() {
                 className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out aspect-square"
                 alt="Event Poster"
               ></Image>
-            </div>
             <div className="max-w-full m-3">
               <p className="text-lg md:text-2xl break-words text-black mt-4 mb-2 dark:text-neutral-200">
                 Coming Next
@@ -184,11 +182,12 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="flex w-full lg:mt-10 flex-col">
           <div className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row`}>
             <p className="text-3xl md:text-5xl font-semibold pt-6">
               {timeDropdown} Events
             </p>
-            <div className="md:left-28 z-10 absolute md:my-7 my-12 text-xs md:text-lg pt-6">
+            <div className="md:left-28 lg:left-0 z-10 absolute lg:relative lg:mb-0 md:my-7 my-12 text-xs md:text-lg pt-6">
               <div className="flex flex-row items-center gap-1 md:gap-2 pt-12 ">
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
@@ -247,10 +246,10 @@ export default function Home() {
           </div>
 
           <div
-            className={`md:w-[90%] w-full mb-5 justify-items-center grid grid-cols-1 md:gap-x-4 gap-y-6 mt-4" ${
+            className={`md:w-[90%] lg:w-full w-full ml-5 mb-5 justify-around grid grid-cols-1 md:gap-x-4 gap-y-6 mt-4" ${
               data.length == 0
                 ? ""
-                : " sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
+                : " sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 "
             }`}
           >
             {data.map((evnt, i) => (
@@ -284,6 +283,7 @@ export default function Home() {
               View Past Events.
             </Link>
           </div>
+        </div>
         </div>
 
         
