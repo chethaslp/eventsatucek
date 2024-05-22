@@ -28,10 +28,12 @@ function Page() {
       return;
     }
     getProfileData(user).then((data: any) => {
-      console.log(data);
       if (!data.ok) {
         setOpenSignin(true);
       } else {
+        if (data?.data.role == "club") {
+          location.href = "/dashboard";
+        }
         setUserData(data.data);
       }
       setLoading(false);
@@ -43,8 +45,7 @@ function Page() {
   }
   function isClub(user: UserType | ClubType): user is ClubType {
     return (user as ClubType).about !== undefined;
-}
-  
+  }
 
   // Profile Page
   if (loading) return <Loading msg={"Getting your profile..."} />;
@@ -71,14 +72,13 @@ function Page() {
               ABOUT
             </h2>
             {userData && isClub(userData) ? (
-                <p>{userData.about}</p>
+              <p>{userData.about}</p>
             ) : (
               <p>
-              {userData?.batch} ({userData?.admYear} Admission)
-              <p>Roll Number: {userData?.rollNumber}</p>
-            </p>
+                {userData?.batch} ({userData?.admYear} Admission)
+                <p>Roll Number: {userData?.rollNumber}</p>
+              </p>
             )}
-            
           </div>
         </div>
 

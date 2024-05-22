@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { FaExclamation } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { Checkbox } from "@/components/ui/checkbox"
+
 import { HashLoader } from "react-spinners";
 import {
   Dialog,
@@ -68,7 +70,7 @@ import { useSearchParams } from "next/navigation";
 
 export function SigninDialog({
   open,
-  setOpen
+  setOpen,
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,7 +79,7 @@ export function SigninDialog({
 
   const user = useAuthContext();
   const { toast } = useToast();
-  const s = useSearchParams()
+  const s = useSearchParams();
   const { theme } = useTheme();
 
   const [admYear, setAdmYear] = React.useState<string>("");
@@ -92,10 +94,15 @@ export function SigninDialog({
     setLoading("Authenticating...");
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (user) => {
-        if(await getUser(user.user) || await getClub(user.user)) {
+        const userExists = await getUser(user.user);
+        const clubExists = await getClub(user.user);
+        if (userExists || clubExists) {
+          const role = userExists ? "Student" : "club";
+          localStorage.setItem("role", role);
+          
           setSigninStep(false);
           setOpen(false);
-          return
+          return;
         }
         setSigninStep(false);
         setLoading("");
@@ -109,30 +116,36 @@ export function SigninDialog({
       setSigninStep(false);
       return false;
     }
-    
+
     setLoading("Getting you Signed Up!");
     // Sending Userdata to DB
-    return createUser(user, {
-      admYear: admYear,
-      batch: batch,
-      rollNumber: rollNumber,
-      phoneNumber: phoneNumber,
-      gender: gender,
-    })
-    // Sending welcome mail.
-    .then(async (data) => fetch("/api/mailService/welcome/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Token": await user.getIdToken()
-      },
-      body: JSON.stringify({user: data}),
-    })).then(()=> {
-      if(s.has("r")) location.href = s.get("r") || ""
-      setSigninStep(false);
-      setOpen(false);
-      return false;
-    }).catch((err)=>console.log(err));
+    return (
+      createUser(user, {
+        admYear: admYear,
+        batch: batch,
+        rollNumber: rollNumber,
+        phoneNumber: phoneNumber,
+        gender: gender,
+      })
+        // Sending welcome mail.
+        .then(async (data: any) => {
+          fetch("/api/mailService/welcome/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Token": await user.getIdToken(),
+            },
+            body: JSON.stringify({ user: data }),
+          });
+        })
+        .then(() => {
+          if (s.has("r")) location.href = s.get("r") || "";
+          setSigninStep(false);
+          setOpen(false);
+          return false;
+        })
+        .catch((err) => console.log(err))
+    );
   };
 
   React.useEffect(() => {
@@ -220,7 +233,7 @@ export function SigninDialog({
                       </Select>
                     </div>
                     <div className="grid gap-2 grid-flow-row ">
-                    <Label htmlFor="batch">Batch</Label>
+                      <Label htmlFor="batch">Batch</Label>
                       <Select required onValueChange={(v) => setBatch(v)}>
                         <SelectTrigger>
                           <SelectValue placeholder="IT" />
@@ -322,6 +335,10 @@ export function SigninDialog({
                       disabled
                       value={user?.email as string}
                     />
+                    <div className="flex items-center gap-2">
+                    <Checkbox required/>
+                    <a href="/policies/terms" target="_blank" className="text-blue-600 hover:underline "> Accept terms and conditions</a>
+                    </div>
                   </div>
                   <button
                     className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"

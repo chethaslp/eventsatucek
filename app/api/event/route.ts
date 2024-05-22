@@ -110,6 +110,7 @@ function resolveClubIcon(clb: string): any {
     "Renvnza '24": "/logos/renvnza.png",
   }[clb];
 }
+
 function resolveClubEmail(clb: string): any {
   return {
     // "Google Developers Student Club - UCEK": "/logos/gdsc.png",
