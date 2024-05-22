@@ -36,11 +36,11 @@ function Page() {
         External RSVP
         </h2>
         <p className="leading-7 [&:not(:first-child)]:mt-6">
-        Events@UCEK will mark the user as 'Registered (to that event)' and redirects the user to the external RSVP link that you provide.
+        Events@UCEK will mark the user as &apos;Registered (to that event)&apos; and redirects the user to the external RSVP link that you provide.
         </p>
         <ul className="my-6 ml-6 list-disc [&>li]:mt-2">
-          <li>Users who have RSVP'd, will be saved in the database, you can access it in the club page.</li>
-          <li>Users will be redirected to the link you provide. Still, the completion of external RSVP cannot be ensured by our site.</li>
+          <li>Users who have RSVP&apos;d, will be saved in the database, you can access it in the club page.</li>
+          <li>Still, the completion of external RSVP cannot be ensured by our site.</li>
         </ul>
 
 
@@ -48,7 +48,7 @@ function Page() {
         No RSVP
         </h2>
         <p className="leading-7 [&:not(:first-child)]:mt-6">
-        This option will disable RSVP service, the RSVP button will be removed from the event's page.
+        This option will disable RSVP service, the RSVP button will be removed from the event&apos;s page.
         </p>
       </div>
       <Footer/>
