@@ -7,23 +7,26 @@ const ShareButton = ({ date, time, title, location, type, about}: any) => {
   const toast = useToast();
   const copy_message = `${title}
   
-${about}
 
 📅 ${date} at ${time}
+
 📍 Venue: ${location == "" ? "Will be Updated" : location}
   
-🌐 Checkout Now: ${window.location.href}`;
+🌐 View More at: ${window.location.href}
+
+${about}`
 
 const whatsapp_message = `*${title}*
   
-${about}
 
 📅 ${date} at ${time}
+
 📍 Venue: ${location == "" ? "Will be Updated" : location}
   
 
-🌐 *Checkout Now:* ${window.location.href}`;
+🌐 *View More at:* ${window.location.href}
 
+${about}`
   const handleCopy = async () => {
     await navigator.clipboard.writeText(copy_message);
     toast.toast({
