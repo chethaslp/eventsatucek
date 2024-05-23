@@ -53,6 +53,22 @@ function Page({ params }: { params: { id: string } }) {
     
   }
 
+  const createLinkElements = (text: string): (JSX.Element | string)[] => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+  
+    return text.split(urlRegex).map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline text-blue-800 hover:no-underline">
+            {part}
+          </a>
+        );
+      } else {
+        return part;
+      }
+    });
+  };
+
   useEffect(() => {
     getEvent(params.id)
       .then((evnt) => {
@@ -217,7 +233,7 @@ function Page({ params }: { params: { id: string } }) {
                 <BsClock className="mr-2 text-sm md:text-[]" /> {date?.format("h:mm a")}
               </p>
               <h4 className="my-2 font-semibold">About</h4>
-              <p className="whitespace-break-spaces">{data[4]}</p>
+              <p className="whitespace-break-spaces">{createLinkElements(data[4])}</p>
             </div>
 
 
