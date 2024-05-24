@@ -8,11 +8,14 @@ function Footer() {
   return (
     <div className=" w-full h-20 flex text-[10px] md:text-[12px] lg:text-[13px] items-center justify-center md:flex-row flex-col dark:bg-[#0a0a0a] ">
       <span>© {year} - Events@UCEK</span>
-      <div className="flex md:hidden gap-2">
-        <Link href={GITHUB_URL}>Github</Link>●
-        <Link href={"/contributors"}>Contributors</Link>
+      <div className="flex">
+        <Link href={"/contributors"} className="md:hidden">Contributors</Link>
+      &nbsp; ● &nbsp;
+      <Link href={GITHUB_URL}>Github</Link> 
       </div>
-      <span className="hidden sm:inline"> &nbsp; | &nbsp;</span>
+      <span className="hidden sm:inline"> &nbsp; ● &nbsp;</span>
+      <Link href={"/policies/terms"}>Privacy Policy</Link>
+      <span className="hidden sm:inline"> &nbsp; ● &nbsp;</span>
       <span>An Initiative by IEEE SB UCEK.</span>
     </div>
   );
