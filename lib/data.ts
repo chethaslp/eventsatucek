@@ -83,8 +83,8 @@ export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Pro
 
     if(clb == getClubs[0] && type == "Both") return "select * where L = 'Yes' and "+ t /* Returns if club is set to "All" and type is "Both" */
     if(clb == getClubs[0]) return `select * where I = '${type}' and L = 'Yes' and ${t} `/* Returns if club is set to "All" and type is different */
-    if(type == "Both")  return `select * where G like '%${clb}%' and L = 'Yes' and ${t}` /* Returns if club is different and type is set to "Both" */
-    return `select * where G like '%${clb}%' and  I = '${type}' and L = 'Yes' and ${t}` /* Returns if club and type is different. */
+    if(type == "Both")  return `select * where G like "%${clb}%" and L = 'Yes' and ${t}` /* Returns if club is different and type is set to "Both" */
+    return `select * where G like "%${clb}%" and  I = '${type}' and L = 'Yes' and ${t}` /* Returns if club and type is different. */
   }
 
   const url = "https://docs.google.com/spreadsheets/d/"

@@ -7,6 +7,7 @@ import {
   serverTimestamp,
   query,
   where,
+  collectionGroup,
 } from "firebase/firestore";
 import { db } from "./config";
 import { User } from "firebase/auth";
@@ -27,6 +28,8 @@ export async function getClub(user: User) {
 export async function getProfileData(user: User) {
   const userData = await getDoc(doc(db, "/users/" + user.uid));
   const clubData = await getDoc(doc(db, "/clubs/" + user.email));
+
+  getDocs(collectionGroup(db,'clubs'))
   if (userData.exists()) {
     return { ok: true, data: userData.data() };
   } else if (clubData.exists()) {

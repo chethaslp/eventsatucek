@@ -59,7 +59,7 @@ function Page({ params }: { params: { id: string } }) {
     return text.split(urlRegex).map((part, index) => {
       if (urlRegex.test(part)) {
         return (
-          <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline text-blue-800 hover:no-underline">
+          <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline text-slate-300 hover:no-underline">
             {part}
           </a>
         );
@@ -130,7 +130,7 @@ function Page({ params }: { params: { id: string } }) {
           case "Attended":
             return <div className="border rounded-lg bg-success gap-3 flex flex-row p-3"><InfoIcon/> Wohooo! You have already attended this event.</div>
           case "Registered":
-              return <div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> You just RSVP&apos;d this event!</div>
+              return <div><div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> You just RSVP&apos;d this event!</div><small className="text-muted-foreground flex justify-center mt-1">Check your mail for further info.</small></div>
           case "Missed":
               return <div className="border rounded-lg bg-destructive gap-3 flex flex-row p-3"><InfoIcon/>You missed this event.</div>
           case null:

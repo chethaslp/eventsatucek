@@ -66,7 +66,7 @@ function Page() {
 
   useEffect(() => {
     if (!user) {
-      location.href = "/?signin1";
+      location.href = "/profile?r=/dashboard";
       return;
     }
     getProfileData(user).then((data: any) => {
