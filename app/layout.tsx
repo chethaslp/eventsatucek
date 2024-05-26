@@ -13,13 +13,13 @@ export const metadata:Metadata = {
     title: 'Events@UCEK',
     description: 'An all-in-one place to know about all events at UCEK!',
     metadataBase: new URL('https://eventsatucek.vercel.app'),
-    icons: "/vercel.svg",
+    icons: "/icon512_rounded.png",
     manifest: "/manifest.json",
     appleWebApp:{
       title: "Events@UCEK",
       statusBarStyle: "black-translucent",
       capable: true,
-      startupImage: "/vercel.svg"
+      startupImage: "/icon512_rounded.png"
     }
   }
 

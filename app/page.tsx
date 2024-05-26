@@ -115,7 +115,7 @@ export default function Home() {
     <Loading msg="Loading..." />
   ) : (
     <>
-      <div className="">
+      <div className="w-full">
         <FCM />
         <Navbar />
         <div className="flex flex-col lg:flex-row w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a] ">
@@ -188,7 +188,7 @@ export default function Home() {
               {timeDropdown} Events
             </p>
             <div className="md:left-28 lg:left-0 z-10 absolute lg:relative lg:mb-0 md:my-7 my-12 text-xs md:text-lg pt-6">
-              <div className="flex flex-row items-center gap-1 md:gap-2 pt-12 ">
+              <div className="flex flex-row items-center gap-1 md:gap-2 pt-12 mt-3 md:mt-0 ">
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
                   <summary

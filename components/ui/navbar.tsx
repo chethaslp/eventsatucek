@@ -60,6 +60,7 @@ export function Navbar({ qName }: { qName?: string }) {
             <Link href={"/"}>
               <Logo className={"text-3xl md:text-5xl"} />
             </Link>
+            /&nbsp; events
             {qName && <span className="text-lg ml-2">/&nbsp;{qName}</span>}
           </div>
           <div className="flex items-center justify-center gap-2">
