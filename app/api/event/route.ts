@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
 import { Message, getMessaging } from 'firebase-admin/messaging';
-import { Timestamp, getFirestore } from "firebase-admin/firestore";
+import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
 import { Event } from "@/lib/types";
 
 /*
@@ -50,9 +50,11 @@ export async function POST(req: NextRequest) {
       img: image,
       title: title,
       editLink: editLink,
-      dt: new Date(dt),
+      dt: Timestamp.fromDate(new Date(dt)),
       rsvp: rsvp_data
     }, { merge: true})
+    
+    
   
   // If publish status is false OR If the event already exists in the DB then, do not publish. 
   if (!publish || eventExists) return NextResponse.json({ msg: "Added." });
