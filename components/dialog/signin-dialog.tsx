@@ -81,6 +81,7 @@ export function SigninDialog({
   const user = useAuthContext();
   const { toast } = useToast();
   const s = useSearchParams();
+  const pathname = usePathname();
   const { theme } = useTheme();
 
   const [admYear, setAdmYear] = React.useState<string>("");
@@ -139,7 +140,7 @@ export function SigninDialog({
           if (s.has("r")) location.href = s.get("r") || "";
           setSigninStep(false);
           setOpen(false);
-          if(usePathname() == "/profile") location.reload();
+          if(pathname == "/profile") location.reload();
           return false;
         })
         .catch((err) => console.log(err))
