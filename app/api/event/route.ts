@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     rsvp_data.link = rsvp_link;
   }
 
-  evntDoc.set({
+  await evntDoc.set({
       evntID: evntId,
       club: club,
       host: hostMail,
