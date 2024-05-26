@@ -42,6 +42,10 @@ export async function POST(req: NextRequest) {
   }else if(rsvp_data.type == "external"){
     rsvp_data.link = rsvp_link;
   }
+
+  // dt will be in the format 2024-07-03T04:30:00.000Z so we need to convert it to a date object
+  const dtObj = new Date(dt);
+  // We need to convert the date object to a unix timestamp
   
   evntDoc.set({
       evntID: evntId,
@@ -50,9 +54,9 @@ export async function POST(req: NextRequest) {
       img: image,
       title: title,
       editLink: editLink,
-      dt: dt,
+      dt: dtObj.getTime(),
       rsvp: rsvp_data
-    } as Event, { merge: true})
+    }, { merge: true})
   
   // If publish status is false OR If the event already exists in the DB then, do not publish. 
   if (!publish || eventExists) return NextResponse.json({ msg: "Added." });

@@ -3,6 +3,7 @@ import { CollectionReference, FieldValue } from "firebase/firestore";
 export type UserType = {
     uid: string;
     displayName: string;
+    club?: string;
     email: string;
     role: 'Student' | 'Club' | 'Admin';
     admYear: string;

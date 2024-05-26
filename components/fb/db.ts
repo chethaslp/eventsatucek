@@ -27,16 +27,11 @@ export async function getClub(user: User) {
 
 export async function getProfileData(user: User) {
   const userData = await getDoc(doc(db, "/users/" + user.uid));
-  const clubData = await getDoc(doc(db, "/clubs/" + user.email));
+  let club = false
 
-  getDocs(collectionGroup(db,'clubs'))
-  if (userData.exists()) {
-    return { ok: true, data: userData.data() };
-  } else if (clubData.exists()) {
-    return { ok: true, data: clubData.data() };
-  } else {
-    return { ok: false, data: null };
-  }
+  if(userData.data()?.club && userData.data()?.club != "") club = true;
+  if (userData.exists()) return { ok: true, data: userData.data(), club: club};
+  else return { ok: false, data: null };
 }
 
 export async function createUser(
@@ -107,13 +102,22 @@ export async function getUserEvents(user: User) {
     });
 }
 
-export async function getClubEvents(user: User, club: string) {
-  return getDocs(query(collection(db, "events"), where("club", "==", club)))
-    .then((data) => data.docs)
-    .catch((err) => {
-      console.error(err);
-      return null;
-    });
+export async function getClubEvents(type: 'past' | 'upcoming', club: string) {
+  let t = where("dt", "<", new Date());
+  
+  if(type == 'upcoming') t = where("dt", ">", new Date());
+
+    return getDocs(
+      query(
+        collection(db, "events"),
+        where("club", "==", club),
+        t )
+    )
+      .then((data) => data.docs)
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
 }
 
 export async function getUserEventStatus(user: User, evntID: string) {
