@@ -119,9 +119,10 @@ function Page() {
         </div>
         <Separator className="my-4" />
         <div className="py-7">
+        <h1 className="sm:text-2xl text-xl mb-3 ">Events Hosted</h1>
           <Tabs defaultValue="account" className="w-[400px]">
-            <TabsList>
-              <TabsTrigger value="upcoming" defaultChecked={true}>Upcoming</TabsTrigger>
+            <TabsList defaultValue={"upcoming"} defaultChecked={true}>
+              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               <TabsTrigger value="past">Past</TabsTrigger>
             </TabsList>
             <TabsContent value="upcoming" className="w-full">
@@ -182,7 +183,6 @@ function ClubEvents({
 
   return (
     <>
-      <h1 className="sm:text-2xl text-xl ">Events Attended</h1>
       {!userEvents ? (
         <div className="flex items-center justify-center flex-col h-full">
           <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t

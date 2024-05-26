@@ -17,23 +17,21 @@ import { useSearchParams } from "next/navigation";
 function Page() {
   const user = useAuthContext();
 
-  const [userData, setUserData] = useState<UserType | ClubType>();
+  const [userData, setUserData] = useState<UserType>();
   const [loading, setLoading] = useState(true);
   const [openSignin, setOpenSignin] = useState(false);
   const [infoText, setInfoText] = useState(<></>);
 
   useEffect(() => {
     if (!user) {
-      location.href = "/?signin1";
+      setOpenSignin(true);
+      setLoading(false);
       return;
     }
     getProfileData(user).then((data: any) => {
       if (!data.ok) {
         setOpenSignin(true);
       } else {
-        if (data?.data.role == "club") {
-          location.href = "/dashboard";
-        }
         setUserData(data.data);
       }
       setLoading(false);
@@ -42,9 +40,6 @@ function Page() {
 
   function getUserAvatar(user: any): string {
     return user?.photoURL ? user.photoURL.replace("s96-c", "s384-c") : "";
-  }
-  function isClub(user: UserType | ClubType): user is ClubType {
-    return (user as ClubType).about !== undefined;
   }
 
   // Profile Page
@@ -71,14 +66,11 @@ function Page() {
             <h2 className="text-md font-semibold mb-2 dark:text-white">
               ABOUT
             </h2>
-            {userData && isClub(userData) ? (
-              <p>{userData.about}</p>
-            ) : (
               <p>
                 {userData?.batch} ({userData?.admYear} Admission)
-                <p>Roll Number: {userData?.rollNumber}</p>
+                <p>Roll Number: {userData?.rollNumber}</p><br/>
+                <p>Clubs you have access: <span className="font-bold">{userData?.club}</span></p>
               </p>
-            )}
           </div>
         </div>
 
@@ -88,11 +80,7 @@ function Page() {
         />
 
         <div className="px-3 py-5 sm:px-10 sm:py-5 md:px-16 md:py-8 flex flex-1 h-full flex-col">
-          {userData?.role == "Club" ? (
-            <ClubEvents />
-          ) : (
             <UserEvents setLoading={setLoading} setInfoText={setInfoText} />
-          )}
         </div>
       </div>
       <div className="w-full">
@@ -102,10 +90,6 @@ function Page() {
   );
 }
 
-// Function to return Club's Events
-function ClubEvents() {
-  return null;
-}
 
 // Function to return User's Events
 function UserEvents({

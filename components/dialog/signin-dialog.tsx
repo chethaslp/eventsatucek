@@ -66,7 +66,8 @@ import SSImage from "@/public/img/ss-signin.png";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
 import BottomGradient from "../ui/BottomGradient";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import path from "path";
 
 export function SigninDialog({
   open,
@@ -95,11 +96,7 @@ export function SigninDialog({
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (user) => {
         const userExists = await getUser(user.user);
-        const clubExists = await getClub(user.user);
-        if (userExists || clubExists) {
-          const role = userExists ? "Student" : "club";
-          localStorage.setItem("role", role);
-          
+        if (userExists) {
           setSigninStep(false);
           setOpen(false);
           return;
@@ -142,6 +139,7 @@ export function SigninDialog({
           if (s.has("r")) location.href = s.get("r") || "";
           setSigninStep(false);
           setOpen(false);
+          if(usePathname() == "/profile") location.reload();
           return false;
         })
         .catch((err) => console.log(err))

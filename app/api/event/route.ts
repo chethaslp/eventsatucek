@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
 import { Message, getMessaging } from 'firebase-admin/messaging';
-import { getFirestore } from "firebase-admin/firestore";
+import { Timestamp, getFirestore } from "firebase-admin/firestore";
 import { Event } from "@/lib/types";
 
 /*
@@ -43,10 +43,6 @@ export async function POST(req: NextRequest) {
     rsvp_data.link = rsvp_link;
   }
 
-  // dt will be in the format 2024-07-03T04:30:00.000Z so we need to convert it to a date object
-  const dtObj = new Date(dt);
-  // We need to convert the date object to a unix timestamp
-  
   evntDoc.set({
       evntID: evntId,
       club: club,
@@ -54,7 +50,7 @@ export async function POST(req: NextRequest) {
       img: image,
       title: title,
       editLink: editLink,
-      dt: dtObj.getTime(),
+      dt: new Date(dt),
       rsvp: rsvp_data
     }, { merge: true})
   
