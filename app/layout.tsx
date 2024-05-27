@@ -3,9 +3,11 @@ import './globals.css'
 import { ThemeProvider } from '@/components/context/theme'
 import { Toaster } from '@/components/ui/toaster'
 import { Metadata, ResolvingMetadata } from 'next'
-import { getEvent } from '@/lib/data'
 import { AuthContextProvider } from '@/components/context/auth'
 import { cn } from '@/lib/utils'
+
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Raleway({ subsets: ['latin'] })
 
@@ -32,6 +34,8 @@ export default function RootLayout({
   return (
     <html lang="en" className='h-screen'>
       <body className= {cn(inter.className, "h-[100dvh] w-[100dvw] overflow-x-hidden")}>
+        <Analytics/>
+        <SpeedInsights/>
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"
