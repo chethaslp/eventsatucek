@@ -32,6 +32,7 @@ export type Event_User = {
 
 export type Event = {
     evntID: string;
+    dt: FieldValue;
     host:string;
     title: string;
     club: string;

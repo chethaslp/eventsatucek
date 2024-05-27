@@ -42,6 +42,8 @@ import {
 import BottomGradient from "@/components/ui/BottomGradient";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { MdUpcoming } from "react-icons/md";
+import { Timestamp } from "firebase/firestore";
+import Link from "next/link";
 
 function Page() {
   interface FormData {
@@ -118,10 +120,10 @@ function Page() {
           </div>
         </div>
         <Separator className="my-4" />
-        <div className="py-7">
+        <div className="py-7 w-full">
         <h1 className="sm:text-2xl text-xl mb-3 ">Events Hosted</h1>
-          <Tabs defaultValue="account" className="w-[400px]">
-            <TabsList defaultValue={"upcoming"} defaultChecked={true}>
+          <Tabs defaultValue="upcoming" className="w-full">
+            <TabsList>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               <TabsTrigger value="past">Past</TabsTrigger>
             </TabsList>
@@ -184,43 +186,27 @@ function ClubEvents({
   return (
     <>
       {!userEvents ? (
-        <div className="flex items-center justify-center flex-col h-full">
+        <div className="flex items-center justify-center flex-col h-full w-full">
           <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t
           hosted any events so far.{" "}
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="table">
+        <div className="overflow-x-auto w-full">
+          <table className="table w-full">
             {/* head */}
             <thead>
               <tr className="dark:text-white ">
-                <th className="px-1 sm:px-4">Club</th>
                 <th className="px-1 sm:px-4">Event</th>
                 <th className="px-1 sm:px-4">Date</th>
                 <th className="px-1 sm:px-4">Status</th>
+                <th className="px-1 sm:px-4">Actions</th>
               </tr>
             </thead>
             <tbody>
               {userEvents.map((evntData) => {
-                const evnt = evntData.data() as Event_User;
+                const evnt = evntData.data() as Event;
                 return (
                   <tr key={evnt.evntID}>
-                    <td className="px-1 sm:px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="text-xs flex items-center flex-row text-muted-foreground">
-                          <div className="mask mask-squircle w-12 h-12">
-                            <Image
-                              width={48}
-                              height={48}
-                              referrerPolicy={"no-referrer"}
-                              src={resolveClubIcon(evnt.club, false)}
-                              alt={evnt.club}
-                            />
-                          </div>
-                          <span className="hidden sm:block">{evnt.club}</span>
-                        </div>
-                      </div>
-                    </td>
                     <td className="px-1 sm:px-4">
                       <div
                         className="font-bold underline cursor-pointer hover:no-underline"
@@ -228,20 +214,33 @@ function ClubEvents({
                           (location.href = `/event/${evnt.evntID}`)
                         }
                       >
-                        {evnt.evntName}
+                        {evnt.title}
                       </div>
                     </td>
-                    <td className="px-1 sm:px-4">{evnt.dt.split(" ")[0]}</td>
+                    <td className="px-1 sm:px-4">{(evnt.dt as Timestamp).toDate().toLocaleString()}</td>
                     <td className="px-1 sm:px-4">
                       <span
                         className={`badge badge-ghost badge-sm text-white p-2 ${
-                          evnt.status == "Registered"
+                          evnt.rsvp.status == "open"
                             ? "bg-green-700"
                             : "bg-blue-700"
                         }`}
                       >
-                        {evnt.status}
+                        {evnt.rsvp.status}
                       </span>
+                      <span
+                        className={`badge badge-ghost badge-sm text-white p-2 ${
+                          evnt.rsvp.type == "internal"
+                            ? "bg-green-700"
+                            : "bg-blue-700"
+                        }`}
+                      >
+                        RSVP: {evnt.rsvp.type}
+                      </span>
+                    </td>
+                    <td className="flex gap-2">
+                      <Link href={evnt.editLink} target="_blank"><Button variant={"outline"}>Edit Event</Button></Link>
+                      <Link href={evnt.editLink} target="_blank"><Button variant={"outline"}>View RSVP</Button></Link>
                     </td>
                   </tr>
                 );

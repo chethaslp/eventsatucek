@@ -14,9 +14,9 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
   const data = await req.json();
   const token = req.headers.get("X-Token")
-  let evntData;
+  let evntData, resp;
 
-  if (!token) return NextResponse.json(
+  if (!token || !data) return NextResponse.json(
     { msg: 'Missing required arguments.' },
     { status: 400 }
   ); 
@@ -59,11 +59,13 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
       userEmail:  data.user.email
     };
 
+    resp = { msg: "Welcome mail sent." }
+
   }else if(params.t == "rsvp"){
     // For RSVP Mail
 
     evntData = (await getFirestore().doc(`events/${data.evnt[1]}`).get()).data() as unknown as Event  // Getting the RSVP infos of the event from the DB
-    
+
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
     if(evntData.rsvp.type == "external"){
       templateFile = "components/templates/mail_rsvp_external.hbs"
@@ -81,16 +83,18 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     
     replacements = {
       rsvpData: evntData.rsvp,
-      eventName: data.evnt[3],
-      eventID: data.evnt[1],
+      eventName: evntData.title,
+      eventID: evntData.evntID,
       userName: data.user.displayName,
-      eventPoster: getImgLink(data.evnt[5]),
+      eventPoster: getImgLink(evntData.img),
       eventDate: date?.format("dddd, Do MMM YYYY"),
       eventTime: date?.format("h:mm a"),
       eventVenue: data.evnt[10],
       userEmail: data.user.email,
-      clubIcon: resolveClubIcon(data.evnt[6])
+      clubIcon: resolveClubIcon(evntData.club)
     };
+
+    resp = { ...evntData?.rsvp }
   }else{
     // If its neither of them.
     return NextResponse.json(
@@ -110,7 +114,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     // Send email
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ ...evntData?.rsvp });
+    return NextResponse.json(resp);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
