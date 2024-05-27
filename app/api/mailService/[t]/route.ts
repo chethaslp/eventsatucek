@@ -9,6 +9,9 @@ import { cert, getApp, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from "firebase-admin/firestore";
 import { Event } from "@/lib/types";
+import mail_welcome from "./templates/mail_welcome";
+import mail_rsvp_external from "./templates/mail_rsvp_external";
+import mail_rsvp_internal from "./templates/mail_rsvp_internal";
 
 export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
@@ -41,7 +44,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     },
   });
 
-  let templateFile, replacements
+  let template, replacements
 
   const mailOptions = {
     from: "Events@UCEK <eventsatucek@gmail.com>",
@@ -53,7 +56,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   if(params.t == "welcome"){
     // For Welcome Mail
 
-    templateFile =  "templates/mail_welcome.hbs";
+    template = mail_welcome;
     replacements = {
       userName:  data.user.displayName,
       userEmail:  data.user.email
@@ -68,9 +71,9 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
     if(evntData.rsvp.type == "external"){
-      templateFile = "templates/mail_rsvp_external.hbs"
+        template = mail_rsvp_external;
     } else if(evntData.rsvp.type == "internal"){
-      templateFile = "templates/mail_rsvp_internal.hbs"
+        template = mail_rsvp_internal;
     } else {
       // RSVP is set to none. In this case no need to sent the mail.
 
@@ -104,12 +107,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   }
   
   try {
-    const templateSource = readFileSync(
-      path.join(process.cwd(), templateFile),
-      "utf8"
-    );
-    const template = Handlebars.compile(templateSource);
-    mailOptions.html = template(replacements);
+    mailOptions.html = Handlebars.compile(template)(replacements);
 
     // Send email
     await transporter.sendMail(mailOptions);
