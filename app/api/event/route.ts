@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
     data: {
       title: title,
       message: body,
-      icon: resolveClubIcon(club) || "",
+      icon: resolveClubIcon(clubList? clubList[0]: "/logo.png") || "/logo.png",
       image:  getImgLink(image),
       url: "/event/"+evntId
     },
