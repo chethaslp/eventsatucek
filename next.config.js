@@ -18,7 +18,11 @@ const nextConfig = {
     ]},
     reactStrictMode:false,
     webpack5: true,
-    webpack: (config, { isServer }) => {
+}
+
+module.exports = nextConfig
+
+const webpack = (config, { isServer }) => {
         // add copy webpack plugin
         if (isServer) {
           config.plugins.push(
@@ -34,7 +38,4 @@ const nextConfig = {
           )
         }
         return config
-      },
-}
-
-module.exports = nextConfig
+      }
