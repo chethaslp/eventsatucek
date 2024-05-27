@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   if(params.t == "welcome"){
     // For Welcome Mail
 
-    templateFile =  "public/templates/mail_welcome.hbs";
+    templateFile =  "templates/mail_welcome.hbs";
     replacements = {
       userName:  data.user.displayName,
       userEmail:  data.user.email
@@ -68,9 +68,9 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
     if(evntData.rsvp.type == "external"){
-      templateFile = "public/templates/mail_rsvp_external.hbs"
+      templateFile = "templates/mail_rsvp_external.hbs"
     } else if(evntData.rsvp.type == "internal"){
-      templateFile = "public/templates/mail_rsvp_internal.hbs"
+      templateFile = "templates/mail_rsvp_internal.hbs"
     } else {
       // RSVP is set to none. In this case no need to sent the mail.
 
