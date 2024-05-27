@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   const token = req.headers.get("X-Token")
   let evntData, resp;
 
-  if (!token || !data) return NextResponse.json(
+  if (!token) return NextResponse.json(
     { msg: 'Missing required arguments.' },
     { status: 400 }
   ); 
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   if(params.t == "welcome"){
     // For Welcome Mail
 
-    templateFile =  "components/templates/mail_welcome.hbs";
+    templateFile =  "public/templates/mail_welcome.hbs";
     replacements = {
       userName:  data.user.displayName,
       userEmail:  data.user.email
@@ -68,9 +68,9 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
     if(evntData.rsvp.type == "external"){
-      templateFile = "components/templates/mail_rsvp_external.hbs"
+      templateFile = "public/templates/mail_rsvp_external.hbs"
     } else if(evntData.rsvp.type == "internal"){
-      templateFile = "components/templates/mail_rsvp_internal.hbs"
+      templateFile = "public/templates/mail_rsvp_internal.hbs"
     } else {
       // RSVP is set to none. In this case no need to sent the mail.
 
@@ -118,8 +118,8 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { msg: "Missing required arguments." },
-      { status: 400 }
+      { msg: "Error Occured." },
+      { status: 500 }
     );
   }
 }

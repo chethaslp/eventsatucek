@@ -187,7 +187,7 @@ export default function Home() {
             <p className="text-3xl md:text-5xl font-semibold pt-6">
               {timeDropdown} Events
             </p>
-            <div className="md:left-28 lg:left-0 z-10 absolute lg:relative lg:mb-0 md:my-7 my-12 text-xs md:text-lg pt-6">
+            <div className="md:left-28 lg:left-0 z-10 absolute lg:relative lg:mb-0 mb-10 md:my-7 my-12 text-xs md:text-lg pt-6">
               <div className="flex flex-row items-center gap-1 md:gap-2 pt-12 mt-3 md:mt-0 ">
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
