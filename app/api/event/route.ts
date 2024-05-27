@@ -15,7 +15,7 @@ import { Event } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
 
-  const {title, body, image, token, club, evntId, dt, publish, editLink, rsvp, rsvp_custom_text, rsvp_link, rsvp_total_allowed, rsvp_custom_quest, checkins, hostMail} = await req.json()
+  const {title, body, image, token, club, evntId, dt, publish, editLink, rsvp, rsvp_custom_text, rsvp_link, rsvp_total_allowed, rsvp_custom_quest, checkins, venue, hostMail} = await req.json()
 
   if (!title ||  !body || !image || !club || !dt || (token != process.env.TOKEN)) {
     console.log(token, process.env.TOKEN)
@@ -42,10 +42,14 @@ export async function POST(req: NextRequest) {
   }else if(rsvp_data.type == "external"){
     rsvp_data.link = rsvp_link;
   }
+  
+  let clubList
+  club.split(",").forEach((clb: string) => {clubList.push(clb.trim())})
 
   await evntDoc.set({
       evntID: evntId,
-      club: club,
+      club: clubList,
+      venue: venue,
       host: hostMail,
       img: image,
       title: title,

@@ -91,7 +91,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
       eventTime: date?.format("h:mm a"),
       eventVenue: data.evnt[10],
       userEmail: data.user.email,
-      clubIcon: resolveClubIcon(evntData.club)
+      clubIcon: resolveClubIcon((typeof evntData.club == "string") ? evntData.club : evntData.club[0]),
     };
 
     resp = { ...evntData?.rsvp }
