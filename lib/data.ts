@@ -96,7 +96,7 @@ export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Pro
 
 export const getClubs = [
   "All Clubs",
-  "Google Developers Student Club - UCEK",
+  "GDSC - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",
   "μlearn - UCEK",

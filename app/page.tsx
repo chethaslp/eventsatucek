@@ -118,8 +118,8 @@ export default function Home() {
       <div className="w-full">
         <FCM />
         <Navbar />
-        <div className="flex flex-col lg:flex-row w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a] ">
-          <div className="flex flex-col mt-20 md:mt-40 lg:mt-10  md:flex-row lg:flex-col items-center gap-4 justify-around bg-[#f5f5f5df] dark:bg-[#181818fe] p-1 sm:p-10  md:px-24 md:py-8 rounded-2xl">
+        <div className="flex flex-col  w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a] ">
+          <div className="flex flex-col mt-32 md:mt-40  md:flex-row  items-center gap-4 justify-around bg-[#f5f5f5df] dark:bg-[#181818fe] p-1 sm:p-10  md:px-24 md:py-8 rounded-2xl">
               <Image
                 width={350}
                 height={350}
@@ -128,7 +128,7 @@ export default function Home() {
                 onClick={() =>
                   (window.location.href = "/event/" + bannerEvent[1])
                 }
-                className="rounded-[22px] cursor-pointer scale-100 hover:scale-105 transition duration-300 ease-in-out aspect-square"
+                className="rounded-[22px] cursor-pointer p-3 md:p-0 scale-100 hover:scale-105 transition duration-300 ease-in-out aspect-square"
                 alt="Event Poster"
               ></Image>
             <div className="max-w-full m-3">
@@ -183,12 +183,12 @@ export default function Home() {
           </div>
 
           <div className="flex w-full lg:mt-10 flex-col">
-          <div className={` my-7 mt-7  mb-28 justify-center  flex md:flex-row`}>
-            <p className="text-3xl md:text-5xl font-semibold pt-6">
+          <div className={` my-7 mt-7  mb-4 justify-center  flex md:flex-col`}>
+            <p className="text-3xl md:text-5xl font-semibold pt-6 text-center">
               {timeDropdown} Events
             </p>
-            <div className="md:left-28 lg:left-0 z-10 absolute lg:relative lg:mb-0 mb-10 md:my-7 my-12 text-xs md:text-lg pt-6">
-              <div className="flex flex-row items-center gap-1 md:gap-2 pt-12 mt-3 md:mt-0 ">
+            <div className="md:left-28 lg:left-0 z-10 absolute lg:relative lg:mb-0 mb-10 md:my-7  text-xs md:text-lg pt-6">
+              <div className="flex flex-row items-center gap-1 md:gap-2 pt-12  mt-3 sm:mt-8 md:mt-28   lg:mt-0  lg:ml-20 md:ml-14">
                 <LuFilter size={25} /> Filter
                 <details className="dropdown">
                   <summary
@@ -215,7 +215,7 @@ export default function Home() {
                     {typeDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52 dark:bg-black `}
+                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-36 w-52 dark:bg-black `}
                   >
                     {["Online", "Offline", "Both"].map((type, idx) => (
                       <li key={idx}>
@@ -232,7 +232,7 @@ export default function Home() {
                     {timeDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52  dark:bg-black`}
+                    className={`p-2  shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-36 md:w-52  dark:bg-black`}
                   >
                     {["Upcoming", "Past", "All"].map((type, idx) => (
                       <li key={idx}>
@@ -246,14 +246,14 @@ export default function Home() {
           </div>
 
           <div
-            className={`md:w-[90%] lg:w-full w-full ml-5 mb-5 justify-around grid grid-cols-1 md:gap-x-4 gap-y-6 mt-4" ${
+            className={`md:w-[90%] w-full mt-36 md:mt-24 lg:mt-0 mb-5  md:mx-20 justify-around grid grid-cols-1 md:gap-x-4 gap-y-6 justify-items-center" ${
               data.length == 0
                 ? ""
-                : " sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 "
+                : " sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 "
             }`}
           >
             {data.map((evnt, i) => (
-              <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
+              <Link key={evnt[1]} href={`/event/${evnt[1]}`} className="flex justify-center">
                 <Card
                   key={evnt[1]}
                   title={evnt[3]}
@@ -275,13 +275,16 @@ export default function Home() {
                 />
               </Link>
             ))}
+            <div className="w-full flex justify-center">
+
             <Link
               href={"/event/past"}
-              className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center text-[13px] sm:text w-[20rem] h-[20rem] sm:w-[25rem] sm:h-[25rem] md:w-[25rem] md:h-[25rem] bg-glass"
-            >
+              className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center  md:mx-0 text-[13px] sm:text w-[20rem] h-[20rem] sm:w-[25rem] sm:h-[25rem] md:w-[25rem] md:h-[25rem] bg-glass"
+              >
               <PiClockCounterClockwiseBold className="text-[30px] sm:text-[50px]" />{" "}
               View Past Events.
             </Link>
+              </div>
           </div>
         </div>
         </div>
