@@ -50,17 +50,16 @@ export default  `<!DOCTYPE html>
       </h4>
       <div>
         <p>
-          Whether it's a mind-bending lecture, a heart-pumping sports tournament, or a foot-tapping cultural extravaganza, Events@UCEK is your trusty companion to always be in the loop. 🗓️
+          Events@UCEK is launched as the official event listing platform for Renvnza '24 🎉
+          Visit https://events.renvnza.in for more details.
         </p>
         <p>
-          But wait, there's more! With Events@UCEK, you can easily RSVP for the events that catch your eye, securing your spot and getting hyped with your UCEK squad. Plus, you'll have a handy record of all the events you've attended, so you can reminisce about the epic memories you've created. 🎟️
-        </p>
-        <p>
-          Get ready to dive into a world of endless possibilities, where new experiences await around every corner. Be sure to keep an eye on your inbox and the website for the latest event updates. 👀
+          With Events@UCEK, you can easily RSVP for the events that catch your eye, securing your spot and getting hyped with your UCEK squad. Plus, you'll have a handy record of all the events you've attended, so you can reminisce about the epic memories you've created. 🎟️
+          Get ready to dive into a world of endless possibilities, where new experiences await around every corner. 🌟
         </p>        
         <p>
+          Be sure to keep an eye on your inbox and the website for the latest event updates. 👀 
           Let's make the most of our time at UCEK and create some unforgettable moments together, fam! 🎉
-          If you have any questions or need further assistance, please feel free to contact us at eventsatucek@gmail.com.
         </p>
         <p>
           Cheers to an eventful journey ahead!<br/>

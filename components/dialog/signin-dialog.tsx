@@ -336,7 +336,7 @@ export function SigninDialog({
                     />
                     <div className="flex items-center gap-2">
                     <Checkbox required/>
-                    <a href="/policies/terms" target="_blank" className="text-blue-600 hover:underline "> Accept terms and conditions</a>
+                    I accept the <a href="/policies/terms" target="_blank" className="text-blue-600 hover:underline ">terms and conditions.</a>
                     </div>
                   </div>
                   <button
