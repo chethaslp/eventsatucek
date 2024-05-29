@@ -104,7 +104,7 @@ function Page() {
   ) : (
     <div className="flex h-full flex-col dark:bg-[#0a0a0a]">
       <Navbar />
-      <div className="mt-20 p-16 flex flex-col dark:bg-[#0a0a0a]">
+      <div className="mt-20 p-16 flex-1 flex-col dark:bg-[#0a0a0a]">
         <div className="flex flex-row items-center w-full justify-between">
           <div className="flex flex-row items-center gap-5">
             <img
@@ -122,12 +122,12 @@ function Page() {
         <Separator className="my-4" />
         <div className="py-7 w-full">
         <h1 className="sm:text-2xl text-xl mb-3 ">Events Hosted</h1>
-          <Tabs defaultValue="upcoming" className="w-full">
+          <Tabs defaultValue="upcoming" className="w-full flex-1 h-full">
             <TabsList>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               <TabsTrigger value="past">Past</TabsTrigger>
             </TabsList>
-            <TabsContent value="upcoming" className="w-full">
+            <TabsContent value="upcoming" className="w-full h-full">
               <div className="flex gap-2 flex-col items-center w-full">
                 <ClubEvents
                   setLoading={setLoading}
@@ -136,7 +136,7 @@ function Page() {
                 />
               </div>
             </TabsContent>
-            <TabsContent value="past"><div className="flex gap-2 flex-col items-center w-full">
+            <TabsContent value="past"><div className="flex gap-2 flex-col h-full items-center w-full">
                 <ClubEvents
                   setLoading={setLoading}
                   type="past"
@@ -240,7 +240,7 @@ function ClubEvents({
                     </td>
                     <td className="flex gap-2">
                       <Link href={evnt.editLink} target="_blank"><Button variant={"outline"}>Edit Event</Button></Link>
-                      <Link href={evnt.editLink} target="_blank"><Button variant={"outline"}>View RSVP</Button></Link>
+                      <Link href={""} target="_blank"><Button variant={"outline"}>View RSVP</Button></Link>
                     </td>
                   </tr>
                 );
