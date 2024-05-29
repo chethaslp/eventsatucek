@@ -69,7 +69,7 @@ function Page() {
               <p>
                 {userData?.batch} ({userData?.admYear} Admission)
                 <p>Roll Number: {userData?.rollNumber}</p><br/>
-                <p>Clubs you have access: <span className="font-bold">{userData?.club}</span></p>
+                {(userData?.club) && <p>Clubs you have access: <span className="font-bold">{userData?.club}</span></p>}
               </p>
           </div>
         </div>

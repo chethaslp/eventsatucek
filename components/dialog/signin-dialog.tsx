@@ -171,7 +171,10 @@ export function SigninDialog({
           });
         })
         .then(() => {
-          if (s.has("r")) location.href = s.get("r") || "";
+          if (s.has("r")) {
+            location.href = s.get("r") || ""
+            return
+          }
           setSigninStep(false);
           setOpen(false);
           if (pathname == "/profile") location.reload();
