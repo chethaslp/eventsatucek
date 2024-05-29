@@ -1,4 +1,4 @@
-export default  `<!DOCTYPE html>
+const template =  `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -76,3 +76,5 @@ export default  `<!DOCTYPE html>
 </body>
 </html>
 `
+
+export default template;

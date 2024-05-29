@@ -215,7 +215,7 @@ export default function Home() {
                     {typeDropdown}
                   </summary>
                   <ul
-                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-36 w-52 dark:bg-black `}
+                    className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-36 dark:bg-black `}
                   >
                     {["Online", "Offline", "Both"].map((type, idx) => (
                       <li key={idx}>
