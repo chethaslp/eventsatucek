@@ -60,7 +60,7 @@ const template = `<!DOCTYPE html>
         padding:5px
       }
 
-      button {
+      .btn {
       background-color: #121212;
       color: #ffffff;
       padding: 10px 20px;
@@ -70,7 +70,7 @@ const template = `<!DOCTYPE html>
       margin: 20px 0;
     }
 
-    button:hover {
+    .btn:hover {
       background-color: #2c2c2c;
     }
     </style>
@@ -107,10 +107,10 @@ const template = `<!DOCTYPE html>
           </li>
         </ul>
         <p>
-          This event handles RSVPs in an external site. So, it is crucial that you go to the below link and confirm your RSVP.
-          <div>
-            <button href="{{rsvpData.link}}">RVSP Here</button>
-          </div>
+          This event handles Registrations in an external site. So, it is crucial that you go to the below link and confirm your registration.
+          <center>
+            <a href={{rsvpData.link}} class="btn">Register Here</a>
+          </center>
         </p>
         <p>
           Cheers!<br />

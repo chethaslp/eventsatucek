@@ -154,7 +154,7 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
   <div className="flex h-full flex-row gap-2 border rounded p-2 mb-1">
     <FaExternalLinkAlt size={20}/>
     <div className="flex flex-col">
-      <span className="inline-block h-auto overflow-hidden">{externalRSVPdialog.link}</span>
+      <p className="inline-block h-auto overflow-hidden">{externalRSVPdialog.link}</p>
     </div>
   </div>
       <small className="text-muted-foreground text-xs">Follow this link to ensure your RSVP.</small>

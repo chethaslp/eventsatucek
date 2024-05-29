@@ -96,6 +96,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
       userEmail: data.user.email,
       clubIcon: resolveClubIcon((typeof evntData.club == "string") ? evntData.club : evntData.club[0]),
     };
+    evntData.rsvp.custom_text
 
     resp = { ...evntData?.rsvp }
   }else{
