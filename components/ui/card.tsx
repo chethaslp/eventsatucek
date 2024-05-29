@@ -35,27 +35,23 @@ const Card = ({
       </div>
       <div className="text-white w-full absolute top-[230px] sm:top-[275px]  md:top-[287px] flex flex-col p-3  group-hover:opacity-50 opacity-100 transition duration-300 ease-in-out">
         <div className="flex flex-row w-full items-center">
-          <div className="bg-[#8f90918c] shadow-md font-semibold mr-4 text-white text-[12px] sm:text-[14px] md:text-[16px] w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg text-center">
+          <div className="bg-[#8f90918c] shadow-md font-semibold mr-4 text-white text-[12px] sm:text-[14px] md:text-[16px] p-1 md:p-0 w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg text-center">
             {dt.format("MMM Do")}
           </div>
-          <div className="flex flex-col gap-1 text-[12px] sm:text-[14px] md:text-[16px]">
+          <div className="flex flex-col gap-1 text-[13px] sm:text-[14px] md:text-[16px]">
             <div className="font-semibold line-clamp-1">{title}</div>
             <div className="flex items-center gap-1">
               <BsClock /> {dt.format("h:mm a")}
             </div>
-              </div>
-            <div className="absolute right-8 md:right-6 text-[8px] text-xl sm:text-xl md:text-2xl">
-              {isOnline ? (
-                <IoIosCloud  />
-              ) : (
-                <IoCloudOfflineSharp />
-              )}
-            </div>
+          </div>
+          <div className="absolute right-8 md:right-6 text-[8px] text-xl sm:text-xl md:text-2xl">
+            {isOnline ? <IoIosCloud /> : <IoCloudOfflineSharp />}
+          </div>
         </div>
         <div className="line-clamp-1"></div>
         <div className="flex flex-row mt-2 items-center">
           <IoLocationSharp className="mr-2  text-[15px] md:text-xl" />
-          <p className="text-[10px] sm:text-[13px] md:text-[16px] line-clamp-1">
+          <p className="text-[12px] sm:text-[13px] md:text-[16px] line-clamp-1">
             {venue == "" ? "TBA" : venue}
           </p>
         </div>

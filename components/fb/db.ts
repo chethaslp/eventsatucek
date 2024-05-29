@@ -42,12 +42,16 @@ export async function createUser(
     rollNumber,
     gender,
     phoneNumber,
+    college,
+    branch,
   }: {
     admYear: string;
     batch: string;
     rollNumber: string;
     gender: string;
     phoneNumber: string;
+    college: string;
+    branch: string;
   }
 ) {
   const data = {
@@ -60,6 +64,8 @@ export async function createUser(
     gender: gender,
     ph: phoneNumber,
     rollNumber: rollNumber,
+    college:college,
+    branch:branch,
   } as UserType;
 
   return setDoc(doc(db, "/users/" + user.uid), data)
