@@ -165,7 +165,7 @@ function Page({ params }: { params: { id: string } }) {
       <SigninDialog open={openSignin} setOpen={setOpenSignin}/>
       <RsvpDialog open={open} setOpen={setOpen} evnt={data}/>
       <div className=" mt-36 flex-1  justify-center px-5 md:px-20 mb-7">
-        <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  md:shadow-lg rounded-xl dark:bg-[#0c0c0c]">
+        <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  shadow-lg rounded-xl dark:bg-[#0c0c0c] ">
           <div className="absolute group z-10 w-10 hover:w-24 flex p-2 m-3 bg-white rounded-full text-black  shadow-lg  transition-width duration-300 ease-in-out">
             <IoShareSocialSharp className="w-5 h-5 group-hover:fixed " />
             <div className="group-hover:flex  hidden ml-5  ">
