@@ -44,6 +44,7 @@ export async function createUser(
     phoneNumber,
     college,
     branch,
+    token
   }: {
     admYear: string;
     batch: string;
@@ -52,6 +53,7 @@ export async function createUser(
     phoneNumber: string;
     college: string;
     branch: string;
+    token: string;
   }
 ) {
   const data = {
@@ -66,6 +68,7 @@ export async function createUser(
     rollNumber: rollNumber,
     college:college,
     branch:branch,
+    fcmToken: token
   } as UserType;
 
   return setDoc(doc(db, "/users/" + user.uid), data)

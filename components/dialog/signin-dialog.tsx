@@ -42,7 +42,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { auth, db } from "../fb/config";
+import { app, auth, db } from "../fb/config";
 import {
   Card,
   CardContent,
@@ -71,6 +71,8 @@ import path from "path";
 import { RadioGroup } from "@radix-ui/react-radio-group";
 import { RadioGroupItem } from "../ui/radio-group";
 import { CollegeList } from "../ui/collegeList";
+import { getMessaging, getToken } from "firebase/messaging";
+import { PUBLIC_KEY } from "@/lib/data";
 
 export function SigninDialog({
   open,
@@ -133,7 +135,7 @@ export function SigninDialog({
   }
 
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!user) {
       setSigninStep(false);
@@ -141,6 +143,9 @@ export function SigninDialog({
     }
 
     setLoading("Getting you Signed Up!");
+
+    getMessaging(app)
+    const token = await getToken(getMessaging(app), { vapidKey: PUBLIC_KEY })
 
     // Sending Userdata to DB
     return (
@@ -152,6 +157,7 @@ export function SigninDialog({
         gender: gender,
         college:college,
         branch:branch,
+        token: token
       })
         // Sending welcome mail.
         .then(async (data: any) => {
@@ -304,13 +310,13 @@ export function SigninDialog({
                                 <SelectValue placeholder="2020" />
                               </SelectTrigger>
                               <SelectContent className="dark:bg-[#0e0e0e] ">
-                                {[...new Array(5)].map((x, i) => (
+                                {[...new Array(6)].map((x, i) => (
                                   <SelectItem
-                                    key={`Y${i + 2019}`}
-                                    value={(i + 2019).toString()}
+                                    key={`Y${i + 2018}`}
+                                    value={(i + 2018).toString()}
                                     className="hover:dark:bg-[#000000a5]"
                                   >
-                                    {i + 2019}
+                                    {i + 2018}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -364,7 +370,7 @@ export function SigninDialog({
                             }
                           />
                         <Label htmlFor="branch">
-                              Branch
+                              Department
                             </Label>
                           <Input
                             className="dark:bg-[#121212]  bg-[#ffff]"

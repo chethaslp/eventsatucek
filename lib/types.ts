@@ -10,6 +10,7 @@ export type UserType = {
     batch: string;
     rollNumber: string;
     attendedEvents?: CollectionReference;
+    fcmToken?: string;
 };
 
 export type ClubType = {

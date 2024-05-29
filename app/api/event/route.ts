@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     rsvp_data.link = rsvp_link;
   }
   
-  let clubList
+  let clubList: string[] = []
   club.split(",").forEach((clb: string) => {clubList.push(clb.trim())})
 
   await evntDoc.set({
