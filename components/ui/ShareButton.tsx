@@ -9,21 +9,17 @@ const ShareButton = ({ date, time, title, location, type, about}: any) => {
   
 
 📅 ${date} at ${time}
-
 📍 Venue: ${location == "" ? "Will be Updated" : location}
-  
+
 🌐 View More at: ${window.location.href}
 
 ${about}`
 
 const whatsapp_message = `*${title}*
   
-
 📅 ${date} at ${time}
-
 📍 Venue: ${location == "" ? "Will be Updated" : location}
   
-
 🌐 *View More at:* ${window.location.href}
 
 ${about}`

@@ -85,11 +85,6 @@ export function RsvpDialog({
           </DrawerDescription>
         </DrawerHeader>
         <RsvpForm evnt={evnt} setOpen={setOpen} />
-        <DrawerFooter>
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
@@ -181,6 +176,7 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
         </div>
       </div>
       <Button onClick={handleRSVP}>Confirm</Button>
+      <Button variant="outline" onClick={()=>setOpen(false)}>Cancel</Button>
     </div>
   );
 }
