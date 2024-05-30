@@ -145,8 +145,7 @@ export function SigninDialog({
     }
 
     setLoading("Getting you Signed Up!");
-
-    getMessaging(app)
+    
     const token = await getToken(getMessaging(app), { vapidKey: PUBLIC_KEY })
 
     // Sending Userdata to DB
@@ -312,7 +311,7 @@ export function SigninDialog({
                               onValueChange={(v) => setAdmYear(v)}
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder="20XX" />
+                                <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent className="dark:bg-[#0e0e0e] ">
                                 {[...new Array(6)].map((x, i) => (
