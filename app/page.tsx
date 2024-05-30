@@ -126,7 +126,7 @@ export default function Home() {
                 referrerPolicy={"no-referrer"}
                 src={getImgLink(bannerEvent[5])}
                 onClick={() =>
-                  (window.location.href = "/event/" + bannerEvent[1])
+                  (window.location.href = "/e/" + bannerEvent[1])
                 }
                 className="rounded-[22px] cursor-pointer p-3 md:p-0 scale-100 hover:scale-105 transition duration-300 ease-in-out aspect-square"
                 alt="Event Poster"
@@ -173,7 +173,7 @@ export default function Home() {
 
               {/* ACTION BUTTONS */}
               <div className="flex flex-row gap-3 mt-5 justify-center">
-                <Link href={"/event/" + bannerEvent[1]}>
+                <Link href={"/e/" + bannerEvent[1]}>
                   <button className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
                     View More
                   </button>
@@ -253,7 +253,7 @@ export default function Home() {
             }`}
           >
             {data.map((evnt, i) => (
-              <Link key={evnt[1]} href={`/event/${evnt[1]}`} className="flex justify-center">
+              <Link key={evnt[1]} href={`/e/${evnt[1]}`} className="flex justify-center">
                 <Card
                   key={evnt[1]}
                   title={evnt[3]}
@@ -278,7 +278,7 @@ export default function Home() {
             <div className="w-full flex justify-center">
 
             <Link
-              href={"/event/past"}
+              href={"/e/past"}
               className="rounded-[22px] border flex justify-center scale-100 hover:scale-105 transition-all cursor-pointer flex-col gap-2 items-center  md:mx-0 text-[13px] sm:text w-[20rem] h-[20rem] sm:w-[25rem] sm:h-[25rem] md:w-[25rem] md:h-[25rem] bg-glass"
               >
               <PiClockCounterClockwiseBold className="text-[30px] sm:text-[50px]" />{" "}
