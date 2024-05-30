@@ -17,7 +17,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
   const data = await req.json();
   const token = req.headers.get("X-Token")
-  let evntData, resp;
+  let evntData, resp, tokenData;
 
   if (!token) return NextResponse.json(
     { msg: 'Missing required arguments.' },
@@ -27,13 +27,14 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
   !getApps().length ? initializeApp({credential: cert(JSON.parse(process.env.CREDS || ""))}) : getApp();
 
-  const tokenData = await getAuth().verifyIdToken(token)
-
-  if(!tokenData) return NextResponse.json(
-    { msg: 'Unauthorized.' },
-    { status: 401 }
-  ); 
-
+  try {
+  tokenData = await getAuth().verifyIdToken(token)
+  } catch (e) {
+    return NextResponse.json(
+      { msg: 'Unauthorized.' },
+      { status: 401 }
+    );
+  }
 
   // Configure Nodemailer
   const transporter = nodemailer.createTransport({
@@ -61,6 +62,8 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
       userName:  data.user.displayName,
       userEmail:  data.user.email
     };
+
+    await getAuth().updateUser(tokenData.uid, { phoneNumber: resolvePhoneNumber(data.user.ph) })
 
     resp = { msg: "Welcome mail sent." }
 
@@ -139,4 +142,11 @@ function resolveClubIcon(clb: string): any {
     "NSS - UCEK": "/logos/nss.png",
     "Renvnza '24": "/logos/renvnza.png",
   }[clb];
+}
+
+function resolvePhoneNumber(ph: string): string {
+  // add +91 to the phone number if not present
+  if(ph.length == 10) return "+91" + ph;
+  else if(ph.length == 12 && ph.startsWith("+91")) return ph; 
+  else return ph;
 }

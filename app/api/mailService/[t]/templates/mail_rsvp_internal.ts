@@ -92,13 +92,13 @@ const template =  `<!DOCTYPE html>
           </li>
         </ul>
         <p>
-        {% if rsvpData.rsvp.custom_text %}
+        {{#if rsvpData.rsvp.custom_text }}
           {{rsvpData.rsvp.custom_text}}
-        {% else %}
+        {{ else }}
           Mark your calendars and get hyped, because this event is gonna be off the charts! 🚀 We'll be sending out more updates as we get closer to the date, so keep an eye on your inbox. 👀
           Can't wait to see you there and make some epic memories together! 🥳 If you have any questions
           or need further assistance, feel free to contact us.
-        {% endif %}
+        {{ /if }}
         </p>
         <p>
           Cheers!<br />

@@ -10,7 +10,7 @@ import {
   collectionGroup,
 } from "firebase/firestore";
 import { db } from "./config";
-import { User } from "firebase/auth";
+import { User, getAuth, updatePhoneNumber } from "firebase/auth";
 import { UserType, Event_User, ClubType } from "@/lib/types";
 import { GenericConverter } from "@/lib/utils";
 
@@ -87,6 +87,7 @@ export async function rsvpEvent(user: User, data: Event_User) {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
+        ph: user.phoneNumber,
         status: "registered",
         updatedAt: serverTimestamp(),
         createdAt: serverTimestamp(),
