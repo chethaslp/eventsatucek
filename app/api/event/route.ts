@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       message: body,
       icon: resolveClubIcon(clubList? clubList[0]: "/logo.png") || "/logo.png",
       image:  getImgLink(image),
-      url: "/event/"+evntId
+      url: "/e/"+evntId
     },
     topic: "all",
   };
@@ -114,21 +114,5 @@ function resolveClubIcon(clb: string): any {
     "Film Club - UCEK": "/logos/fmc.png",
     "NSS - UCEK": "/logos/nss.png",
     "Renvnza '24": "/logos/renvnza.png",
-  }[clb];
-}
-
-function resolveClubEmail(clb: string): any {
-  return {
-    // "Google Developers Student Club - UCEK": "/logos/gdsc.png",
-    // "IEEE - UCEK": "/logos/ieee.png",
-     "Legacy IEDC - UCEK": "richardshaju66@gmail.com",
-    // "μlearn - UCEK": "/logos/muln.png",
-    // "FOSS - UCEK": "/logos/foss.png",
-    // "TinkerHub - UCEK": "/logos/trh.png",
-    // "SFI UCEK": "/logos/sfi.png",
-    // "Meluhans Dance Club": "/logos/mdc.png",
-    // "Music Club - UCEK": "/logos/mcc.png",
-    // "Film Club - UCEK": "/logos/fmc.png",
-    // "NSS - UCEK": "/logos/nss.png",
   }[clb];
 }
