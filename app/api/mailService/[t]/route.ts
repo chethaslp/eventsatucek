@@ -63,7 +63,17 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
       userEmail:  data.user.email
     };
 
-    await getAuth().updateUser(tokenData.uid, { phoneNumber: resolvePhoneNumber(data.user.ph) })
+    try {
+      await getAuth().updateUser(tokenData.uid, { phoneNumber: resolvePhoneNumber(data.user.ph) })
+    }
+    // @ts-ignore
+    catch(e){
+      console.log(e)
+    // @ts-ignore
+      if(e.code == "auth/phone-number-already-exists"){
+        // TODO: Handle this case
+      }
+    }
 
     resp = { msg: "Welcome mail sent." }
 
