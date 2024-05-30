@@ -8,6 +8,6 @@ import Image from 'next/image';
 const font = Teko({ subsets: ['latin'], weight: ['400']})
 export function Logo({className , loading}:{className : string, loading?: boolean}){
     return <div className={cn(font.className, "text-3xl md:text-5xl flex items-center flex-row", className)}>
-        <Image src={siteLogo} width={loading? 90: 50} height={50} alt='logo'/>
+        events@ucek
     </div>
 }

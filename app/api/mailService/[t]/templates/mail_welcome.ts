@@ -50,10 +50,6 @@ const template =  `<!DOCTYPE html>
       </h4>
       <div>
         <p>
-          Events@UCEK is launched as the official event listing platform for Renvnza '24 🎉
-          Visit https://events.renvnza.in for more details.
-        </p>
-        <p>
           With Events@UCEK, you can easily RSVP for the events that catch your eye, securing your spot and getting hyped with your UCEK squad. Plus, you'll have a handy record of all the events you've attended, so you can reminisce about the epic memories you've created. 🎟️
           Get ready to dive into a world of endless possibilities, where new experiences await around every corner. 🌟
         </p>        
