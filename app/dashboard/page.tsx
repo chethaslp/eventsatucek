@@ -211,7 +211,7 @@ function ClubEvents({
                       <div
                         className="font-bold underline cursor-pointer hover:no-underline"
                         onClick={() =>
-                          (location.href = `/event/${evnt.evntID}`)
+                          (location.href = `/e/${evnt.evntID}`)
                         }
                       >
                         {evnt.title}
