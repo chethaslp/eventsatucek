@@ -75,7 +75,7 @@ function Page() {
               {"   "}({userData?.admYear} Admission)
               <p>
                 {isUcek
-                  ? `Roll Number: ${userData?.rollNumber}`
+                  ? `Admission Number: ${userData?.admissionNumber}`
                   : userData?.college}{" "}
               </p>
               <br />

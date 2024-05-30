@@ -60,7 +60,7 @@ import {
   signInWithCredential,
   signInWithPopup,
 } from "firebase/auth";
-import { createUser, getClub, getUser } from "../fb/db";
+import { checkAdmissionNumber, createUser, getClub, getUser } from "../fb/db";
 import { Logo } from "../ui/logo";
 import SSImage from "@/public/img/ss-signin.png";
 import Image from "next/image";
@@ -74,6 +74,7 @@ import { CollegeList } from "../ui/collegeList";
 import { getMessaging, getToken } from "firebase/messaging";
 import { PUBLIC_KEY } from "@/lib/data";
 import { useRouter } from "next/navigation";
+import { log } from "console";
 
 export function SigninDialog({
   open,
@@ -95,11 +96,12 @@ export function SigninDialog({
   const [batch, setBatch] = React.useState<string>("");
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
-  const [rollNumber, setRollNumber] = React.useState<string>("");
+  const [admissionNumber, setAdmissionNumber] = React.useState<string>("");
   const [college, setCollege] = React.useState<string>("");
   const [branch, setBranch] = React.useState<string>("");
   const [loading, setLoading] = React.useState("");
   const [signinStep, setSigninStep] = React.useState(false);
+  const [checkAdmission, setCheckAdmission] = React.useState(false);
   const [whichCollegeDialog, setWhichCollegeDialog] = React.useState(true);
 
   function handleSignin() {
@@ -113,6 +115,7 @@ export function SigninDialog({
           location.reload();
           return;
         }
+        location.reload();
         setSigninStep(false);
         setLoading("");
       })
@@ -139,27 +142,34 @@ export function SigninDialog({
 
 
   const handleSubmit = async (e: any) => {
+    
     e.preventDefault();
     if (!user) {
       setSigninStep(false);
       return false;
     }
-
+    const admissionNumberExists = await checkAdmissionNumber(admissionNumber);
+    if (admissionNumberExists) {
+      console.log("Admission Number Exists");
+      setCheckAdmission(true)
+      return false;
+    }
+   
     setLoading("Getting you Signed Up!");
     
-    const token = await getToken(getMessaging(app), { vapidKey: PUBLIC_KEY })
+    // const token = await getToken(getMessaging(app), { vapidKey: PUBLIC_KEY })
 
     // Sending Userdata to DB
     return (
       createUser(user, {
         admYear: admYear,
         batch: batch,
-        rollNumber: rollNumber,
+        admissionNumber: admissionNumber,
         phoneNumber: phoneNumber,
         gender: gender,
         college:college,
         branch:branch,
-        token: token
+        token: "token"
       })
         // Sending welcome mail.
         .then(async (data: any) => {
@@ -531,16 +541,16 @@ export function SigninDialog({
                         </div>
                         <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
                           <div className="grid gap-2 grid-flow-row ">
-                            <Label htmlFor="rollnumber">Roll Number</Label>
+                            <Label htmlFor="addNumber" className={`${checkAdmission ? 'text-red-600': ''} `}>{ checkAdmission ? "Already Registered"  :  "Admission No"}</Label>
                             <Input
                               className="dark:bg-[#121212] bg-[#ffff]"
-                              id="rollnumber"
+                              id="addNumber"
                               type="number"
-                              placeholder="Eg: 54"
+                              placeholder="23 CSE 111"
                               min={1}
                               required
                               onChange={(e) =>
-                                setRollNumber(e.currentTarget.value)
+                                setAdmissionNumber(e.currentTarget.value)
                               }
                             />
                           </div>
@@ -610,7 +620,7 @@ export function SigninDialog({
                           </div>
                         </div>
                         <button
-                          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+                          className={` bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]`}
                           type="submit"
                         >
                           Finish Sign up &rarr;
