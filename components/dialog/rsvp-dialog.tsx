@@ -77,7 +77,7 @@ export function RsvpDialog({
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerContent className="dark:bg-[#121212]">
+      <DrawerContent className="dark:bg-[#121212] mb-4">
         <DrawerHeader className="text-left">
           <DrawerTitle>RSVP?</DrawerTitle>
           <DrawerDescription>
@@ -107,7 +107,7 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
     
     if(!(await getUser(user))){
       setLoading("Redirecting you to profile page. Please complete your profile data.")
-      setTimeout(()=>location.href = `/profile?r=/event/${evnt[1]}`, 2000)
+      setTimeout(()=>location.href = `/profile?r=/e/${evnt[1]}`, 2000)
       return
     }
 

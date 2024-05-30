@@ -73,6 +73,7 @@ import { RadioGroupItem } from "../ui/radio-group";
 import { CollegeList } from "../ui/collegeList";
 import { getMessaging, getToken } from "firebase/messaging";
 import { PUBLIC_KEY } from "@/lib/data";
+import { useRouter } from "next/navigation";
 
 export function SigninDialog({
   open,
@@ -87,6 +88,7 @@ export function SigninDialog({
   const { toast } = useToast();
   const s = useSearchParams();
   const pathname = usePathname();
+  const router = useRouter()
   const { theme } = useTheme();
 
   const [admYear, setAdmYear] = React.useState<string>("");
@@ -172,7 +174,7 @@ export function SigninDialog({
         })
         .then(() => {
           if (s.has("r")) {
-            location.href = s.get("r") || ""
+            router.push(s.get("r") || "")
             return
           }
           setSigninStep(false);
@@ -310,7 +312,7 @@ export function SigninDialog({
                               onValueChange={(v) => setAdmYear(v)}
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder="2020" />
+                                <SelectValue placeholder="20XX" />
                               </SelectTrigger>
                               <SelectContent className="dark:bg-[#0e0e0e] ">
                                 {[...new Array(6)].map((x, i) => (
@@ -471,7 +473,7 @@ export function SigninDialog({
                               onValueChange={(v) => setAdmYear(v)}
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder="2020" />
+                                <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent className="dark:bg-[#0e0e0e] ">
                                 {[...new Array(5)].map((x, i) => (
@@ -490,7 +492,7 @@ export function SigninDialog({
                             <Label htmlFor="batch">Batch</Label>
                             <Select required onValueChange={(v) => setBatch(v)}>
                               <SelectTrigger>
-                                <SelectValue placeholder="IT" />
+                                <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent className="dark:bg-[#0e0e0e]">
                                 <SelectItem
