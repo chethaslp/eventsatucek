@@ -110,6 +110,7 @@ export function SigninDialog({
         if (userExists) {
           setSigninStep(false);
           setOpen(false);
+          location.reload();
           return;
         }
         setSigninStep(false);

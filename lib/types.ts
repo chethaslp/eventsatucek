@@ -9,6 +9,8 @@ export type UserType = {
     admYear: string;
     batch: string;
     rollNumber: string;
+    college: string;
+    branch: string;
     attendedEvents?: CollectionReference;
     fcmToken?: string;
 };
