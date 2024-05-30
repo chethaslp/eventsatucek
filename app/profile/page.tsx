@@ -20,6 +20,7 @@ function Page() {
   const [userData, setUserData] = useState<UserType>();
   const [loading, setLoading] = useState(true);
   const [openSignin, setOpenSignin] = useState(false);
+  const [isUcek, setIsUcek] = useState(false);
   const [infoText, setInfoText] = useState(<></>);
 
   useEffect(() => {
@@ -33,6 +34,9 @@ function Page() {
         setOpenSignin(true);
       } else {
         setUserData(data.data);
+        if (data.data.college.length == 0) {
+          setIsUcek(true);
+        }
       }
       setLoading(false);
     });
@@ -66,11 +70,22 @@ function Page() {
             <h2 className="text-md font-semibold mb-2 dark:text-white">
               ABOUT
             </h2>
+            <p>
+              {isUcek ? userData?.batch : userData?.branch}
+              {"   "}({userData?.admYear} Admission)
               <p>
-                {userData?.batch} ({userData?.admYear} Admission)
-                <p>Roll Number: {userData?.rollNumber}</p><br/>
-                {(userData?.club) && <p>Clubs you have access: <span className="font-bold">{userData?.club}</span></p>}
+                {isUcek
+                  ? `Admission Number: ${userData?.admissionNumber}`
+                  : userData?.college}{" "}
               </p>
+              <br />
+              {userData?.club && (
+                <p>
+                  Clubs you have access:{" "}
+                  <span className="font-bold">{userData?.club}</span>
+                </p>
+              )}
+            </p>
           </div>
         </div>
 
@@ -80,7 +95,7 @@ function Page() {
         />
 
         <div className="px-3 py-5 sm:px-10 sm:py-5 md:px-16 md:py-8 flex flex-1 h-full flex-col">
-            <UserEvents setLoading={setLoading} setInfoText={setInfoText} />
+          <UserEvents setLoading={setLoading} setInfoText={setInfoText} />
         </div>
       </div>
       <div className="w-full">
@@ -89,7 +104,6 @@ function Page() {
     </div>
   );
 }
-
 
 // Function to return User's Events
 function UserEvents({
@@ -168,9 +182,7 @@ function UserEvents({
                     <td className="px-1 sm:px-4">
                       <div
                         className="font-bold underline cursor-pointer hover:no-underline"
-                        onClick={() =>
-                          (location.href = `/e/${evnt.evntID}`)
-                        }
+                        onClick={() => (location.href = `/e/${evnt.evntID}`)}
                       >
                         {evnt.evntName}
                       </div>

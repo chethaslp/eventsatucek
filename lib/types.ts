@@ -8,7 +8,9 @@ export type UserType = {
     role: 'Student' | 'Club' | 'Admin';
     admYear: string;
     batch: string;
-    rollNumber: string;
+    admissionNumber: string;
+    college: string;
+    branch: string;
     attendedEvents?: CollectionReference;
     fcmToken?: string;
 };

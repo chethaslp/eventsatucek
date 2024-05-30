@@ -13,6 +13,7 @@ import { db } from "./config";
 import { User, getAuth, updatePhoneNumber } from "firebase/auth";
 import { UserType, Event_User, ClubType } from "@/lib/types";
 import { GenericConverter } from "@/lib/utils";
+import { log } from "util";
 
 export async function getUser(user: User) {
   const rslt = await getDoc(doc(db, "/users/" + user.uid));
@@ -27,10 +28,10 @@ export async function getClub(user: User) {
 
 export async function getProfileData(user: User) {
   const userData = await getDoc(doc(db, "/users/" + user.uid));
-  let club = false
+  let club = false;
 
-  if(userData.data()?.club && userData.data()?.club != "") club = true;
-  if (userData.exists()) return { ok: true, data: userData.data(), club: club};
+  if (userData.data()?.club && userData.data()?.club != "") club = true;
+  if (userData.exists()) return { ok: true, data: userData.data(), club: club };
   else return { ok: false, data: null };
 }
 
@@ -39,16 +40,16 @@ export async function createUser(
   {
     admYear,
     batch,
-    rollNumber,
+    admissionNumber,
     gender,
     phoneNumber,
     college,
     branch,
-    token
+    token,
   }: {
     admYear: string;
     batch: string;
-    rollNumber: string;
+    admissionNumber: string;
     gender: string;
     phoneNumber: string;
     college: string;
@@ -65,10 +66,10 @@ export async function createUser(
     batch: batch,
     gender: gender,
     ph: phoneNumber,
-    rollNumber: rollNumber,
-    college:college,
-    branch:branch,
-    fcmToken: token
+    admissionNumber: admissionNumber,
+    college: college,
+    branch: branch,
+    fcmToken: token,
   } as UserType;
 
   return setDoc(doc(db, "/users/" + user.uid), data)
@@ -112,22 +113,30 @@ export async function getUserEvents(user: User) {
     });
 }
 
-export async function getClubEvents(type: 'past' | 'upcoming', club: string) {
-  let t = where("dt", "<", new Date());
-  
-  if(type == 'upcoming') t = where("dt", ">", new Date());
+export async function checkAdmissionNumber(admissionNumber: string) {
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, where("admissionNumber", "==", admissionNumber));
 
-    return getDocs(
-      query(
-        collection(db, "events"),
-        where("club", "==", club),
-        t )
-    )
-      .then((data) => data.docs)
-      .catch((err) => {
-        console.error(err);
-        return null;
-      });
+  try {
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  } catch (error) {
+    console.error("Error checking admission number: ", error);
+    return false;
+  }
+}
+
+export async function getClubEvents(type: "past" | "upcoming", club: string) {
+  let t = where("dt", "<", new Date());
+
+  if (type == "upcoming") t = where("dt", ">", new Date());
+
+  return getDocs(query(collection(db, "events"), where("club", "==", club), t))
+    .then((data) => data.docs)
+    .catch((err) => {
+      console.error(err);
+      return null;
+    });
 }
 
 export async function getUserEventStatus(user: User, evntID: string) {
