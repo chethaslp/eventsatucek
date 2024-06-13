@@ -257,7 +257,7 @@ export function SigninDialog({
                     <Label htmlFor="r2">No</Label>
                   </div>
                 </RadioGroup>
-                <Button onClick={handleIsUcek} type="button">
+                <Button onClick={()=> typeof isUcek != "undefined" && handleIsUcek()} type="button">
                   Confirm
                 </Button>
               </CardDescription>
@@ -545,9 +545,8 @@ export function SigninDialog({
                             <Input
                               className="dark:bg-[#121212] bg-[#ffff]"
                               id="addNumber"
-                              type="number"
-                              placeholder="23 CSE 111"
-                              min={1}
+                              type="text"
+                              placeholder="23CSE111"
                               required
                               onChange={(e) =>
                                 setAdmissionNumber(e.currentTarget.value)
