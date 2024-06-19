@@ -1,4 +1,4 @@
-import { CollectionReference, FieldValue } from "firebase/firestore";
+import { CollectionReference, FieldValue, Timestamp } from "firebase/firestore";
 
 export type UserType = {
     uid: string;
@@ -30,6 +30,16 @@ export type Event_User = {
     status: 'Attended' | 'Registered' | 'Missed';
     dt: string;
     updatedAt?: FieldValue;
+};
+
+export type Event_RSVP = {
+    status: 'attended' | 'registered' | 'missed';
+    email: string;
+    name: string;
+    ph?: string;
+    uid: string;
+    updatedAt?: Timestamp;
+    createdAt: Timestamp;
 };
 
 

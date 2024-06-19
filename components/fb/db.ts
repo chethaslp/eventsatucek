@@ -131,7 +131,7 @@ export async function getClubEvents(type: "past" | "upcoming", club: string) {
 
   if (type == "upcoming") t = where("dt", ">", new Date());
 
-  return getDocs(query(collection(db, "events"), where("club", "==", club), t))
+  return getDocs(query(collection(db, "events"), where("club", "array-contains", club), t))
     .then((data) => data.docs)
     .catch((err) => {
       console.error(err);

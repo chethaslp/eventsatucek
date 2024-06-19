@@ -85,8 +85,10 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
     if(evntData.rsvp.type == "external"){
         template = mail_rsvp_external;
+        mailOptions.subject = evntData?.title? "Registration: " + evntData.title : ""
     } else if(evntData.rsvp.type == "internal"){
         template = mail_rsvp_internal;
+        mailOptions.subject = evntData?.title? "You're in 🎉: " + evntData.title: ""
     } else {
       // RSVP is set to none. In this case no need to sent the mail.
 

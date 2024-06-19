@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
       try{
-        decodedUID = crypto.createDecipheriv('aaes-192-cbc', d.evntSecretKey, Buffer.alloc(16, 0)).update(data, 'base64', 'utf8')
+        decodedUID = crypto.createDecipheriv('aes-192-cbc', d.evntSecretKey, Buffer.alloc(16, 0)).update(data, 'base64', 'utf8')
       }catch(e){
         return NextResponse.json(
           { msg: 'Unauthorized.' },
