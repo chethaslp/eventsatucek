@@ -52,7 +52,7 @@ export default function Home() {
         <CardGrid>
           {data.map((evnt, i) => (
             <Link
-              href={"/ed/"+evnt[1]}
+              href={"/e/"+evnt[1]}
               key={evnt[1]}>
               <Card
                 title={evnt[3]}

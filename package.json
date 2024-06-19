@@ -46,6 +46,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.49.2",
     "react-icons": "^5.0.1",
+    "react-qr-code": "^2.0.14",
     "react-qr-reader": "^3.0.0-beta-1",
     "react-spinners": "^0.13.8",
     "register-service-worker": "^1.7.2",

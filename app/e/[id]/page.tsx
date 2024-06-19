@@ -33,6 +33,8 @@ import { InfoIcon, Loader2 } from "lucide-react";
 import moment from "moment";
 import NotFound from "@/app/not-found";
 import { HashLoader } from "react-spinners";
+import { TicketDialog } from "@/components/dialog/ticket-dialog";
+import { Button } from "@/components/ui/button";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
@@ -45,6 +47,7 @@ function Page({ params }: { params: { id: string } }) {
   const [open, setOpen] = useState(false);
   const [openSignin, setOpenSignin] = useState(false);
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
+  const [showTicketDialog, setShowTicketDialog] = useState(false);
 
   const [date, setDate] = useState<any>();
   const [clubIcon, setClubIcon] = useState<any[]>();
@@ -130,7 +133,12 @@ function Page({ params }: { params: { id: string } }) {
           case "Attended":
             return <div className="border rounded-lg bg-success gap-3 flex flex-row p-3"><InfoIcon/> Wohooo! You have already attended this event.</div>
           case "Registered":
-              return <div><div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> You just RSVP&apos;d this event!</div><small className="text-muted-foreground flex justify-center mt-1">Check your mail for further info.</small></div>
+              return <div>
+                <div className="border rounded-lg bg-secondary gap-3 flex flex-col p-3"><span className="flex gap-2"><InfoIcon/> You just RSVP&apos;d this event!</span>
+                <Button className="mt-4" onClick={()=>setShowTicketDialog(true)}>Show My Ticket</Button>
+                </div>
+                <small className="text-muted-foreground flex justify-center mt-1">Check your mail for further info.</small>
+                </div>
           case "Missed":
               return <div className="border rounded-lg bg-destructive gap-3 flex flex-row p-3"><InfoIcon/>You missed this event.</div>
           case null:
@@ -164,6 +172,7 @@ function Page({ params }: { params: { id: string } }) {
       <Navbar />
       <SigninDialog open={openSignin} setOpen={setOpenSignin}/>
       <RsvpDialog open={open} setOpen={setOpen} evnt={data}/>
+      <TicketDialog open={showTicketDialog} setOpen={setShowTicketDialog} evnt={data}/>
       <div className=" mt-36 flex-1  justify-center px-5 md:px-20 mb-7">
         <div className="h-fit flex md:m-3 flex-col md:flex-row min:w-[22rem] md:w-auto overflow-hidden  shadow-lg rounded-xl dark:bg-[#0c0c0c] ">
           <div className="absolute group z-10 w-10 hover:w-24 flex p-2 m-3 bg-white rounded-full text-black  shadow-lg  transition-width duration-300 ease-in-out">

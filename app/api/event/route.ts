@@ -3,6 +3,7 @@ import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
 import { Message, getMessaging } from 'firebase-admin/messaging';
 import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
 import { Event } from "@/lib/types";
+import crypto from "crypto"
 
 /*
   SEND NOTIFICATIONS:
@@ -47,6 +48,7 @@ export async function POST(req: NextRequest) {
   club.split(",").forEach((clb: string) => {clubList.push(clb.trim())})
 
   await evntDoc.set({
+      evntSecretKey: crypto.randomBytes(24),
       evntID: evntId,
       club: clubList,
       venue: venue,
@@ -115,4 +117,9 @@ function resolveClubIcon(clb: string): any {
     "NSS - UCEK": "/logos/nss.png",
     "Renvnza '24": "/logos/renvnza.png",
   }[clb];
+}
+
+
+function generateSecretKey(){
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
