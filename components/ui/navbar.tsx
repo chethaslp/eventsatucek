@@ -39,17 +39,6 @@ export function Navbar({ qName }: { qName?: string }) {
   }
 
   // if(!user) redirect("/signin?c="+path)
-  const handleScan = () => {
-    setOpenScanner(!openScanner)
-  };
-  const handleError = (err:any) => {
-    console.log(err);
-    
-  };
-  const handleSuccess = (result:any) => {
-    console.log(result);
-    
-  };
 
   return (
     <>
@@ -117,14 +106,6 @@ export function Navbar({ qName }: { qName?: string }) {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button
-              variant="outline"
-              className="text-lg  md:hidden visible"
-              size="icon"
-              onClick={handleScan}
-            >
-              <ScanLine />
-            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -147,21 +128,6 @@ export function Navbar({ qName }: { qName?: string }) {
             </DropdownMenu>
           </div>
         </div>
-
-        {openScanner ? (
-          <QrReader 
-            scanDelay={300}
-            onResult={handleSuccess}
-            constraints={{
-              facingMode:"environment",
-              
-              
-            }}
-            containerStyle={{ width: "100%" }}
-          />
-        ) : (
-          null
-        )}
       </div>
     </>
   );

@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 import { ListRsvpDialog } from "@/components/dialog/list-rsvp-dialog";
+import { CheckInDialog } from "@/components/dialog/checkin-dialog";
 
 function Page() {
   const user = useAuthContext();
@@ -30,6 +31,7 @@ function Page() {
   const [loading, setLoading] = useState(true);
   const [openSignin, setOpenSignin] = useState(false);
   const [openRsvpDialog, setOpenRsvpDialog] = useState(false);
+  const [openCheckInDialog, setOpenCheckInDialog] = useState(false);
   const [crntEvent, setCrntEvent] = useState<Event>();
 
   useEffect(() => {
@@ -72,6 +74,7 @@ function Page() {
       <Navbar />
 
       {openRsvpDialog && crntEvent && (<ListRsvpDialog open={openRsvpDialog} setOpen={setOpenRsvpDialog} evnt={crntEvent} />)}
+      {openCheckInDialog && crntEvent && (<CheckInDialog open={openCheckInDialog} setOpen={setOpenCheckInDialog} evnt={crntEvent} />)}
       
 
       <div className="mt-20 p-16 flex-1 flex-col dark:bg-[#0a0a0a]">
@@ -103,6 +106,7 @@ function Page() {
                   setLoading={setLoading}
                   setCrntEvent={setCrntEvent}
                   setOpenRsvpDialog={setOpenRsvpDialog}
+                  setOpenCheckInDialog={setOpenCheckInDialog}
                   type="upcoming"
                   club={userData?.club || ""}
                 />
@@ -113,6 +117,7 @@ function Page() {
                   setLoading={setLoading}
                   setCrntEvent={setCrntEvent}
                   setOpenRsvpDialog={setOpenRsvpDialog}
+                  setOpenCheckInDialog={setOpenCheckInDialog}
                   type="past"
                   club={userData?.club || ""}
                 />
@@ -134,11 +139,13 @@ function ClubEvents({
   type,
   setCrntEvent,
   setOpenRsvpDialog,
+  setOpenCheckInDialog,
   club,
 }: {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setCrntEvent: React.Dispatch<React.SetStateAction<Event | undefined>>;
   setOpenRsvpDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenCheckInDialog: React.Dispatch<React.SetStateAction<boolean>>;
   type: 'upcoming' | 'past';
   club: string;
 }) {
@@ -222,6 +229,10 @@ function ClubEvents({
                         setCrntEvent(evnt)
                         setOpenRsvpDialog(true)
                       }}>View RSVP</Button>}
+                      {evnt.rsvp.type != "none" && evnt.rsvp.status == "open" && <Button variant={"secondary"} onClick={()=>{
+                        setCrntEvent(evnt)
+                        setOpenCheckInDialog(true)
+                      }}>Check-in</Button>}
                     </td>
                   </tr>
                 );

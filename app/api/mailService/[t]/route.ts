@@ -123,6 +123,9 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   }
   
   try {
+    Handlebars.registerHelper('ifEquals', (arg1, arg2, options) => {
+      return (arg1 == arg2) ? options.fn() : options.inverse();
+  });
     mailOptions.html = Handlebars.compile(template)(replacements);
 
     // Send email
