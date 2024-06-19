@@ -86,7 +86,7 @@ export function CheckInDialog({
 
       setQrActive(false)
 
-      fetch(`/api/event/${evnt.evntID}/checkin`, {
+      fetch(`/api/event/checkin`, {
         method: "POST",
         headers: {
           "X-Token": await user?.getIdToken() || "",
@@ -120,7 +120,7 @@ export function CheckInDialog({
               facingMode:"environment"
             }}
             containerStyle={{ width: "100%" }}
-           />: <div className="flex flex-col gap-4 p-4">
+           />: <div className="flex flex-row gap-4 p-4">
               <Loader2 className="animate-spin"/> Checking in...
             </div>}
         </DialogContent>
