@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
   if (!token || !ticketToken) {
     return NextResponse.json(
-      { msg: 'Unauthorized.' },
+      { msg: 'Missing Required Fields.' },
       { status: 400 }
     );
   }
@@ -35,23 +35,28 @@ export async function POST(req: NextRequest) {
     decodedToken = await getAuth().verifyIdToken(token);
   } catch (e) {
     return NextResponse.json(
-      { msg: 'Unauthorized.' },
+      { msg: 'Invalid Token.' },
       { status: 400 }
     );
   }
 
   const [evntId, data] = ticketToken.split(".");
   const evntDoc = await getFirestore().doc(`/events/${evntId}`).get();
+  const hostData = (await getFirestore().doc(`/users/${decodedToken.uid}`).get()).data() as {club: string}
 
   if(evntDoc.exists){
-      const d = evntDoc.data() as {host :string, evntSecretKey: string}
-      if(decodedToken.email == d.host) return NextResponse.json(
+      const d = evntDoc.data() as {host :string, evntSecretKey: string, club: string[]}
+      if(!d.club.includes(hostData.club)) return NextResponse.json(
         { msg: 'Unauthorized.' },
-        { status: 400 }
+        { status: 401 }
       );
       try{
-        decodedUID = crypto.createDecipheriv('aes-192-cbc', d.evntSecretKey, Buffer.alloc(16, 0)).update(data, 'base64', 'utf8')
+        const c = crypto.createDecipheriv('aes-192-cbc', Buffer.from(d.evntSecretKey), Buffer.alloc(16, 0))
+        
+        decodedUID = Buffer.concat([c.update(Buffer.from(data)), c.final()]).toString();
+        
       }catch(e){
+        console.log(e)
         return NextResponse.json(
           { msg: 'Unauthorized.' },
           { status: 400 }

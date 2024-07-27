@@ -57,7 +57,8 @@ export async function POST(req: NextRequest, {params}: {params :{evntId: string}
         { status: 409 }
       );
 
-      return NextResponse.json({ ticketToken: params.evntId + "." + crypto.createCipheriv('aes-192-cbc', d.evntSecretKey, Buffer.alloc(16, 0)).update(decodedToken.uid, 'utf8', 'base64') });
+      const c = crypto.createCipheriv('aes-192-cbc', Buffer.from(d.evntSecretKey), Buffer.alloc(16, 0))
+      return NextResponse.json({ ticketToken: params.evntId + "." + c.update(decodedToken.uid,'utf-8','base64').toString() + c.final('base64').toString() });
   }else{
     return NextResponse.json(
       { msg: 'Event Not Found.' },

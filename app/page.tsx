@@ -30,6 +30,9 @@ import NoEvents from "./NoEvents";
 import FCM from "@/components/ui/fcm";
 import moment from "moment";
 import CountdownTimer from "@/components/ui/CountDown";
+import { MdUpcoming } from "react-icons/md";
+import { GoLinkExternal } from "react-icons/go";
+import { ArrowBigDownDash } from "lucide-react";
 const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
 export default function Home() {
@@ -119,7 +122,7 @@ export default function Home() {
         <FCM />
         <Navbar />
         <div className="flex flex-col  w-full h-full p-1 md:p-5 items-center dark:bg-[#0a0a0a] ">
-          <div className="flex flex-col mt-32 md:mt-40  md:flex-row  items-center gap-4 justify-around bg-[#f5f5f5df] dark:bg-[#181818fe] p-1 sm:p-10  md:px-24 md:py-8 rounded-2xl">
+          {bannerEvent[0] && <div className="flex flex-col mt-32 md:mt-40  md:flex-row  items-center gap-4 justify-around bg-[#f5f5f5df] dark:bg-[#181818fe] p-1 sm:p-10  md:px-24 md:py-8 rounded-2xl">
               <Image
                 width={350}
                 height={350}
@@ -180,7 +183,23 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-          </div>
+          </div>}
+
+          {!bannerEvent[0] && <div className="justify-center gap-2 flex items-center h-[23rem] md:h-[26rem] flex-col">
+        <div className="flex gap-2 flex-col items-center">
+          <MdUpcoming size={40} />
+          <p className='text-lg font-bold'>No Upcoming Events right Now!</p>
+        </div>
+        <div className={`flex items-center`}>
+          Checkout &nbsp;{" "}
+          <Link className="flex underline items-center gap-1" href={"/e/past"}>
+            Past Events
+            <GoLinkExternal size={15} />
+          </Link>
+        </div>
+          <ArrowBigDownDash size={30} className="mt-3 animate-bounce"/>
+      </div>
+}
 
           <div className="flex w-full lg:mt-10 flex-col">
           <div className={` my-7 mt-7  mb-4 justify-center  flex md:flex-col`}>
