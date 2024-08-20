@@ -14,7 +14,7 @@ function Bannner({ bannerEvent, date }: { bannerEvent: Array<string> , date: any
       className="relative h-[50rem] bg-cover bg-center overflow-hidden"
       style={{
         backgroundImage:
-          "url(" + getImgLink(bannerEvent[5]) + ")",
+          "url(/_next/image?url=" + encodeURIComponent(getImgLink(bannerEvent[5])) + "&w=750&q=100)",
       }}
     >
       {/* Overlay for blur effect */}
