@@ -43,7 +43,7 @@ export function Navbar({ qName }: { qName?: string }) {
   return (
     <>
       <SigninDialog open={open} setOpen={setOpen} />
-      <div className="w-full backdrop-blur px-5 py-3 dark:bg-[#181818fe] bg-[#f5f5f5df] shadow-sm fixed z-20 ">
+      <div className="w-full backdrop-blur px-5 py-3 dark:bg-[#181818fe] bg-[#ffffff] shadow-sm fixed z-20 ">
         <div className="flex items-center justify-between gap-2 flex-row">
           <div className="flex items-center flex-row gap-2 hover:scale-105 transition-all scale-100">
             <Link href={"/"}>
