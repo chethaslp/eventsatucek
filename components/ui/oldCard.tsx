@@ -7,7 +7,7 @@ import { BsClock } from "react-icons/bs";
 import Image from "next/image";
 import moment from "moment";
 
-const Card = ({
+const OldCard = ({
   title,
   header,
   date,
@@ -60,4 +60,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default OldCard;

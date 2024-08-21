@@ -23,7 +23,8 @@ import FCM from "@/components/ui/fcm";
 import moment from "moment";
 import Bannner from "@/components/ui/bannner";
 import PreviewCard from "@/components/ui/previewCard";
-import Card from "@/components/ui/oldCard";
+import OldCard from "@/components/ui/oldCard";
+import Card from "@/components/ui/card";
 import FilterTab from "@/components/ui/filterTab";
 import EventsList from "@/components/ui/eventsList";
 
@@ -116,13 +117,38 @@ export default function Home() {
         <FCM />
         <Navbar />
         <Bannner bannerEvent={bannerEvent} date={date}/>
-        <PreviewCard/>
+        <PreviewCard heading="Upcoming Events"/>
         <FilterTab/>
-        <EventsList/>
+        <EventsList>
+          {data.map((evnt, i) => (
+            <Card
+              key={evnt[1]}
+              id={evnt[1]}
+              title={evnt[3]}
+              description={evnt[4]}
+              club={evnt[6]}
+              img={
+                <Image
+                  width={310}
+                  height={310}
+                  referrerPolicy={"no-referrer"}
+                  src={getImgLink(evnt[5])}
+                  alt="Event Poster"
+                  className="transition duration-300 ease-in-out aspect-square rounded-md"
+                ></Image>
+              }
+              date={evnt[7]}
+              isOnline={evnt[8] == "Online" ? true : false}
+              venue={evnt[10]}
+            />
+          ))}
+        </EventsList>
+        <PreviewCard heading="Past Events"/>
+
 
         
 
-        {/*--------------------------------- Old ui  -------------------------------------------------*/}
+        {/*--------------------------------- Old ui  -----------------------------------------*/}
         <div className="flex flex-col  w-full h-full p-1 md:p-5 items-center bg-[#000000] ">
           <div className="flex w-full lg:mt-10 flex-col">
             <div
@@ -202,7 +228,7 @@ export default function Home() {
                   href={`/e/${evnt[1]}`}
                   className="flex justify-center"
                 >
-                  <Card
+                  <OldCard
                     key={evnt[1]}
                     title={evnt[3]}
                     description={evnt[4]}

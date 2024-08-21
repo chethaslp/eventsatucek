@@ -95,7 +95,7 @@ export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Pro
 }
 
 export const getClubs = [
-  "All Clubs",
+  "All",
   "GDSC - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",
@@ -107,5 +107,4 @@ export const getClubs = [
   "Music Club - UCEK",
   "Film Club - UCEK",
   "NSS - UCEK",
-  "Renvnza '24",
 ]

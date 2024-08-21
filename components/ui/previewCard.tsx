@@ -1,12 +1,14 @@
 import React, { useState, useRef } from "react";
 import { useSwipeable } from "react-swipeable";
 
-const Card = ({
+const PreviewCard = ({
+  heading,
   title,
   img,
   date,
   club,
 }: {
+  heading?: string;
   className?: string;
   title?: string | React.ReactNode;
   img?: React.ReactNode;
@@ -36,7 +38,7 @@ const Card = ({
   }
   return (
     <div className="bg-black text-white">
-      <h1 className="text-5xl font-semibold ml-8 py-20">Upcoming events</h1>
+      <h1 className="text-5xl font-semibold ml-8 py-20">{heading}</h1>
       <div className="flex overflow-x-scroll remove-scrollbar pb-10">
 
      {cards}
@@ -45,4 +47,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default PreviewCard;
