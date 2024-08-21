@@ -3,7 +3,7 @@ import { Navbar } from "@/components/ui/navbar";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import CardGrid from "@/components/ui/CardGrid";
-import Card from "@/components/ui/card";
+import Card from "@/components/ui/previewCard";
 
 import { getImgLink, getPastEvents } from "@/lib/data";
 import Loading from "../../../components/ui/Loading";

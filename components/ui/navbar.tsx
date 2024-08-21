@@ -19,7 +19,7 @@ import { Avatar } from "./avatar";
 import { useAuthContext } from "../context/auth";
 import { signOut } from "firebase/auth";
 import { SigninDialog } from "../dialog/signin-dialog";
-import { SetStateAction, useRef, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { auth } from "../fb/config";
 import Image from "next/image";
 import { QrReader } from "react-qr-reader";
@@ -38,30 +38,44 @@ export function Navbar({ qName }: { qName?: string }) {
     else setOpen(true);
   }
 
+  const [color, setColor] = useState('');
+
+   const listenScrollEvent = () => {
+      if (window.scrollY > 600) {
+         setColor('rgba(0, 0, 0, 10');
+      } else {
+         setColor('');
+      }
+   };
+   
+   useEffect(() => {
+    window.addEventListener('scroll', listenScrollEvent);
+ })
+
   // if(!user) redirect("/signin?c="+path)
 
   return (
     <>
-      <SigninDialog open={open} setOpen={setOpen} />
-      <div className="w-full backdrop-blur px-5 py-3 dark:bg-[#181818fe] bg-[#ffffff] shadow-sm fixed z-20 ">
+      <SigninDialog open={open} setOpen={setOpen} />  
+      <div className="w-full  px-5 py-3 shadow-sm fixed z-20 " style={{ backgroundColor: color,  transition: 'background-color 0.5s ease' }}>
         <div className="flex items-center justify-between gap-2 flex-row">
-          <div className="flex items-center flex-row gap-2 hover:scale-105 transition-all scale-100">
+          <div className="flex items-center text-white flex-row gap-2 hover:scale-105 transition-all scale-100">
             <Link href={"/"}>
               <Logo className={"text-3xl md:text-5xl"} />
             </Link>
-            {qName && <span className="text-lg ml-2">/&nbsp;{qName}</span>}
+            {qName && <span className="text-lg ml-2 ">/&nbsp;{qName}</span>}
           </div>
           <div className="flex items-center justify-center gap-2">
             <a
               href={path == "/event/past" ? "/" : "/event/past"}
-              className="w-fill hidden md:block"
+              className="w-fill hidden md:block "
             >
-              <Button variant="link" className="text">
+              <Button variant="link" className="text text-white">
                 {path == "/event/past" ? "Upcoming Events" : "Past Events"}
               </Button>
             </a>
             <a href={"/contributors"} className="w-fill hidden md:block">
-              <Button variant="link" className="text">
+              <Button variant="link" className="text text-white">
                 Contributors
               </Button>
             </a>
@@ -103,26 +117,6 @@ export function Navbar({ qName }: { qName?: string }) {
                   className="cursor-pointer"
                 >
                   {user ? "Signout" : "Signin"}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                  <span className="sr-only">Toggle theme</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="dark:bg-[#121212]">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                  Light
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                  System
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

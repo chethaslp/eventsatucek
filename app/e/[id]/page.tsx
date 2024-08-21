@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 
-import Card from "@/components/ui/card";
+import Card from "@/components/ui/previewCard";
 import Footer from "@/components/ui/Footer";
 import Loading from "@/components/ui/Loading";
 import CardGrid from "@/components/ui/CardGrid";

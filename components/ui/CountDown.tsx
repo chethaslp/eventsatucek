@@ -34,7 +34,7 @@ export default function CountDown({
         className={`grid grid-flow-col mt-4 gap-5 text-center auto-cols-max `}
       >
         <div
-          className={`flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text`}
+          className={`flex flex-col p-2 bg-[#3d3c3c6e] rounded-box text-white text-sm sm:text-sm md:text`}
         >
           <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
             <span
@@ -48,7 +48,7 @@ export default function CountDown({
           </span>
           DAYS
         </div>
-        <div className="flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
+        <div className="flex flex-col p-2 bg-[#3d3c3c6e] rounded-box text-white text-sm sm:text-sm md:text">
           <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
             <span
               className={`${inter.className}`}
@@ -61,7 +61,7 @@ export default function CountDown({
           </span>
           HOURS
         </div>
-        <div className="flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
+        <div className="flex flex-col p-2 bg-[#3d3c3c6e] rounded-box text-white  text-sm sm:text-sm md:text">
           <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
             <span
               className={`${inter.className}`}
@@ -74,7 +74,7 @@ export default function CountDown({
           </span>
           MIN
         </div>
-        <div className="flex flex-col p-2 bg-[#dbdbdb6e] rounded-box text-black dark:text-white dark:bg-slate-800 text-sm sm:text-sm md:text">
+        <div className="flex flex-col p-2 bg-[#3d3c3c6e] rounded-box text-white  text-sm sm:text-sm md:text">
           <span className="countdown font-mono text-3xl sm:text-4xl md:text-5xl">
             <span
               className={`${inter.className}`}

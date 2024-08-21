@@ -49,6 +49,7 @@
     "react-qr-code": "^2.0.14",
     "react-qr-reader": "^3.0.0-beta-1",
     "react-spinners": "^0.13.8",
+    "react-swipeable": "^7.0.1",
     "register-service-worker": "^1.7.2",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
