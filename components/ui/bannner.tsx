@@ -29,7 +29,7 @@ function Bannner({
       <div className="absolute inset-0 bg-black bg-opacity-0 md:bg-opacity-10 md:backdrop-blur-sm bg-gradient-to-t from-black to-transparent flex items-center justify-center"></div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center p-0 md:p-20 md:gap-24 h-full">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-center p-0 md:p-20 md:gap-24 h-full">
         <div className="hidden md:flex">
           <Image
             width={350}
@@ -50,7 +50,7 @@ function Bannner({
             <span className="font-bold text-xl md:text-3xl ">
               {bannerEvent[3]}
             </span>
-            <small className="text-muted">{bannerEvent[6]}</small>
+            <small className="">{bannerEvent[6]}</small>
           </p>
           <p className="flex items-center mb-1 text-sm md:text-base">
             <FaCalendarAlt className="mr-2" />

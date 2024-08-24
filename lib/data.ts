@@ -38,6 +38,36 @@ export function getEvent(evntID:string): Promise<string[][]> {
   return getData(url)
 }
 
+export async function getEvents(n="20") {
+  const url = "https://docs.google.com/spreadsheets/d/"
+              + EVNTS_SHEET_ID
+              + "/gviz/tq?tqx=out:csv&sheet=s1&tq="
+              + encodeURIComponent("select * where L = 'Yes' order by(`H`) desc");
+
+  const events =  await getData(url)
+
+  // separate past and upcoming events
+  const currentTime = new Date();
+  const upcomingEvents: string[][] = [];
+  const pastEvents: string[][] = [];
+
+  for (const event of events) {
+    const [datePart, timePart] = event[7].split(' ');
+    const [day, month, year] = datePart.split('/').map(Number);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+    
+    const eventTime = new Date(year, month - 1, day, hours, minutes, seconds);
+
+    if ( eventTime > currentTime) {
+      upcomingEvents.push(event);
+    } else {
+      pastEvents.push(event);
+    }
+  }
+
+  return [upcomingEvents, pastEvents];
+}
+
 // Get Upcoming Events
 export function getUpcomingEvents(n="20"): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
@@ -73,16 +103,18 @@ export function getMoreClubEvents(clb:string, id:string): Promise<string[][]> {
 
 // Sort Events Club Wise
 // params: {clb -> Club Name}
-export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Promise<string[][]> {
+export function filterEvents(clbid=0,type="Both",time="All",n="20"): Promise<string[][]> {
+
+  let clb = getClubs[clbid]
 
   function resolveQuery(){
     var t;
-    if (time == 'All') t = "1=1 order by(`H`)"
-    else if(time == 'Upcoming') t = "H > now() order by(`H`)"
-    else if(time == 'Past') t = "H < now() order by(`H`)"
+    if (time == 'All') t = "1=1 order by(`H`) desc"
+    else if(time == 'Upcoming') t = "H > now() order by(`H`) desc"
+    else if(time == 'Past') t = "H < now() order by(`H`) desc"
 
-    if(clb == getClubs[0] && type == "Both") return "select * where L = 'Yes' and "+ t /* Returns if club is set to "All" and type is "Both" */
-    if(clb == getClubs[0]) return `select * where I = '${type}' and L = 'Yes' and ${t} `/* Returns if club is set to "All" and type is different */
+    if(clbid == 0 && type == "Both") return "select * where L = 'Yes' and "+ t /* Returns if club is set to "All" and type is "Both" */
+    if(clbid == 0) return `select * where I = '${type}' and L = 'Yes' and ${t} `/* Returns if club is set to "All" and type is different */
     if(type == "Both")  return `select * where G like "%${clb}%" and L = 'Yes' and ${t}` /* Returns if club is different and type is set to "Both" */
     return `select * where G like "%${clb}%" and  I = '${type}' and L = 'Yes' and ${t}` /* Returns if club and type is different. */
   }
@@ -94,9 +126,17 @@ export function filterEvents(clb=getClubs[0],type="Both",time="All",n="20"): Pro
   return getData(url)
 }
 
+export function search(keyword:string,n="20"): Promise<string[][]> {
+  const url = "https://docs.google.com/spreadsheets/d/"
+              + EVNTS_SHEET_ID
+              + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
+              + encodeURIComponent(`select * where L = 'Yes' and (D like '%${keyword}%' or E contains '${keyword}' or G contains '${keyword}' or H contains '${keyword}' or K contains '${keyword}') order by(\`H\`) desc limit ${n}`);
+  return getData(url)
+}
+
 export const getClubs = [
   "All",
-  "GDSC - UCEK",
+  "Google Developers Student Club - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",
   "μlearn - UCEK",

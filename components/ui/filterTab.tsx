@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import React, { useRef, useState } from "react";
-import { getClubs, filterEvents } from "@/lib/data";
+import { getClubs, filterEvents, search } from "@/lib/data";
+import { Button } from "./button";
 
-function FilterTab() {
+function FilterTab({ setFilteredEvents }: { setFilteredEvents: any }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedClub, setSelectedClub] = useState(0);
   const [selectedType, setSelectedType] = useState(1);
@@ -30,27 +31,43 @@ function FilterTab() {
 
   const handleClubClick = (idx: any) => {
     setSelectedClub(idx);
+    filterEvents(idx, ["Online", "Both", "Offline"][selectedType], ["Upcoming", "Past", "All"][selectedTime]).then((evnts) =>
+      setFilteredEvents(evnts)
+    );
   };
   const handleTypeClick = (idx: any) => {
     setSelectedType(idx);
+    filterEvents(selectedClub, ["Online", "Both", "Offline"][idx], ["Upcoming", "Past", "All"][selectedTime]).then((evnts) =>
+      setFilteredEvents(evnts)
+    );
   };
   const handleTimeClick = (idx: any) => {
     setSelectedTime(idx);
+    filterEvents(selectedClub, ["Online", "Both", "Offline"][selectedType], ["Upcoming", "Past", "All"][idx]).then((evnts) =>
+      setFilteredEvents(evnts)
+    );
   };
+
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    search(e.target.keyword.value).then((evnts) => setFilteredEvents(evnts));
+  }
 
   return (
     <div className="bg-black flex justify-center items-center pt-8">
       <div className="w-[70%] h-fit  p-2 rounded-sm">
         <div>
           <div className="flex flex-col items-center justify-center gap-3">
-            <div className="bg-[#0b0b0b] p-2 items-center w-[95%] h-8 flex rounded-lg gap-3">
+            <form className="bg-[#0b0b0b] p-2 items-center w-[95%] h-8 flex rounded-lg gap-3" onSubmit={handleSearch}>
               <Search color="white" />
               <input
                 className="bg-[#0b0b0b] w-full outline-none focus:outline-none text-white"
                 type="text"
-                placeholder="Search clubs"
+                name="keyword"
+                placeholder="Search events, clubs or tags"
               />
-            </div>
+              <Button type="submit" className="bg-[#0b0b0b] text-white">Search</Button>
+            </form>
             <div className="bg-[#0b0b0b] p-2 items-center max-w-[95%] justify-center h-8 flex rounded-lg gap-3">
               <ChevronLeft
                 color="white"
@@ -70,7 +87,7 @@ function FilterTab() {
                       selectedClub === idx ? "bg-[#222222]" : "bg-transparent"
                     }`}
                   >
-                    {club}
+                    {club=="Google Developers Student Club - UCEK"?"GDSC":club.replace("- UCEK","")}
                   </div>
                 ))}
               </div>
