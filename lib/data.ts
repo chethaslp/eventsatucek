@@ -130,7 +130,7 @@ export function search(keyword:string,n="20"): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent(`select * where L = 'Yes' and (D like '%${keyword}%' or E contains '${keyword}' or G contains '${keyword}' or H contains '${keyword}' or K contains '${keyword}') order by(\`H\`) desc limit ${n}`);
+              + encodeURIComponent(`select * where L = 'Yes' and (D like "%${keyword}%" or E contains '${keyword}' or G contains '${keyword}' or H contains '${keyword}' or K contains '${keyword}') order by(\`H\`) desc limit ${n}`);
   return getData(url)
 }
 

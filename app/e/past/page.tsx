@@ -3,7 +3,7 @@ import { Navbar } from "@/components/ui/navbar";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import CardGrid from "@/components/ui/CardGrid";
-import Card from "@/components/ui/previewCard";
+import Card from "@/components/ui/card";
 
 import { getImgLink, getPastEvents } from "@/lib/data";
 import Loading from "../../../components/ui/Loading";
@@ -58,14 +58,14 @@ export default function Home() {
                 title={evnt[3]}
                 description={evnt[4]}
                 club={evnt[6]}
-                header={
+                img={
                   <Image
-                    width={500}
-                    height={500}
+                    width={310}
+                    height={310}
                     referrerPolicy={"no-referrer"}
                     src={getImgLink(evnt[5])}
-                    alt="Event Poster"
-                    className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
+                    alt={evnt[3]}
+                    className="transition duration-300 ease-in-out aspect-square rounded-md"
                   ></Image>
                 }
                 date={evnt[7]}

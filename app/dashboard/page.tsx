@@ -172,8 +172,8 @@ function ClubEvents({
     <>
       {!userEvents ? (
         <div className="flex items-center justify-center flex-col h-full w-full">
-          <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t
-          hosted any events so far.{" "}
+          <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2>
+          {type=="upcoming"? "You aren't hosting any events right now." :"You haven&'t hosted any events so far."}
         </div>
       ) : (
         <div className="overflow-x-auto w-full">

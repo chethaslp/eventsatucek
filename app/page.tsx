@@ -29,6 +29,7 @@ import Card from "@/components/ui/card";
 import FilterTab from "@/components/ui/filterTab";
 import EventsList from "@/components/ui/eventsList";
 import { MdUpcoming } from "react-icons/md";
+import LogoBanner from "@/components/ui/logobanner";
 
 const font = Urbanist({ subsets: ["latin"], weight: ["400"] });
 
@@ -37,7 +38,7 @@ export default function Home() {
   const typeDropdownButton: any = useRef(null);
   const timeDropdownButton: any = useRef(null);
 
-  const [filteredEvents, setFilteredEvents] = useState<Array<string[]>>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Array<string[]>>();
   const [pastData, setPastData] = useState<Array<string[]>>([]);
   const [upcomingData, setUpcomingData] = useState<Array<string[]>>([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +62,7 @@ export default function Home() {
   useEffect(() => {
     getEvents()
       .then(([upcomingEvents, pastEvents]) => {
-        if (filteredEvents.length <= 1) {
+        if (filteredEvents && filteredEvents.length <= 1) {
           setTimeDropdown("Past");
           filterEvents(clubDropdown, typeDropdown, "Past").then((evnts) =>
             setFilteredEvents(evnts)
@@ -83,10 +84,6 @@ export default function Home() {
 
   function handleError() {}
   function handleScan() {}
-  // If there is no events in data
-  if (filteredEvents.length == 0 && !loading && bannerEvent.length == 0) {
-    return <NoEvents />;
-  }
 
   return loading ? (
     <Loading msg="Loading..." />
@@ -95,16 +92,16 @@ export default function Home() {
       <div className="w-full">
         <FCM />
         <Navbar />
-        <Bannner bannerEvent={bannerEvent} date={date}/>
+        {(!bannerEvent || bannerEvent.length != 0) ? <LogoBanner/>:<Bannner bannerEvent={bannerEvent} date={date}/>}
         {/* <PreviewCard heading="Upcoming Events"/> */}
 
-        <FilterTab setFilteredEvents={setFilteredEvents}/>
+        <FilterTab className="" setFilteredEvents={setFilteredEvents}/>
         <EventsList>
-          {filteredEvents.length == 0 && <div className="flex gap-2 flex-col items-center">
+          {filteredEvents && filteredEvents.length == 0 && <div className="flex gap-2 flex-col items-center">
               <MdUpcoming size={40} />
               <p className='text-lg font-bold'>We found nothing. <br/> (┬┬﹏┬┬)</p>
             </div>}
-          {filteredEvents.map((evnt, i) => (
+          {filteredEvents && filteredEvents.map((evnt, i) => (
             <Card
               key={evnt[1]}
               id={evnt[1]}
@@ -128,11 +125,11 @@ export default function Home() {
           ))}
         </EventsList>
         <div className="bg-black text-white">
-          <h1 className="text-5xl font-semibold ml-8 py-20">Past Events</h1>
+          <h3 className="text-4xl font-semibold ml-8 py-20">Past Events</h3>
           <div className="flex overflow-x-scroll remove-scrollbar pb-10">
 
             {pastData.map((evnt) =>   
-            <div className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all min-w-96 shadow-xl mx-6 bg-[#0b0b0b]" onClick={()=> location.href = "/e/"+ bannerEvent[1]}>
+            <div key={evnt[1]} className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all min-w-96 shadow-xl mx-6 bg-[#0b0b0b]" onClick={()=> location.href = "/e/"+ evnt[1]}>
               <figure className="h-32">
                 <Image
                   src={getImgLink(evnt[5])}

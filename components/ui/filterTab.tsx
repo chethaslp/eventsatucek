@@ -1,10 +1,12 @@
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { getClubs, filterEvents, search } from "@/lib/data";
 import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
-function FilterTab({ setFilteredEvents }: { setFilteredEvents: any }) {
+function FilterTab({ setFilteredEvents, className }: { setFilteredEvents: any, className?: string }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
   const [selectedClub, setSelectedClub] = useState(0);
   const [selectedType, setSelectedType] = useState(1);
   const [selectedTime, setSelectedTime] = useState(0);
@@ -50,11 +52,15 @@ function FilterTab({ setFilteredEvents }: { setFilteredEvents: any }) {
 
   const handleSearch = (e: any) => {
     e.preventDefault();
-    search(e.target.keyword.value).then((evnts) => setFilteredEvents(evnts));
+    setLoading(true);
+    search(e.target.keyword.value).then((evnts) => {
+      setFilteredEvents(evnts)
+      setLoading(false);
+    });
   }
 
   return (
-    <div className="bg-black flex justify-center items-center pt-8">
+    <div className={cn("bg-black flex justify-center items-center pt-8", className)}>
       <div className="w-[70%] h-fit  p-2 rounded-sm">
         <div>
           <div className="flex flex-col items-center justify-center gap-3">
@@ -66,7 +72,7 @@ function FilterTab({ setFilteredEvents }: { setFilteredEvents: any }) {
                 name="keyword"
                 placeholder="Search events, clubs or tags"
               />
-              <Button type="submit" className="bg-[#0b0b0b] text-white">Search</Button>
+              <Button type="submit" variant={"default"} disabled={loading}>{loading? <Loader2 className="animate-spin"/>: "Search"}</Button>
             </form>
             <div className="bg-[#0b0b0b] p-2 items-center max-w-[95%] justify-center h-8 flex rounded-lg gap-3">
               <ChevronLeft

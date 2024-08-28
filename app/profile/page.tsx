@@ -13,6 +13,7 @@ import Image from "next/image";
 import Loading from "@/components/ui/Loading";
 import { signOut } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
+import { auth } from "@/components/fb/config";
 
 function Page() {
   const user = useAuthContext();
@@ -58,7 +59,7 @@ function Page() {
     <div className="flex h-full flex-col dark:bg-[#0a0a0a]">
       <Navbar />
       <div className="mt-40 flex flex-1 flex-col sm:flex-row items-center md:items-start dark:bg-[#0a0a0a]">
-        <div className="flex flex-col px-16 py-8">
+        <div className="flex flex-col items-center px-4 w-full mb-3 md:mb-0 md:w-72">
           <div className="avatar">
             <div className="w-44 h-44 rounded-full">
               <img src={getUserAvatar(user) || ""} />
@@ -66,25 +67,34 @@ function Page() {
           </div>
           <h2 className="text-xl mt-1 font-semibold">{user.displayName}</h2>
           <p className="text-muted-foreground">{userData?.role}</p>
-          <div className="mt-4 border-l-4 text-muted-foreground p-1 border-blue-700 pl-3 w-40">
-            <h2 className="text-md font-semibold mb-2 dark:text-white">
-              ABOUT
-            </h2>
-            <p>
+          <div className="mt-4 p-1 flex flex-col gap-2 w-full">
+            <p className="flex flex-col gap-1 border rounded-lg p-3">
+              <span className="text-muted-foreground text-sm">Email :</span> 
+              {user.email}
+            </p>
+            <p className="flex flex-col gap-1 border rounded-lg p-3">
+              <span className="text-muted-foreground text-sm">{isUcek ? "Admission Number :": "College :"}</span> 
+              {isUcek
+                  ? userData?.admissionNumber
+                  : userData?.college}
+            </p>
+            <p className="flex flex-col gap-1 border rounded-lg p-3">
+              <span className="text-muted-foreground text-sm">Batch :</span> 
               {isUcek ? userData?.batch : userData?.branch}
               {"   "}({userData?.admYear} Admission)
-              <p>
-                {isUcek
-                  ? `Admission Number: ${userData?.admissionNumber}`
-                  : userData?.college}{" "}
-              </p>
+            </p>
+            <p>
               <br />
               {userData?.club && (
-                <p>
-                  Clubs you have access:{" "}
-                  <span className="font-bold">{userData?.club}</span>
-                </p>
+                <p className="flex flex-col gap-1 border cursor-pointer hover:bg-slate-900 rounded-lg p-3" onClick={()=>location.href="/dashboard"}>
+                <span className="text-muted-foreground text-sm"> Clubs you have access: </span> 
+                <span className="font-bold">{userData?.club}</span>
+              </p>
               )}
+            </p>
+
+            <p className="flex justify-center">
+              {infoText}
             </p>
           </div>
         </div>
@@ -94,7 +104,7 @@ function Page() {
           className=" max-h-fit hidden md:flex"
         />
 
-        <div className="px-3 py-5 sm:px-10 sm:py-5 md:px-16 md:py-8 flex flex-1 h-full flex-col">
+        <div className="px-3 py-5 w-full sm:px-10 sm:py-5 md:px-16 md:py-8 flex flex-1 h-full flex-col">
           <UserEvents setLoading={setLoading} setInfoText={setInfoText} />
         </div>
       </div>
@@ -131,8 +141,7 @@ function UserEvents({
       setLoading(false);
       setInfoText(
         <>
-          You Attended <span className="font-bold">{data?.length}</span>{" "}
-          event(s) so far.
+          You attended&nbsp;<span className="font-bold">{data?.length}</span> &nbsp;event(s) so far.
         </>
       );
     });
@@ -140,7 +149,7 @@ function UserEvents({
 
   return (
     <>
-      <h1 className="sm:text-2xl text-xl ">Events Attended</h1>
+      <h1 className="sm:text-2xl text-xl mb-3">Your Events</h1>
       {!userEvents ? (
         <div className="flex items-center justify-center flex-col h-full">
           <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t
@@ -148,7 +157,57 @@ function UserEvents({
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="table">
+          {/* Cards for Mobile View */}
+            <div className="grid grid-cols-1 w-full sm:grid-cols-2 md:grid-cols-3 gap-4 md:hidden">
+              {userEvents.map((evntData) => {
+                const evnt = evntData.data() as Event_User;
+                return (
+                  <div
+                    key={evnt.evntID}
+                    className="bg-white w-full dark:bg-[#1f1f1f] rounded-lg shadow-md p-4"
+                  >
+                    <div className="flex w-full flex-row items-center gap-3">
+                      <div className="text-xs flex items-center flex-col text-muted-foreground">
+                        <div className="mask mask-squircle w-12 h-12">
+                          <Image
+                            width={48}
+                            height={48}
+                            referrerPolicy={"no-referrer"}
+                            src={resolveClubIcon(evnt.club, false)}
+                            alt={evnt.club}
+                          />
+                        </div>
+                        <span className="max-w-20 line-clamp-2">{evnt.club}</span>
+                      </div>
+                      
+                    <div className="flex-1">
+                    <div
+                      className="font-bold underline cursor-pointer hover:no-underline mt-2"
+                      onClick={() => (location.href = `/e/${evnt.evntID}`)}
+                    >
+                      {evnt.evntName}
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1">
+                      {evnt.dt.split(" ")[0]}
+                    </div>
+                    <div className="mt-2">
+                      <span
+                        className={`badge badge-ghost badge-sm text-white p-2 ${
+                          evnt.status == "Registered" ? "bg-green-700" : "bg-blue-700"
+                        }`}
+                      >
+                        {evnt.status}
+                      </span>
+                    </div>
+                    </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+          {/* Table for Desktop View */}
+          <table className="table hidden md:block">
             {/* head */}
             <thead>
               <tr className="dark:text-white ">

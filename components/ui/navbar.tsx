@@ -67,11 +67,11 @@ export function Navbar({ qName }: { qName?: string }) {
           </div>
           <div className="flex items-center justify-center gap-2">
             <a
-              href={path == "/event/past" ? "/" : "/event/past"}
+              href={path == "/e/past" ? "/" : "/e/past"}
               className="w-fill hidden md:block "
             >
               <Button variant="link" className="text text-white">
-                {path == "/event/past" ? "Upcoming Events" : "Past Events"}
+                {path == "/e/past" ? "Upcoming Events" : "Past Events"}
               </Button>
             </a>
             <a href={"/contributors"} className="w-fill hidden md:block">

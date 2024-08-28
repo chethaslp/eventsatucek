@@ -261,25 +261,21 @@ function Page({ params }: { params: { id: string } }) {
               <CardGrid>
                 {moreEvents.map((evnt, i) => (
                   <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
-                    <Card
-                      key={evnt[1]}
-                      title={evnt[3]}
-                      description={evnt[4]}
-                      club={evnt[6]}
-                      header={
-                        <Image
-                          width={500}
-                          height={500}
-                          referrerPolicy={"no-referrer"}
-                          src={getImgLink(evnt[5])}
-                          alt="Event Poster"
-                          className="opacity-50 group-hover:opacity-100 transition duration-300 ease-in-out"
-                        ></Image>
-                      }
-                      date={evnt[7]}
-                      isOnline={evnt[8] == "Online" ? true : false}
-                      venue={evnt[10]}
-                    />
+                    <div key={evnt[1]} className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all min-w-96 shadow-xl mx-6 bg-[#0b0b0b]">
+                      <figure className="h-32">
+                          <Image
+                            src={getImgLink(evnt[5])}
+                            width={400}
+                            height={400}
+                            alt={evnt[3]}
+                          />
+                        </figure>
+                      <div className="card-body ">
+                        <h2 className="card-title">{evnt[3]}</h2>
+                        <p>{evnt[6]}</p>
+                        <p>{moment(evnt[7], "DD/MM/YYYY HH:mm:ss").format("DD MMM, YYYY")}<span>  •  </span> {evnt[10]}</p>
+                      </div>
+                    </div>
                   </Link>
                 ))}
               </CardGrid>
