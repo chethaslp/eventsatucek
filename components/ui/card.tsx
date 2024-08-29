@@ -8,7 +8,6 @@ import Image from "next/image";
 import moment from "moment";
 import { FaCalendarAlt } from "react-icons/fa";
 import Link from "next/link";
-import { Button } from "./button";
 
 function Card({
   id,
@@ -38,8 +37,8 @@ function Card({
       <div className="text-white text-left w-full">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-semibold">{title}</h1>
-            <p className="text-base  mb-3">{club}</p>
+            <h1 className="md:text-3xl text-lg font-semibold">{title}</h1>
+            <p className="md:text-base text-[10px] text-muted mb-3">{club}</p>
           </div>
           <Image
             className="rounded-full w-14 sm:w-14 sm:h-14 md:w-16 md:h-16"
@@ -47,31 +46,33 @@ function Card({
             alt={club + "logo"}
           />
         </div>
-        <p className="flex items-center mb-1 text-sm md:text-base">
+        <p className="flex items-center mb-1 text-[10px] md:text-base">
           <FaCalendarAlt className="mr-2" />
           {dt?.format("dddd, Do MMM YYYY")} ({dt?.fromNow()})
         </p>
-        <p className="flex break-words items-center mb-1 text-sm md:text-base">
+        <p className="flex break-words items-center mb-1 text-[10px] md:text-base">
           <IoLocationSharp className="mr-2" />{" "}
           {venue == "" ? "Will be updated." : venue}
         </p>
         {isOnline ? (
-          <p className="flex items-center mb-1 text-sm md:text-base">
+          <p className="flex items-center mb-1 text-[10px] md:text-base">
             <IoIosCloud className="mr-2" /> Online
           </p>
         ) : (
-          <p className="flex items-center mb-1 text-sm md:text-base">
+          <p className="flex items-center mb-1 text-[10px] md:text-base">
             <IoCloudOfflineSharp className="mr-2" /> Offline{" "}
           </p>
         )}
-        <p className="flex items-center mb-1 text-sm md:text-base">
+        <p className="flex items-center mb-1 text-[10px] md:text-base">
           {" "}
           <BsClock className="mr-2" />
           {dt?.format("h:mm a")}
         </p>
-        <div className="hidden md:flex flex-row gap-3 mt-3 items-center justify-center">
+        <div className="hidden md:flex flex-row gap-3 mt-1">
           <Link href={"/e/" + id}>
-          <Button variant={"outline"}>View More</Button>
+            <button className="inline-flex hover:scale-105 transition-all scale-100 h-10 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+              View More
+            </button>
           </Link>
         </div>
       </div>

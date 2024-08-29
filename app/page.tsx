@@ -69,7 +69,7 @@ export default function Home() {
           );
         }
         const upcomingEvent = upcomingEvents.shift() || [""]; // Remove and return the first event from data
-        
+
         setUpcomingData(upcomingEvents);
         setPastData(pastEvents);
         setBannerEvent(upcomingEvent);
@@ -81,7 +81,6 @@ export default function Home() {
       });
   }, []);
 
-
   function handleError() {}
   function handleScan() {}
 
@@ -92,59 +91,76 @@ export default function Home() {
       <div className="w-full">
         <FCM />
         <Navbar />
-        {(!bannerEvent || bannerEvent.length != 0) ? <LogoBanner/>:<Bannner bannerEvent={bannerEvent} date={date}/>}
+        {!bannerEvent || bannerEvent.length != 0 ? (
+          <LogoBanner />
+        ) : (
+          <Bannner bannerEvent={bannerEvent} date={date} />
+        )}
         {/* <PreviewCard heading="Upcoming Events"/> */}
 
-        <FilterTab className="" setFilteredEvents={setFilteredEvents}/>
+        <FilterTab className="" setFilteredEvents={setFilteredEvents} />
         <EventsList>
-          {filteredEvents && filteredEvents.length == 0 && <div className="flex gap-2 flex-col items-center">
+          {filteredEvents && filteredEvents.length == 0 && (
+            <div className="flex gap-2 flex-col items-center">
               <MdUpcoming size={40} />
-              <p className='text-lg font-bold'>We found nothing. <br/> (┬┬﹏┬┬)</p>
-            </div>}
-          {filteredEvents && filteredEvents.map((evnt, i) => (
-            <Card
-              key={evnt[1]}
-              id={evnt[1]}
-              title={evnt[3]}
-              description={evnt[4]}
-              club={evnt[6]}
-              img={
-                <Image
-                  width={310}
-                  height={310}
-                  referrerPolicy={"no-referrer"}
-                  src={getImgLink(evnt[5])}
-                  alt={evnt[3]}
-                  className="transition duration-300 ease-in-out aspect-square rounded-md"
-                ></Image>
-              }
-              date={evnt[7]}
-              isOnline={evnt[8] == "Online" ? true : false}
-              venue={evnt[10]}
-            />
-          ))}
+              <p className="text-lg font-bold">
+                We found nothing. <br /> (┬┬﹏┬┬)
+              </p>
+            </div>
+          )}
+          {filteredEvents &&
+            filteredEvents.map((evnt, i) => (
+              <Card
+                key={evnt[1]}
+                id={evnt[1]}
+                title={evnt[3]}
+                description={evnt[4]}
+                club={evnt[6]}
+                img={
+                  <Image
+                    width={310}
+                    height={310}
+                    referrerPolicy={"no-referrer"}
+                    src={getImgLink(evnt[5])}
+                    alt={evnt[3]}
+                    className="transition duration-300 ease-in-out aspect-square rounded-md"
+                  ></Image>
+                }
+                date={evnt[7]}
+                isOnline={evnt[8] == "Online" ? true : false}
+                venue={evnt[10]}
+              />
+            ))}
         </EventsList>
         <div className="bg-black text-white">
           <h3 className="text-4xl font-semibold ml-8 py-20">Past Events</h3>
           <div className="flex overflow-x-scroll remove-scrollbar pb-10">
-
-            {pastData.map((evnt) =>   
-            <div key={evnt[1]} className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all min-w-96 shadow-xl mx-6 bg-[#0b0b0b]" onClick={()=> location.href = "/e/"+ evnt[1]}>
-              <figure className="h-32">
-                <Image
-                  src={getImgLink(evnt[5])}
-                  width={400}
-                  height={400}
-                  alt={evnt[3]}
-                />
-              </figure>
-            <div className="card-body ">
-              <h2 className="card-title">{evnt[3]}</h2>
-              <p>{evnt[6]}</p>
-              <p>{moment(evnt[7], "DD/MM/YYYY HH:mm:ss").format("DD MMM, YYYY")}<span>  •  </span> {evnt[10]}</p>
-            </div>
-          </div>
-          )}
+            {pastData.map((evnt) => (
+              <div
+                key={evnt[1]}
+                className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all min-w-96 shadow-xl mx-6 bg-[#0b0b0b]"
+                onClick={() => (location.href = "/e/" + evnt[1])}
+              >
+                <figure className="h-32">
+                  <Image
+                    src={getImgLink(evnt[5])}
+                    width={400}
+                    height={400}
+                    alt={evnt[3]}
+                  />
+                </figure>
+                <div className="card-body ">
+                  <h2 className="card-title">{evnt[3]}</h2>
+                  <p>{evnt[6]}</p>
+                  <p>
+                    {moment(evnt[7], "DD/MM/YYYY HH:mm:ss").format(
+                      "DD MMM, YYYY"
+                    )}
+                    <span> • </span> {evnt[10]}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <Footer />
