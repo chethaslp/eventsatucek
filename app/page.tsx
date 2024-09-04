@@ -93,12 +93,13 @@ export default function Home() {
         <FCM />
         <Navbar />
         {bannerEvent.length > 1 ? (
-          <Bannner bannerEvent={bannerEvent} date={date} />
+
+            <Bannner bannerEvent={bannerEvent} date={date} />
+
         ) : (
           <LogoBanner />
         )}
         {/* <PreviewCard heading="Upcoming Events"/> */}
-
         <FilterTab className="" setFilteredEvents={setFilteredEvents} />
         <EventsList>
           {filteredEvents && filteredEvents.length == 0 && (
@@ -133,7 +134,7 @@ export default function Home() {
               />
             ))}
         </EventsList>
-        <div className="bg-black text-white">
+        {/* <div className="bg-black text-white">
           <h3 className="text-4xl font-semibold ml-8 py-20">Past Events</h3>
           <div className="flex overflow-x-scroll remove-scrollbar pb-10">
             {pastData.map((evnt) => (
@@ -163,7 +164,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         <Footer />
       </div>
     </>
