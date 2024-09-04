@@ -57,7 +57,7 @@ export function Navbar({ qName }: { qName?: string }) {
   return (
     <>
       <SigninDialog open={open} setOpen={setOpen} />  
-      <div className="w-full  px-5 py-3 shadow-sm fixed z-20 md:bg-transparent bg-black " style={{ backgroundColor: color,  transition: 'background-color 0.5s ease' }}>
+      <div className="w-full  px-5 py-3 shadow-sm fixed z-20 " style={{ backgroundColor: color,  transition: 'background-color 0.5s ease' }}>
         <div className="flex items-center justify-between gap-2 flex-row">
           <div className="flex items-center text-white flex-row gap-2 hover:scale-105 transition-all scale-100">
             <Link href={"/"}>

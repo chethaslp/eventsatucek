@@ -7,6 +7,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { IoCloudOfflineSharp, IoLocationSharp } from "react-icons/io5";
 import { IoIosCloud } from "react-icons/io";
 import { BsClock } from "react-icons/bs";
+import { ExternalLink } from "lucide-react";
 
 function Bannner({
   bannerEvent,
@@ -51,7 +52,9 @@ function Bannner({
               <span className="font-bold text-xl md:text-3xl ">
                 {bannerEvent[3]}
               </span>
-              <small className="text-muted text-gray-300">{bannerEvent[6]}</small>
+              <small className="text-muted text-gray-300">
+                {bannerEvent[6]}
+              </small>
             </p>
             <p className="flex items-center mb-1 text-sm md:text-base">
               <FaCalendarAlt className="mr-2" />
@@ -94,10 +97,15 @@ function Bannner({
       {/* This part is only for mobile view */}
       <div className="p-5 h-[16rem] bg-black -mt-4 md:hidden flex flex-col">
         <p className="flex flex-col mb-3">
-          <span className="font-bold text-xl md:text-3xl ">
-            {bannerEvent[3]}
-          </span>
-          <small className="text-muted text-gray-400">{bannerEvent[6]}</small>
+          <div className="flex justify-between">
+            <span className="font-bold text-2xl md:text-3xl ">
+              {bannerEvent[3]}
+            </span>
+            <Link href={"/e/" + bannerEvent[1]} className="md:hidden flex">
+              <ExternalLink color="white" size={17} />
+            </Link>
+          </div>
+          <small className="text-muted text-gray-200">{bannerEvent[6]}</small>
         </p>
         <p className="flex items-center mb-1 text-sm md:text-base">
           <FaCalendarAlt className="mr-2" />

@@ -74,7 +74,7 @@ function FilterTab({
   return (
     <div
       className={cn(
-        "bg-black flex justify-center items-center pt-8",
+        "bg-black flex justify-center items-center md:pt-8 pt-20",
         className
       )}
     >
@@ -108,7 +108,7 @@ function FilterTab({
                   <div
                     key={idx}
                     onClick={() => handleClubClick(idx)}
-                    className={`text-white text-center rounded-md md:min-w-[9rem] min-w-[6rem] text-[14px] cursor-pointer ${
+                    className={`text-white text-center rounded-md md:min-w-[9rem] min-w-[6rem] md:text-[14px] text-[12px] cursor-pointer ${
                       selectedClub === idx ? "bg-[#222222]" : "bg-transparent"
                     }`}
                   >
@@ -131,7 +131,7 @@ function FilterTab({
                     <div
                       key={idx}
                       onClick={() => handleTypeClick(idx)}
-                      className={`text-white text-center rounded-md md:min-w-[5rem] min-w-[5rem] cursor-pointer ${
+                      className={`text-white text-center rounded-md md:min-w-[5rem] min-w-[5rem] md:text-[14px] text-[12px] cursor-pointer ${
                         selectedType === idx ? "bg-[#222222]" : "bg-transparent"
                       }`}
                     >
@@ -146,7 +146,7 @@ function FilterTab({
                     <div
                       key={idx}
                       onClick={() => handleTimeClick(idx)}
-                      className={`text-white text-center rounded-md md:min-w-[5rem] min-w-[5rem] cursor-pointer ${
+                      className={`text-white text-center rounded-md md:min-w-[5rem] min-w-[5rem] md:text-[14px] text-[12px] cursor-pointer ${
                         selectedTime === idx ? "bg-[#222222]" : "bg-transparent"
                       }`}
                     >

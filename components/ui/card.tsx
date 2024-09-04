@@ -32,40 +32,44 @@ function Card({
   const clubIcon = resolveClubIcon(club, false);
 
   return (
-    <div className="px-5 py-5 bg-[#0c0c0c] rounded-lg flex gap-7 md:flex-row flex-col">
-      <div className="md:w-[20rem] md:h-[20rem] w-[15rem] h-[15rem]">{img}</div>
+    <div className="px-5 py-5 bg-[#191919] rounded-lg flex gap-7 md:flex-row flex-col">
+      <div className="w-full md:w-auto flex justify-center items-center">
+        <div className="md:w-[20rem] md:h-[20rem] w-[15rem] h-[15rem]">
+          {img}
+        </div>
+      </div>
       <div className="text-white text-left w-full">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ">
           <div>
-            <h1 className="md:text-3xl text-lg font-semibold">{title}</h1>
-            <p className="md:text-base text-[10px] text-muted mb-3 text-gray-300">
+            <h1 className="md:text-3xl text-xl font-semibold">{title}</h1>
+            <p className="md:text-base text-[14px] text-muted mb-3 text-gray-200">
               {club}
             </p>
           </div>
           <Image
-            className="rounded-full w-10 sm:w-14 sm:h-14 md:w-16 md:h-16"
+            className="rounded-full w-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
             src={clubIcon}
             alt={club + "logo"}
           />
         </div>
-        <p className="flex items-center mb-1 text-[10px] md:text-base">
+        <p className="flex items-center mb-1 text-[13px] md:text-base">
           <FaCalendarAlt className="mr-2" />
           {dt?.format("dddd, Do MMM YYYY")} ({dt?.fromNow()})
         </p>
-        <p className="flex break-words items-center mb-1 text-[10px] md:text-base">
+        <p className="flex break-words items-center mb-1 text-[13px] md:text-base">
           <IoLocationSharp className="mr-2" />{" "}
           {venue == "" ? "Will be updated." : venue}
         </p>
         {isOnline ? (
-          <p className="flex items-center mb-1 text-[10px] md:text-base">
+          <p className="flex items-center mb-1 text-[13px] md:text-base">
             <IoIosCloud className="mr-2" /> Online
           </p>
         ) : (
-          <p className="flex items-center mb-1 text-[10px] md:text-base">
+          <p className="flex items-center mb-1 text-[13px] md:text-base">
             <IoCloudOfflineSharp className="mr-2" /> Offline{" "}
           </p>
         )}
-        <p className="flex items-center mb-1 text-[10px] md:text-base">
+        <p className="flex items-center mb-1 text-[13px] md:text-base">
           {" "}
           <BsClock className="mr-2" />
           {dt?.format("h:mm a")}
