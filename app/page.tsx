@@ -81,6 +81,7 @@ export default function Home() {
       });
   }, []);
 
+
   function handleError() {}
   function handleScan() {}
 
@@ -91,10 +92,10 @@ export default function Home() {
       <div className="w-full">
         <FCM />
         <Navbar />
-        {!bannerEvent || bannerEvent.length != 0 ? (
-          <LogoBanner />
-        ) : (
+        {bannerEvent.length > 1 ? (
           <Bannner bannerEvent={bannerEvent} date={date} />
+        ) : (
+          <LogoBanner />
         )}
         {/* <PreviewCard heading="Upcoming Events"/> */}
 
