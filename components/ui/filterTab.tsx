@@ -78,11 +78,11 @@ function FilterTab({
         className
       )}
     >
-      <div className="w-[70%] h-fit  p-2 rounded-sm">
+      <div className="md:w-[70%] w-[95%] h-fit  p-2 rounded-sm">
         <div>
           <div className="flex flex-col items-center justify-center gap-3">
             <form
-              className="bg-[#0b0b0b] p-2 items-center w-[95%] h-8 flex rounded-lg gap-3"
+              className="bg-[#0b0b0b] p-2 items-center md:w-[95%] w-full h-8 flex rounded-lg gap-3"
               onSubmit={handleSearch}
             >
               <Search color="white" />
@@ -92,11 +92,8 @@ function FilterTab({
                 name="keyword"
                 placeholder="Search events, clubs or tags"
               />
-              <Button type="submit" variant={"default"} disabled={loading}>
-                {loading ? <Loader2 className="animate-spin" /> : "Search"}
-              </Button>
             </form>
-            <div className="bg-[#0b0b0b] p-2 items-center max-w-[95%]  justify-center h-8 flex rounded-lg gap-3">
+            <div className="bg-[#0b0b0b] p-2 items-center md:max-w-[95%] max-w-full  justify-center h-8 flex rounded-lg gap-3">
               <ChevronLeft
                 color="white"
                 onClick={scrollLeft}
@@ -111,7 +108,7 @@ function FilterTab({
                   <div
                     key={idx}
                     onClick={() => handleClubClick(idx)}
-                    className={`text-white text-center rounded-md md:min-w-[13rem] min-w-[9rem] text-[14px] cursor-pointer ${
+                    className={`text-white text-center rounded-md md:min-w-[9rem] min-w-[6rem] text-[14px] cursor-pointer ${
                       selectedClub === idx ? "bg-[#222222]" : "bg-transparent"
                     }`}
                   >
@@ -134,7 +131,7 @@ function FilterTab({
                     <div
                       key={idx}
                       onClick={() => handleTypeClick(idx)}
-                      className={`text-white text-center rounded-md md:min-w-[7rem] min-w-[5rem] cursor-pointer ${
+                      className={`text-white text-center rounded-md md:min-w-[5rem] min-w-[5rem] cursor-pointer ${
                         selectedType === idx ? "bg-[#222222]" : "bg-transparent"
                       }`}
                     >
@@ -143,13 +140,13 @@ function FilterTab({
                   ))}
                 </div>
               </div>
-              <div className="bg-[#0b0b0b] p-2 items-center md:max-w-[95%] w-[19rem] h-8 flex rounded-lg gap-3">
+              <div className="bg-[#0b0b0b] p-2 items-center md:max-w-[95%] w-[18rem] justify-center h-8 flex rounded-lg gap-3">
                 <div className="flex overflow-x-scroll remove-scrollbar gap-2">
                   {["Upcoming", "Past", "All"].map((club, idx) => (
                     <div
                       key={idx}
                       onClick={() => handleTimeClick(idx)}
-                      className={`text-white text-center rounded-md md:min-w-[7rem] min-w-[5rem] cursor-pointer ${
+                      className={`text-white text-center rounded-md md:min-w-[5rem] min-w-[5rem] cursor-pointer ${
                         selectedTime === idx ? "bg-[#222222]" : "bg-transparent"
                       }`}
                     >

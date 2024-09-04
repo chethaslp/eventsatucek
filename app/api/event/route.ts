@@ -104,7 +104,7 @@ function getImgLink(link: string) {
 
 function resolveClubIcon(clb: string): any {
   return {
-    "Google Developers Student Club - UCEK": "/logos/gdsc.png",
+    "GDSC - UCEK" : "/logos/gdsc.png",
     "IEEE - UCEK": "/logos/ieee.png",
     "Legacy IEDC - UCEK": "/logos/iedc.png",
     "μlearn - UCEK": "/logos/muln.png",

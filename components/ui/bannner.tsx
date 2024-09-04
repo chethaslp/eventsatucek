@@ -51,7 +51,7 @@ function Bannner({
               <span className="font-bold text-xl md:text-3xl ">
                 {bannerEvent[3]}
               </span>
-              <small className="text-muted">{bannerEvent[6]}</small>
+              <small className="text-muted text-gray-300">{bannerEvent[6]}</small>
             </p>
             <p className="flex items-center mb-1 text-sm md:text-base">
               <FaCalendarAlt className="mr-2" />

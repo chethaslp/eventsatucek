@@ -40,14 +40,13 @@ function Page() {
       return;
     }
     getProfileData(user).then((data: any) => {
-
       if (!data.ok) {
         location.href = "/profile?r=/dashboard";
         return;
       }
-      
-      if (!data.club){
-        location.href = "/profile"
+
+      if (!data.club) {
+        location.href = "/profile";
         return;
       }
       setUserData(data.data);
@@ -73,9 +72,20 @@ function Page() {
     <div className="flex h-full flex-col dark:bg-[#0a0a0a]">
       <Navbar />
 
-      {openRsvpDialog && crntEvent && (<ListRsvpDialog open={openRsvpDialog} setOpen={setOpenRsvpDialog} evnt={crntEvent} />)}
-      {openCheckInDialog && crntEvent && (<CheckInDialog open={openCheckInDialog} setOpen={setOpenCheckInDialog} evnt={crntEvent} />)}
-      
+      {openRsvpDialog && crntEvent && (
+        <ListRsvpDialog
+          open={openRsvpDialog}
+          setOpen={setOpenRsvpDialog}
+          evnt={crntEvent}
+        />
+      )}
+      {openCheckInDialog && crntEvent && (
+        <CheckInDialog
+          open={openCheckInDialog}
+          setOpen={setOpenCheckInDialog}
+          evnt={crntEvent}
+        />
+      )}
 
       <div className="mt-20 p-16 flex-1 flex-col dark:bg-[#0a0a0a]">
         <div className="flex flex-row items-center w-full justify-between">
@@ -87,14 +97,26 @@ function Page() {
             <div className="flex flex-col">
               <p className="md:text-2xl font-semibold">{user.displayName}</p>
               <p className="text-sm text-muted-foreground">
-                You are now accessing event records of <span className="font-bold">{userData?.club}</span>
+                You are now accessing event records of{" "}
+                <span className="font-bold">{userData?.club}</span>
               </p>
             </div>
           </div>
         </div>
         <Separator className="my-4" />
         <div className="py-7 w-full">
-        <h1 className="sm:text-2xl text-xl mb-3 ">Events Hosted</h1>
+          <div className="flex justify-between">
+            <h1 className="sm:text-2xl text-xl mb-3 ">Events Hosted</h1>
+            <Button
+              variant="secondary"
+              onClick={() =>
+                (location.href =
+                  "https://docs.google.com/forms/d/e/1FAIpQLSchkVsDZD5FysBkRhokE2QGTTKrs_CqnXRt1EXGuF3DpDhCxw/viewform")
+              }
+            >
+              Add event
+            </Button>
+          </div>
           <Tabs defaultValue="upcoming" className="w-full flex-1 h-full">
             <TabsList>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
@@ -112,7 +134,8 @@ function Page() {
                 />
               </div>
             </TabsContent>
-            <TabsContent value="past"><div className="flex gap-2 flex-col h-full items-center w-full">
+            <TabsContent value="past">
+              <div className="flex gap-2 flex-col h-full items-center w-full">
                 <ClubEvents
                   setLoading={setLoading}
                   setCrntEvent={setCrntEvent}
@@ -122,7 +145,7 @@ function Page() {
                   club={userData?.club || ""}
                 />
               </div>
-              </TabsContent>
+            </TabsContent>
           </Tabs>
         </div>
       </div>
@@ -146,7 +169,7 @@ function ClubEvents({
   setCrntEvent: React.Dispatch<React.SetStateAction<Event | undefined>>;
   setOpenRsvpDialog: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenCheckInDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  type: 'upcoming' | 'past';
+  type: "upcoming" | "past";
   club: string;
 }) {
   const user = useAuthContext();
@@ -173,7 +196,9 @@ function ClubEvents({
       {!userEvents ? (
         <div className="flex items-center justify-center flex-col h-full w-full">
           <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2>
-          {type=="upcoming"? "You aren't hosting any events right now." :"You haven&'t hosted any events so far."}
+          {type == "upcoming"
+            ? "You aren't hosting any events right now."
+            : "You haven&'t hosted any events so far."}
         </div>
       ) : (
         <div className="overflow-x-auto w-full">
@@ -195,14 +220,14 @@ function ClubEvents({
                     <td className="px-1 sm:px-4">
                       <div
                         className="font-bold underline cursor-pointer hover:no-underline"
-                        onClick={() =>
-                          (location.href = `/e/${evnt.evntID}`)
-                        }
+                        onClick={() => (location.href = `/e/${evnt.evntID}`)}
                       >
                         {evnt.title}
                       </div>
                     </td>
-                    <td className="px-1 sm:px-4">{(evnt.dt as Timestamp).toDate().toLocaleString()}</td>
+                    <td className="px-1 sm:px-4">
+                      {(evnt.dt as Timestamp).toDate().toLocaleString()}
+                    </td>
                     <td className="px-1 sm:px-4">
                       <span
                         className={`badge badge-ghost capitalize badge-sm text-white p-2 ${
@@ -217,22 +242,41 @@ function ClubEvents({
                         className={`badge badge-ghost badge-sm capitalize text-white p-2 ${
                           evnt.rsvp.type == "internal"
                             ? "bg-green-700"
-                            : (evnt.rsvp.type == "external")? "bg-blue-700" : ""
+                            : evnt.rsvp.type == "external"
+                            ? "bg-blue-700"
+                            : ""
                         }`}
                       >
                         RSVP: {evnt.rsvp.type}
                       </span>
                     </td>
                     <td className="flex gap-2">
-                      <Link href={evnt.editLink} target="_blank"><Button variant={"outline"}>Edit Event</Button></Link>
-                      {evnt.rsvp.type != "none" && <Button variant={"outline"} onClick={()=>{
-                        setCrntEvent(evnt)
-                        setOpenRsvpDialog(true)
-                      }}>View RSVP</Button>}
-                      {evnt.rsvp.type != "none" && evnt.rsvp.status == "open" && <Button variant={"secondary"} onClick={()=>{
-                        setCrntEvent(evnt)
-                        setOpenCheckInDialog(true)
-                      }}>Check-in</Button>}
+                      <Link href={evnt.editLink} target="_blank">
+                        <Button variant={"outline"}>Edit Event</Button>
+                      </Link>
+                      {evnt.rsvp.type != "none" && (
+                        <Button
+                          variant={"outline"}
+                          onClick={() => {
+                            setCrntEvent(evnt);
+                            setOpenRsvpDialog(true);
+                          }}
+                        >
+                          View RSVP
+                        </Button>
+                      )}
+                      {evnt.rsvp.type != "none" &&
+                        evnt.rsvp.status == "open" && (
+                          <Button
+                            variant={"secondary"}
+                            onClick={() => {
+                              setCrntEvent(evnt);
+                              setOpenCheckInDialog(true);
+                            }}
+                          >
+                            Check-in
+                          </Button>
+                        )}
                     </td>
                   </tr>
                 );

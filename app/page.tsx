@@ -125,7 +125,7 @@ export default function Home() {
                     referrerPolicy={"no-referrer"}
                     src={getImgLink(evnt[5])}
                     alt={evnt[3]}
-                    className="transition duration-300 ease-in-out aspect-square rounded-md"
+                    className="transition duration-300 ease-in-out aspect-square object-cover w-full h-full rounded-md"
                   ></Image>
                 }
                 date={evnt[7]}

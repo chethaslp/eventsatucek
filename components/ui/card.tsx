@@ -32,16 +32,18 @@ function Card({
   const clubIcon = resolveClubIcon(club, false);
 
   return (
-    <div className="px-5 py-5 bg-[#0c0c0c] rounded-lg flex gap-7">
-      <div>{img}</div>
+    <div className="px-5 py-5 bg-[#0c0c0c] rounded-lg flex gap-7 md:flex-row flex-col">
+      <div className="md:w-[20rem] md:h-[20rem] w-[15rem] h-[15rem]">{img}</div>
       <div className="text-white text-left w-full">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="md:text-3xl text-lg font-semibold">{title}</h1>
-            <p className="md:text-base text-[10px] text-muted mb-3">{club}</p>
+            <p className="md:text-base text-[10px] text-muted mb-3 text-gray-300">
+              {club}
+            </p>
           </div>
           <Image
-            className="rounded-full w-14 sm:w-14 sm:h-14 md:w-16 md:h-16"
+            className="rounded-full w-10 sm:w-14 sm:h-14 md:w-16 md:h-16"
             src={clubIcon}
             alt={club + "logo"}
           />

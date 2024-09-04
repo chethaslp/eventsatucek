@@ -32,7 +32,7 @@ export const GITHUB_API_URL =
 
 export function resolveClubIcon(clb: string,black:boolean ): any {
   return {
-    "Google Developers Student Club - UCEK": GDSCLogo,
+    "GDSC - UCEK": GDSCLogo,
     "IEEE - UCEK": black ? IEEELogoBlack : IEEELogo,
     "Legacy IEDC - UCEK": black ? IEDCLogoBlack : IEDCLogo,
     "μlearn - UCEK": black ? MULNLogoBlack : MULNLogo,
