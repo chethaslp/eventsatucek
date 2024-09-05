@@ -56,6 +56,7 @@ export default function Home() {
               key={evnt[1]}>
               <Card
                 title={evnt[3]}
+                id={evnt[1]}
                 description={evnt[4]}
                 club={evnt[6]}
                 img={

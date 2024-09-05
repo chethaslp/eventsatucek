@@ -52,8 +52,6 @@ const token = req.headers.get('X-Token')
       participants.push([reg.email, reg.name, reg.ph]);
     });
   
-    // convert to csv using papaparse
-
     const response = new NextResponse(Papa.unparse(participants))
     response.headers.set('content-type', 'text/csv');
     return response;

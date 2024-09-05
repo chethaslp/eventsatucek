@@ -97,7 +97,7 @@ export function getMoreClubEvents(clb:string, id:string): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where `G` = '" + clb + "' and `B` != '" + id + "' and L = 'Yes' and toDate(`H`) > now() order by `H`");
+              + encodeURIComponent("select * where `G` = '" + clb + "' and `B` != '" + id + "' and L = 'Yes' order by `H` ");
   return getData(url)
 }
 
@@ -136,7 +136,7 @@ export function search(keyword:string,n="20"): Promise<string[][]> {
 
 export const getClubs = [
   "All",
-  "Google Developers Student Club - UCEK",
+  "GDSC - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",
   "μlearn - UCEK",

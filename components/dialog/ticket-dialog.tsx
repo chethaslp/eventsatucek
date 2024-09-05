@@ -87,6 +87,13 @@ function ShowTicket({ evnt, setOpen }: { evnt: string[]; setOpen: React.Dispatch
 
     setLoading("Getting your ticket...");
     (async ()=>{
+      const ls = localStorage.getItem("ticketToken_"+evnt[1])
+      if(ls && ls != ""){
+        setTicketToken(ls)
+        setLoading("")
+        return
+      }
+
       fetch(`/api/event/${evnt[1]}/getTicket`, {
         method: "POST",
         headers: {
@@ -109,6 +116,7 @@ function ShowTicket({ evnt, setOpen }: { evnt: string[]; setOpen: React.Dispatch
           return
         }
         const d = await data.json()
+        localStorage.setItem("ticketToken_"+evnt[1], d.ticketToken)
         setTicketToken(d.ticketToken)
         setLoading("")
       })

@@ -107,7 +107,7 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
     
     if(!(await getUser(user))){
       setLoading("Redirecting you to profile page. Please complete your profile data.")
-      setTimeout(()=>location.href = `/profile?r=/e/${evnt[1]}`, 2000)
+      setTimeout(()=>location.href = '/profile?r=/'+ encodeURIComponent('e/'+ evnt[1]), 2000)
       return
     }
 

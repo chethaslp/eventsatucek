@@ -35,6 +35,7 @@ import NotFound from "@/app/not-found";
 import { HashLoader } from "react-spinners";
 import { TicketDialog } from "@/components/dialog/ticket-dialog";
 import { Button } from "@/components/ui/button";
+import { set } from "react-hook-form";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
@@ -103,64 +104,6 @@ function Page({ params }: { params: { id: string } }) {
       console.error("An error occurred:", error);
     });
   }, [data]);
-
-
-  function UserEventInteractionPanel(){
-
-    const [userStatus, setUserStatus] = useState<Event_User['status'] | null>();
-  
-    useEffect(() =>{
-      if(!data) return
-      if(!user) {
-        setUserStatus(null)
-        return
-      }
-      if(data[12] == "No RSVP"){
-        setUserStatus(null)
-        return
-      }
-      
-      getUserEventStatus(user, params.id).then((d)=>{
-        if(d?.exists()){
-          setUserStatus(d.data()?.status)
-        }else setUserStatus(null)
-      })
-    },[])
-
-    return <div className="flex items-center justify-center mt-5">
-      {(()=>{
-        switch (userStatus) {
-          case "Attended":
-            return <div className="border rounded-lg bg-success gap-3 flex flex-row p-3"><InfoIcon/> Wohooo! You have already attended this event.</div>
-          case "Registered":
-              return <div>
-                <div className="border rounded-lg bg-secondary gap-3 flex flex-col p-3"><span className="flex gap-2"><InfoIcon/> You just RSVP&apos;d this event!</span>
-                <Button className="mt-4" onClick={()=>setShowTicketDialog(true)}>Show My Ticket</Button>
-                </div>
-                <small className="text-muted-foreground flex justify-center mt-1">Check your mail for further info.</small>
-                </div>
-          case "Missed":
-              return <div className="border rounded-lg bg-destructive gap-3 flex flex-row p-3"><InfoIcon/>You missed this event.</div>
-          case null:
-            return (!date?.isBefore() && data[12] != "No RSVP") ? <button onClick={()=>{
-              if(!user) {
-                setOpenSignin(true)
-                return
-              }
-              setOpen(true)
-            }} 
-              className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-              Register Now!
-            </button>: 
-            (data[12] != "No RSVP")?<div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> This event is over.</div>:null
-          default:
-            return <HashLoader color={theme=="light"? undefined:"white"}/>
-          }
-      })()}
-    </div>
-
-      
-  }
 
 
   if(!data) return <NotFound/>
@@ -246,7 +189,7 @@ function Page({ params }: { params: { id: string } }) {
             </div>
 
 
-            <UserEventInteractionPanel/>
+            <UserEventInteractionPanel setOpen={setOpen} setOpenSignin={setOpenSignin} setShowTicketDialog={setShowTicketDialog} data={data} date={date} params={params} user={user}/>
 
           </div>
         </div>
@@ -256,11 +199,11 @@ function Page({ params }: { params: { id: string } }) {
           moreEvents.length > 0 ? (
             <>
               <h1 className="text-lg md:text-3xl font-semibold mt-10 mb-8 p-3">
-                Upcoming Events from {data ? data[6] : null}
+                More Events from {data ? data[6]=="Google Developers Student Club - UCEK" ? "GDSC": data[6].replace("- UCEK",""): null}
               </h1>
               <CardGrid>
                 {moreEvents.map((evnt, i) => (
-                  <Link key={evnt[1]} href={`/event/${evnt[1]}`}>
+                  <Link key={evnt[1]} href={`/e/${evnt[1]}`}>
                     <div key={evnt[1]} className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all min-w-96 shadow-xl mx-6 bg-[#0b0b0b]">
                       <figure className="h-32">
                           <Image
@@ -291,6 +234,61 @@ function Page({ params }: { params: { id: string } }) {
       <Footer />
     </div>
   );
+}
+
+function UserEventInteractionPanel({data, user, params, setOpen, setOpenSignin, setShowTicketDialog, date}: {data:string[], user: any, params: {id: string}, setOpenSignin: any, setShowTicketDialog: any, setOpen: any, date: any}) {
+
+  const [userStatus, setUserStatus] = useState<Event_User['status'] | null>();
+
+  useEffect(() =>{
+    if(!data) return
+    if(!user) {
+      setUserStatus(null)
+      return
+    }
+    if(data[12] == "No RSVP"){
+      setUserStatus(null)
+      return
+    }
+    
+    getUserEventStatus(user, params.id).then((d)=>{
+      if(d?.exists()){
+        d.data()?.status == "Registered" && date.isBefore() ? setUserStatus("Missed") :  setUserStatus(d.data()?.status)
+      }else setUserStatus(null)
+    })
+  },[])
+
+  return <div className="flex items-center justify-center mt-5">
+    {(()=>{
+      switch (userStatus) {
+        case "Attended":
+          return <div className="border rounded-lg bg-success gap-3 flex flex-row p-3"><InfoIcon/> Wohooo! You have already attended this event.</div>
+        case "Registered":
+            return <div>
+              <div className="border rounded-lg bg-secondary gap-3 flex flex-col p-3"><span className="flex gap-2"><InfoIcon/> You just RSVP&apos;d this event!</span>
+              <Button className="mt-4" onClick={()=>setShowTicketDialog(true)}>Show My Ticket</Button>
+              </div>
+              <small className="text-muted-foreground flex justify-center mt-1">Check your mail for further info.</small>
+              </div>
+        case "Missed":
+            return <div className="border rounded-lg bg-destructive gap-3 flex flex-row p-3"><InfoIcon/>You missed this event.</div>
+        case null:
+          return (!date?.isBefore() && data[12] != "No RSVP") ? <button onClick={()=>{
+            if(!user) {
+              setOpenSignin(true)
+              return
+            }
+            setOpen(true)
+          }} 
+            className="inline-flex hover:scale-105 transition-all scale-100 h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+            Register Now!
+          </button>: 
+          (data[12] != "No RSVP")?<div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3"><InfoIcon/> This event is over.</div>:null
+        default:
+          return <HashLoader color={"white"}/>
+        }
+    })()}
+  </div>
 }
 
 export default Page;
