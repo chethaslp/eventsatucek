@@ -92,9 +92,9 @@ export default function Home() {
       <div className="w-full">
         <FCM />
         <Navbar />
-        {(!bannerEvent || bannerEvent.length == 0) ? <LogoBanner/>:<Bannner bannerEvent={bannerEvent} date={date}/>}
+        {(!bannerEvent || bannerEvent.length == 0 || !bannerEvent[5]) ? <LogoBanner/>:<Bannner bannerEvent={bannerEvent} date={date}/>}
         {/* <PreviewCard heading="Upcoming Events"/> */}
-        <FilterTab className="" setFilteredEvents={setFilteredEvents} />
+        <FilterTab className="" setFilteredEvents={setFilteredEvents} upcomingEvents={upcomingData}/>
         <EventsList>
           {filteredEvents && filteredEvents.length == 0 && (
             <div className="flex gap-2 flex-col items-center">

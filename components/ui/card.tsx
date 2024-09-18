@@ -34,23 +34,23 @@ function Card({
   return (
     <div className="px-5 py-5 bg-[#191919] rounded-lg flex gap-7 md:flex-row flex-col">
       <div className="w-full md:w-auto flex justify-center items-center">
-        <div className="md:w-[20rem] md:h-[20rem] w-[15rem] h-[15rem]">
+        <Link href={"/e/" + id} className="md:w-[20rem] md:h-[20rem] w-[15rem] h-[15rem] scale-100 hover:scale-105 transition-all">
           {img}
-        </div>
+        </Link>
       </div>
       <div className="text-white text-left w-full">
         <div className="flex items-center justify-between ">
           <div>
             <h1 className="md:text-3xl text-xl font-semibold">{title}</h1>
-            <p className="md:text-base text-[14px] text-muted mb-3 text-gray-200">
+            <p className="md:text-base text-[14px] mb-3 text-gray-200">
               {club}
             </p>
           </div>
-          <Image
-            className="rounded-full w-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
-            src={clubIcon}
-            alt={club + "logo"}
-          />
+            <Image
+              className="rounded-full w-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
+              src={clubIcon}
+              alt={club + "logo"}
+            />
         </div>
         <p className="flex items-center mb-1 text-[13px] md:text-base">
           <FaCalendarAlt className="mr-2" />

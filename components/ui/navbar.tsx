@@ -66,14 +66,6 @@ export function Navbar({ qName }: { qName?: string }) {
             {qName && <span className="text-lg ml-2 ">/&nbsp;{qName}</span>}
           </div>
           <div className="flex items-center justify-center gap-2">
-            <a
-              href={path == "/e/past" ? "/" : "/e/past"}
-              className="w-fill hidden md:block "
-            >
-              <Button variant="link" className="text text-white">
-                {path == "/e/past" ? "Upcoming Events" : "Past Events"}
-              </Button>
-            </a>
             <a href={"/contributors"} className="w-fill hidden md:block">
               <Button variant="link" className="text text-white">
                 Contributors

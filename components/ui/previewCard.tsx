@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { useSwipeable } from "react-swipeable";
 
 const PreviewCard = ({
   heading,

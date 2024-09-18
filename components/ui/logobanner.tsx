@@ -21,12 +21,16 @@ function LogoBanner() {
       {/* Content */}
       <div className="relative z-10 flex flex-col md:flex-col items-center justify-center h-full">
         {user ? (
-          <p className="text-2xl font-medium ">Hello👋 {user?.displayName}</p>
+          <>
+          <h1 className="text-2xl">Hello👋</h1>
+          <p className="text-3xl md:text-5xl font-bold"> {user?.displayName} !</p>
+          </>
         ) : (
-          ""
+          <>
+          <h1 className="text-2xl">Welcome to</h1>
+          <Logo className="text-5xl md:text-9xl" />
+          </>
         )}
-        <h1 className="text-2xl">Welcome to</h1>
-        <Logo className="text-5xl md:text-9xl" />
       </div>
     </div>
   );

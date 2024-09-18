@@ -1,14 +1,17 @@
 import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getClubs, filterEvents, search } from "@/lib/data";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
+import { set } from "react-hook-form";
 
 function FilterTab({
   setFilteredEvents,
+  upcomingEvents,
   className,
 }: {
   setFilteredEvents: any;
+  upcomingEvents: string[][] | undefined;
   className?: string;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -16,6 +19,7 @@ function FilterTab({
   const [selectedClub, setSelectedClub] = useState(0);
   const [selectedType, setSelectedType] = useState(1);
   const [selectedTime, setSelectedTime] = useState(0);
+  const [isOpenedFirstTime, setIsOpenedFirstTime] = useState(true);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -70,6 +74,18 @@ function FilterTab({
       setLoading(false);
     });
   };
+
+  useEffect(() => {
+    if(((upcomingEvents && upcomingEvents.length ==0) || !upcomingEvents) && isOpenedFirstTime) {
+      setSelectedTime(1);
+      setSelectedClub(0);
+      setSelectedType(1);
+      setIsOpenedFirstTime(false);
+
+      filterEvents(0, "Both", "Past").then((evnts) => setFilteredEvents(evnts));
+    }
+  }, []);
+
 
   return (
     <div
@@ -127,7 +143,7 @@ function FilterTab({
             <div className="flex gap-5 md:flex-row flex-col items-center">
               <div className="bg-[#0b0b0b] p-2 items-center md:max-w-[95%] w-[19rem] justify-center h-8 flex rounded-lg gap-3">
                 <div className="flex overflow-x-scroll remove-scrollbar gap-2">
-                  {["Online", "Both", "Offline"].map((club, idx) => (
+                  {["Online", "Both", "Offline"].map((type, idx) => (
                     <div
                       key={idx}
                       onClick={() => handleTypeClick(idx)}
@@ -135,14 +151,14 @@ function FilterTab({
                         selectedType === idx ? "bg-[#222222]" : "bg-transparent"
                       }`}
                     >
-                      {club}
+                      {type}
                     </div>
                   ))}
                 </div>
               </div>
               <div className="bg-[#0b0b0b] p-2 items-center md:max-w-[95%] w-[18rem] justify-center h-8 flex rounded-lg gap-3">
                 <div className="flex overflow-x-scroll remove-scrollbar gap-2">
-                  {["Upcoming", "Past", "All"].map((club, idx) => (
+                  {["Upcoming", "Past", "All"].map((time, idx) => (
                     <div
                       key={idx}
                       onClick={() => handleTimeClick(idx)}
@@ -150,7 +166,7 @@ function FilterTab({
                         selectedTime === idx ? "bg-[#222222]" : "bg-transparent"
                       }`}
                     >
-                      {club}
+                      {time}
                     </div>
                   ))}
                 </div>
