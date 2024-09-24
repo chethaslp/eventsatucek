@@ -32,7 +32,7 @@ function Card({
   const clubIcon = resolveClubIcon(club, false);
 
   return (
-    <div className="px-5 py-5 bg-[#191919] rounded-lg flex gap-7 md:flex-row flex-col">
+    <div className="px-5 py-5 bg-[#0c0c0c] rounded-lg flex gap-7 md:flex-row flex-col">
       <div className="w-full md:w-auto flex justify-center items-center">
         <Link href={"/e/" + id} className="md:w-[20rem] md:h-[20rem] w-[15rem] h-[15rem] scale-100 hover:scale-105 transition-all">
           {img}

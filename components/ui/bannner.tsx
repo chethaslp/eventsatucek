@@ -52,7 +52,7 @@ function Bannner({
               <span className="font-bold text-xl md:text-3xl ">
                 {bannerEvent[3]}
               </span>
-              <small className="text-muted text-gray-300">
+              <small className="text-muted text-white">
                 {bannerEvent[6]}
               </small>
             </p>
@@ -105,7 +105,7 @@ function Bannner({
               <ExternalLink color="white" size={17} />
             </Link>
           </div>
-          <small className="text-muted text-gray-200">{bannerEvent[6]}</small>
+          <small className="text-muted text-white">{bannerEvent[6]}</small>
         </p>
         <p className="flex items-center mb-1 text-sm md:text-base">
           <FaCalendarAlt className="mr-2" />

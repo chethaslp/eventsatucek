@@ -204,7 +204,7 @@ function Page({ params }: { params: { id: string } }) {
               <CardGrid>
                 {moreEvents.map((evnt, i) => (
                   <Link key={evnt[1]} href={`/e/${evnt[1]}`}>
-                    <div key={evnt[1]} className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all min-w-96 shadow-xl mx-6 bg-[#0b0b0b]">
+                    <div key={evnt[1]} className="text-white card cursor-pointer scale-100 hover:scale-105 transition-all md:min-w-96  shadow-xl mx-6 bg-[#0b0b0b]">
                       <figure className="h-32">
                           <Image
                             src={getImgLink(evnt[5])}
@@ -214,9 +214,9 @@ function Page({ params }: { params: { id: string } }) {
                           />
                         </figure>
                       <div className="card-body ">
-                        <h2 className="card-title">{evnt[3]}</h2>
-                        <p>{evnt[6]}</p>
-                        <p>{moment(evnt[7], "DD/MM/YYYY HH:mm:ss").format("DD MMM, YYYY")}<span>  •  </span> {evnt[10]}</p>
+                        <h2 className="card-title md:text-xl text-lg">{evnt[3]}</h2>
+                        <p className="text-[14px] md:text-lg">{evnt[6]}</p>
+                        <p className="text-[14px] md:text-lg">{moment(evnt[7], "DD/MM/YYYY HH:mm:ss").format("DD MMM, YYYY")}<span>  •  </span> {evnt[10]}</p>
                       </div>
                     </div>
                   </Link>

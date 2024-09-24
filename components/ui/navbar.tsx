@@ -41,7 +41,7 @@ export function Navbar({ qName }: { qName?: string }) {
   const [color, setColor] = useState('');
 
    const listenScrollEvent = () => {
-      if (window.scrollY > 600) {
+      if (window.scrollY > 100) {
          setColor('rgba(0, 0, 0, 10');
       } else {
          setColor('');
