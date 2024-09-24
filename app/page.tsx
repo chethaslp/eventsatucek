@@ -91,7 +91,7 @@ export default function Home() {
     <>
       <div className="w-full">
         <FCM />
-        <Navbar />
+        <Navbar  />
         {(!bannerEvent || bannerEvent.length == 0 || !bannerEvent[5]) ? <LogoBanner/>:<Bannner bannerEvent={bannerEvent} date={date}/>}
         {/* <PreviewCard heading="Upcoming Events"/> */}
         <FilterTab className="" setFilteredEvents={setFilteredEvents} upcomingEvents={upcomingData}/>

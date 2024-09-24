@@ -61,7 +61,7 @@ export function Navbar({ qName }: { qName?: string }) {
         <div className="flex items-center justify-between gap-2 flex-row">
           <div className="flex items-center text-white flex-row gap-2 hover:scale-105 transition-all scale-100">
             <Link href={"/"}>
-              <Logo className={"text-3xl md:text-5xl"} />
+              <Logo className={"text-3xl md:text-5xl"} isNavbar={true} />
             </Link>
             {qName && <span className="text-lg ml-2 ">/&nbsp;{qName}</span>}
           </div>
