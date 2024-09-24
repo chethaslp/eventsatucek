@@ -135,6 +135,7 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
         setLoading("")
       }else{
         setOpen(false);
+        location.reload();
       }
     })
     .catch((error) => {
