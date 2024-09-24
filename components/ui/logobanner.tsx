@@ -23,7 +23,7 @@ function LogoBanner() {
         {user ? (
           <>
           <h1 className="text-2xl">Hello👋</h1>
-          <p className="text-3xl md:text-5xl font-bold"> {user?.displayName} !</p>
+          <p className="text-3xl md:text-5xl font-bold capitalize">{user?.displayName} !</p>
           </>
         ) : (
           <>
