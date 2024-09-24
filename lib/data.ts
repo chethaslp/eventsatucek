@@ -142,9 +142,9 @@ export const getClubs = [
   "μlearn - UCEK",
   "FOSS - UCEK",
   "TinkerHub - UCEK",  
+  "NSS - UCEK",
   "SFI UCEK",
   "Meluhans",
   "Music Club - UCEK",
-  "Film Club - UCEK",
-  "NSS - UCEK",
+  "Film Club - UCEK"
 ]
