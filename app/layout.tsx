@@ -12,13 +12,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Raleway({ subsets: ['latin'] })
 
 export const metadata:Metadata = {
-    title: 'UCKevents',
+    title: 'Events@UCK',
     description: 'An all-in-one place to know about all events at UCEK!',
     metadataBase: new URL('https://eventsatucek.vercel.app'),
     icons: "/icon512_rounded.png",
     manifest: "/manifest.json",
     appleWebApp:{
-      title: "UCKevents",
+      title: "Events@UCK",
       statusBarStyle: "black-translucent",
       capable: true,
       startupImage: "/icon512_rounded.png"
