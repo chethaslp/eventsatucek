@@ -83,6 +83,18 @@ function Page() {
               {isUcek ? userData?.batch : userData?.branch}
               {"   "}({userData?.admYear} Admission)
             </p>
+            <p className="flex flex-col gap-1 border rounded-lg p-3">
+              <span className="text-muted-foreground text-sm">Registration No:</span> 
+               41520161056
+            </p>
+            <p className="flex flex-col gap-1 border rounded-lg p-3">
+              <span className="text-muted-foreground text-sm">Wifi Username</span> 
+              CSE000017
+            </p>
+            <p className="flex flex-col gap-1 border rounded-lg p-3">
+              <span className="text-muted-foreground text-sm">Wifi Password</span> 
+                ucek1713
+            </p>
             <p>
               <br />
               {userData?.club && (
