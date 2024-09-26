@@ -1,27 +1,27 @@
 {
-  "theme_color": "#181818",
-  "background_color": "#0a0a0a",
-  "icons": [
-    {
-      "purpose": "maskable",
-      "sizes": "512x512",
-      "src": "icon512_maskable.png",
-      "type": "image/png"
-    },
-    {
-      "purpose": "any",
-      "sizes": "512x512",
-      "src": "logo.png",
-      "type": "image/png"
-    }
-  ],
-  "orientation": "portrait",
-  "display": "standalone",
-  "dir": "auto",
-  "lang": "en-US",
-  "name": "UCKevents",
-  "short_name": "UCKevents",
-  "start_url": "/",
-  "scope": "/",
-  "description": "An all-in-one place to know about all events at UCEK!"
+    "theme_color": "#ffffff",
+    "background_color": "#000000",
+    "icons": [
+        {
+            "purpose": "maskable",
+            "sizes": "512x512",
+            "src": "icon512_maskable.png",
+            "type": "image/png"
+        },
+        {
+            "purpose": "any",
+            "sizes": "512x512",
+            "src": "icon512_rounded.png",
+            "type": "image/png"
+        }
+    ],
+    "orientation": "portrait",
+    "display": "standalone",
+    "dir": "auto",
+    "lang": "en-US",
+    "name": "Events@UCEK",
+    "short_name": "Events@UCEK",
+    "start_url": "/",
+    "scope": "/",
+    "description": "An all-in-one place to know about all events at UCEK!"
 }
