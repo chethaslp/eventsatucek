@@ -97,6 +97,7 @@ export function SigninDialog({
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
   const [admissionNumber, setAdmissionNumber] = React.useState<string>("");
+  const [registrationNumber, setRegistrationNumber] = React.useState<string>("");
   const [college, setCollege] = React.useState<string>("");
   const [branch, setBranch] = React.useState<string>("");
   const [loading, setLoading] = React.useState("");
@@ -165,11 +166,13 @@ export function SigninDialog({
         admYear: admYear,
         batch: batch,
         admissionNumber: admissionNumber,
+        registrationNumber: registrationNumber,
         phoneNumber: phoneNumber,
         gender: gender,
         college:college,
         branch:branch,
         token: "token"
+
       })
         // Sending welcome mail.
         .then(async (data: any) => {
@@ -212,8 +215,8 @@ export function SigninDialog({
   }, [open]);
 
   return open ? (
-    <div className="transition-all animate-in h-full w-full flex items-center justify-center flex-col fixed z-[50]  bg-transparent backdrop-blur-md">
-      <Logo className="text-4xl md:text-6xl " />
+    <div className="transition-all animate-in h-full w-full flex items-center justify-center flex-col fixed z-[50] overflow-y-auto  bg-transparent backdrop-blur-md">
+      <Logo className="text-4xl md:text-5xl pt-20" />
       {signinStep ? (
         <Button
           variant={"ghost"}
@@ -327,11 +330,11 @@ export function SigninDialog({
                               <SelectContent className="dark:bg-[#0e0e0e] ">
                                 {[...new Array(6)].map((x, i) => (
                                   <SelectItem
-                                    key={`Y${i + 2018}`}
-                                    value={(i + 2018).toString()}
+                                    key={`Y${i + new Date().getFullYear() - 5}`}
+                                    value={(i + new Date().getFullYear() - 5).toString()}
                                     className="hover:dark:bg-[#000000a5]"
                                   >
-                                    {i + 2018}
+                                    {i + new Date().getFullYear() - 5}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -470,7 +473,7 @@ export function SigninDialog({
                     ) : (
                       <form
                         onSubmit={handleSubmit}
-                        className={"grid items-center justify-center gap-4"}
+                        className={"grid items-center justify-center gap-4 "}
                       >
                         <Label className="border-l-2  p-2">Course Info</Label>
                         <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
@@ -486,13 +489,13 @@ export function SigninDialog({
                                 <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent className="dark:bg-[#0e0e0e] ">
-                                {[...new Array(5)].map((x, i) => (
+                                {[...new Array(6)].map((x, i) => (
                                   <SelectItem
-                                    key={`Y${i + 2019}`}
-                                    value={(i + 2019).toString()}
+                                    key={`Y${i + new Date().getFullYear() - 5}`}
+                                    value={(i + new Date().getFullYear() - 5).toString()}
                                     className="hover:dark:bg-[#000000a5]"
                                   >
-                                    {i + 2019}
+                                    {i + new Date().getFullYear() - 5}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -586,6 +589,20 @@ export function SigninDialog({
                           </div>
                         </div>
 
+                        <div className="grid gap-2">
+                          <Label htmlFor="registrationNumber">Registration No</Label>
+                          <Input
+                            className="dark:bg-[#121212]  bg-[#ffff]"
+                            id="registrationNumber"
+                            type="number"
+                            placeholder="58947589"
+                            min={1}
+                            required
+                            onChange={(e) =>
+                              setRegistrationNumber(e.currentTarget.value)
+                            }
+                          />
+                        </div>
                         <div className="grid gap-2">
                           <Label htmlFor="rollnumber">Personal Info</Label>
                           <Input

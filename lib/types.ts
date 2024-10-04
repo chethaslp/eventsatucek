@@ -13,6 +13,9 @@ export type UserType = {
     branch: string;
     attendedEvents?: CollectionReference;
     fcmToken?: string;
+    wifiUsername?: string;
+    wifiPass?: string;
+    registrationNumber?: string;
 };
 
 export type ClubType = {

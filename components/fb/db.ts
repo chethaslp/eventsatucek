@@ -41,6 +41,7 @@ export async function createUser(
     admYear,
     batch,
     admissionNumber,
+    registrationNumber,
     gender,
     phoneNumber,
     college,
@@ -50,6 +51,7 @@ export async function createUser(
     admYear: string;
     batch: string;
     admissionNumber: string;
+    registrationNumber: string;
     gender: string;
     phoneNumber: string;
     college: string;
@@ -67,9 +69,12 @@ export async function createUser(
     gender: gender,
     ph: phoneNumber,
     admissionNumber: admissionNumber,
+    registrationNumber: registrationNumber,
     college: college,
     branch: branch,
     fcmToken: token,
+    wifiPass: "",
+    wifiUsername: "",
   } as UserType;
 
   return setDoc(doc(db, "/users/" + user.uid), data)
@@ -148,4 +153,45 @@ export async function getUserEventStatus(user: User, evntID: string) {
     console.error(err);
     return null;
   });
+}
+
+export async function updateUserProfile(user: User,{
+  admYear,
+  batch,
+  admissionNumber,
+  registrationNumber,
+  wifiUsername,
+  wifiPass,
+}: {
+  admYear: string;
+  batch: string;
+  admissionNumber: string;
+  registrationNumber: string;
+  wifiUsername: string,
+  wifiPass: string,
+}) {
+  const userRef = doc(db, "users", user.uid);
+  return getDoc(userRef)
+    .then((docSnap) => {
+      if (docSnap.exists()) {
+        return setDoc(userRef, {
+          ...docSnap.data(),
+          admYear: admYear,
+          batch: batch,
+          admissionNumber: admissionNumber,
+          registrationNumber: registrationNumber,
+          wifiUsername: wifiUsername,
+          wifiPass: wifiPass,
+        });
+      } else {
+        throw new Error("User does not exist");
+      }
+    })
+    .then(() => {
+      return true;
+    })
+    .catch((err) => {
+      console.error(err);
+      return false;
+    });
 }
