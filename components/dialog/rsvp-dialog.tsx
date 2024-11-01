@@ -119,7 +119,7 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
       club: evnt[6],
       status: "Registered",
       dt: evnt[7],
-    }, userData.registrationNumber)
+    }, userData)
     // Sending mail to the registered User.
     .then(async ()=> fetch("/api/mailService/rsvp", {
       method: "POST",

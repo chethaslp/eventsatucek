@@ -85,7 +85,7 @@ export async function createUser(
     .catch(() => false);
 }
 
-export async function rsvpEvent(user: User, data: Event_User, regNo?: string) {
+export async function rsvpEvent(user: User, data: Event_User, userData?: UserType) {
   data.updatedAt = serverTimestamp();
   return setDoc(doc(db, "users", user.uid, "attendedEvents", data.evntID), data)
     .then(() =>
@@ -93,8 +93,9 @@ export async function rsvpEvent(user: User, data: Event_User, regNo?: string) {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
-        regNo: regNo || "",
+        regNo: userData?.registrationNumber,
         ph: user.phoneNumber,
+        clg: userData?.college,
         status: "registered",
         updatedAt: serverTimestamp(),
         createdAt: serverTimestamp(),

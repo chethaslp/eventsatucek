@@ -73,7 +73,7 @@ export function ListRsvpDialog({
     if(rsvps == null) return
     const csv = Papa.unparse(rsvps.docs.map((doc)=>{
       const d = doc.data() as Event_RSVP
-      return {Name: d.name, Email: d.email, PhoneNumber: d.ph, Status: d.status, RegisteredAt: d.createdAt.toDate().toLocaleString()}
+      return {Register_No: d.regNo || "", Name: d.name, Email: d.email, PhoneNumber: d.ph, Status: d.status, RegisteredAt: d.createdAt.toDate().toLocaleString()}
   }))
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
