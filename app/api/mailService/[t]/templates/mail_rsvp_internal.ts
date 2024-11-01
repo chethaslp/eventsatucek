@@ -63,7 +63,7 @@ const template =  `<!DOCTYPE html>
   <body>
     <div class="container">
       <div class="header">
-        <img src="{{clubIcon}}" style="border-radius: 4px;" alt="Club Logo" />
+        <img src="{{clubIcon}}" style="border-radius: 4px; width:100px; height: 100px;" alt="Club Logo" />
       </div>
       <div class="content">
         <h3>Hey {{userName}}! 👋</h3>
@@ -92,10 +92,9 @@ const template =  `<!DOCTYPE html>
           </li>
         </ul>
         <p>
-        {{#if rsvpData.rsvp.custom_text != "" }}
-        {{#ifEquals rsvpData.rsvp.custom_text ""}}
+        {{#ifEquals rsvpData.custom_text ""}}
           Mark your calendars and get hyped, because this event is gonna be off the charts! 🚀 We'll be sending out more updates as we get closer to the date, so keep an eye on your inbox. 👀
-          Can't wait to see you there and make some epic memories together! 🥳 If you have any questions
+          Can't wait to see you there and make this event awesome! 🥳 If you have any questions
           or need further assistance, feel free to contact us.
         {{ else }}
           {{rsvpData.rsvp.custom_text}}
@@ -103,10 +102,12 @@ const template =  `<!DOCTYPE html>
         </p>
         <p>
           Cheers!<br />
-          The Events@UCEK Crew
+          {{clubName}}<br />
         </p>
       </div>
-      <div class="footer">
+      <div class="footer">      
+      <div>
+      Powered by <a href="https://events.ieeesbucek.in">Events@UCE</a><br/>
         <small style="padding: 5px;">
           This email was sent to {{userEmail}}. If you believe you received this
           email by mistake, please contact us.

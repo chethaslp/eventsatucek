@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
 import { Message, getMessaging } from 'firebase-admin/messaging';
 import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
-import { Event, Event_User } from "@/lib/types";
+import { Event_User } from "@/lib/types";
 import { getAuth } from "firebase-admin/auth";
 import crypto from "crypto"
-import Papa from "papaparse";
 
 /*
     GET TICKET TOKEN
@@ -42,7 +41,6 @@ export async function POST(req: NextRequest, {params}: {params :{evntId: string}
   const evntDoc = await getFirestore().doc(`events/${params.evntId}`).get();
 
   if(evntDoc.exists){
-      const d = evntDoc.data() as {host :string, evntSecretKey: string}
 
       const regUser = await getFirestore().collection(`/events/${params.evntId}/regs`).doc(decodedToken.uid).get();
       const userData = await getFirestore().collection(`/users/${decodedToken.uid}/attendedEvents`).doc(params.evntId).get();
@@ -56,9 +54,9 @@ export async function POST(req: NextRequest, {params}: {params :{evntId: string}
         { msg: 'Ticket Expired.' },
         { status: 409 }
       );
-
-      const c = crypto.createCipheriv('aes-192-cbc', Buffer.from(d.evntSecretKey), Buffer.alloc(16, 0))
-      return NextResponse.json({ ticketToken: params.evntId + "." + c.update(decodedToken.uid,'utf-8','base64').toString() + c.final('base64').toString() });
+      //@ts-ignore
+      const c = crypto.createCipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0))
+      return NextResponse.json({ ticketToken: params.evntId + "." + c.update(decodedToken.uid,'utf8','base64').toString() + c.final('base64').toString() });
   }else{
     return NextResponse.json(
       { msg: 'Event Not Found.' },

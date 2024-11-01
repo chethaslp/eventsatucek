@@ -57,9 +57,6 @@ function Page() {
   function getUserAvatar(user: any): string {
     return user?.photoURL ? user.photoURL.replace("s96-c", "s384-c") : "";
   }
-  function isClub(user: UserType | ClubType): user is ClubType {
-    return (user as ClubType).about !== undefined;
-  }
 
   if (loading) return <Loading msg={"Launching dashboard..."} />;
 

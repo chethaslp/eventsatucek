@@ -41,6 +41,7 @@ export type Event_RSVP = {
     name: string;
     ph?: string;
     uid: string;
+    regNo?: string;
     updatedAt?: Timestamp;
     createdAt: Timestamp;
 };
@@ -48,7 +49,7 @@ export type Event_RSVP = {
 
 export type Event = {
     evntID: string;
-    dt: FieldValue;
+    dt: Timestamp;
     host:string;
     title: string;
     club: string;

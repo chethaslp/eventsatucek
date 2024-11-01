@@ -23,8 +23,8 @@ export async function generateMetadata({params}:{params:{id:string}}): Promise<M
   const data = parse(await (await fetch(url)).text())
 
   if(!data.data[1]) return {
-    metadataBase: new URL('https://eventsatucek.vercel.app'),
-    title: "Events@UCEK",
+    metadataBase: new URL('https://events.ieeesbucek.in'),
+    title: "Events@UCE",
     description: 'An all-in-one place to know about all events at UCEK!',
     icons: "/vercel.svg"}
 
@@ -32,8 +32,8 @@ export async function generateMetadata({params}:{params:{id:string}}): Promise<M
 
  
   return {
-    metadataBase: new URL('https://eventsatucek.vercel.app'),
-    title: "Events@UCEK - " + evnt[3],
+    metadataBase: new URL('https://events.ieeesbucek.in'),
+    title: "Events@UCE - " + evnt[3],
     description: evnt[4],
     icons: "/vercel.svg",
     openGraph: {

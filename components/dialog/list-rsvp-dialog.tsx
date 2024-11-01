@@ -100,6 +100,7 @@ export function ListRsvpDialog({
               <table className="table-auto w-full">
                 <thead>
                   <tr>
+                    <th className="px-4 py-2">Reg. No</th>
                     <th className="px-4 py-2">Name</th>
                     <th className="px-4 py-2">Email</th>
                     <th className="px-4 py-2">Phone Number</th>
@@ -110,6 +111,7 @@ export function ListRsvpDialog({
                   {rsvps.docs.map((doc) => {
                     const d = doc.data() as Event_RSVP
                     return <tr key={doc.id}>
+                      <td className="border px-4 py-2">{d.regNo}</td>
                       <td className="border px-4 py-2">{d.name}</td>
                       <td className="border px-4 py-2">{d.email}</td>
                       <td className="border px-4 py-2">{d.ph || "None"}</td>

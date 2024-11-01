@@ -48,7 +48,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   let template, replacements
 
   const mailOptions = {
-    from: "Events@UCEK <eventsatucek@gmail.com>",
+    from: "Events@UCEK <events@uck.ac.in>",
     to: data.user.email,
     subject: "Welcome to Events@UCEK!",
     html : ""
@@ -110,8 +110,9 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
       eventVenue: data.evnt[10],
       userEmail: data.user.email,
       clubIcon: resolveClubIcon((typeof evntData.club == "string") ? evntData.club : evntData.club[0]),
+      clubName: (typeof evntData.club == "string") ? evntData.club : evntData.club[1],
+      customText: evntData.rsvp.custom_text,
     };
-    evntData.rsvp.custom_text
 
     resp = { ...evntData?.rsvp }
   }else{

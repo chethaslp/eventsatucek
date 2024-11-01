@@ -104,8 +104,10 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
   const handleRSVP = async ()=>{
     if(!user) return
     setLoading("Getting you in...")
+
+    const userData = await getUser(user)
     
-    if(!(await getUser(user))){
+    if(!userData){
       setLoading("Redirecting you to profile page. Please complete your profile data.")
       setTimeout(()=>location.href = '/profile?r=/'+ encodeURIComponent('e/'+ evnt[1]), 2000)
       return
@@ -116,8 +118,8 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
       evntName: evnt[3],
       club: evnt[6],
       status: "Registered",
-      dt: evnt[7]
-    })
+      dt: evnt[7],
+    }, userData.registrationNumber)
     // Sending mail to the registered User.
     .then(async ()=> fetch("/api/mailService/rsvp", {
       method: "POST",

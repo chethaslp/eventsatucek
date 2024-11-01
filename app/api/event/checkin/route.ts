@@ -51,9 +51,10 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
       try{
-        const c = crypto.createDecipheriv('aes-192-cbc', Buffer.from(d.evntSecretKey), Buffer.alloc(16, 0))
-        
-        decodedUID = Buffer.concat([c.update(Buffer.from(data)), c.final()]).toString();
+        //@ts-ignore
+        const c = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0))
+        //@ts-ignore
+        decodedUID = (c.update(data, 'base64', 'utf8') + c.final('utf8')).toString();
         
       }catch(e){
         console.log(e)
@@ -73,14 +74,16 @@ export async function POST(req: NextRequest) {
       );
 
       if(((regUser.data() as {status:string}).status.toLocaleLowerCase() != "registered") || ((userData.data() as Event_User).status.toLocaleLowerCase() != "registered")) return NextResponse.json(
-        { msg: 'This user cannot be checkedin.' },
+        { msg: 'This user is already checked in.' },
         { status: 409 }
       );
 
       regUser.ref.update({status: "attended"})    
-      userData.ref.update({status: "Attended"})  
+      userData.ref.update({status: "Attended"}) 
       
-
+      return NextResponse.json(
+        { msg: 'User Checked in.' },
+      );
       
   }else{
     return NextResponse.json(
