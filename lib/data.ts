@@ -38,7 +38,7 @@ export function getEvent(evntID:string): Promise<string[][]> {
   return getData(url)
 }
 
-export async function getEvents(n="20") {
+export async function getEvents(n="15") {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq="
@@ -94,6 +94,7 @@ export function getPastEvents(n="20"): Promise<string[][]> {
 //   id -> ID of event to be excluded from the list
 // }
 export function getMoreClubEvents(clb:string, id:string): Promise<string[][]> {
+  clb = clb.includes(",") ? clb.split(",")[0].trim() : clb; 
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
@@ -139,11 +140,11 @@ export const getClubs = [
   "GDSC - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",
-  "IEEE RAS SBC UCEK",
   "μlearn - UCEK",
   "FOSS - UCEK",
   "NSS - UCEK",
   "SFI UCEK",
   "Meluhans Dance Club",
-  "Music Club - UCEK"
+  "Music Club - UCEK",
+  "IEEE RAS SBC UCEK"
 ]

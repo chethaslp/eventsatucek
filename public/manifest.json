@@ -19,8 +19,8 @@
     "display": "standalone",
     "dir": "auto",
     "lang": "en-US",
-    "name": "UCEK Events",
-    "short_name": "UCEK Events",
+    "name": "Events@UCE",
+    "short_name": "Events@UCE",
     "start_url": "/",
     "scope": "/",
     "description": "An all-in-one place to know about all events at UCEK!"
