@@ -1,27 +1,21 @@
 import { type ClassValue, clsx } from "clsx";
 import 'moment'
 import { twMerge } from "tailwind-merge";
+import { QueryDocumentSnapshot } from "firebase/firestore";
+
 import GDSCLogo from "../public/logos/gdsc.png";
 import IEDCLogo from "../public/logos/iedc.png";
-import IEDCLogoBlack from "../public/logos/iedc_black.png";
 import FOSSLogo from "../public/logos/foss.png";
 import FMCLogo from "../public/logos/fmc.png";
-import FMCLogoBlack from "../public/logos/fmc_black.png";
 import MCCLogo from "../public/logos/mcc.png";
-import MCCLogoBlack from "../public/logos/mcc_black.png";
 import IEEELogo from "../public/logos/ieee.png";
-import IEEELogoBlack from "../public/logos/ieee_black.png";
 import MDCLogo from "../public/logos/mdc.png";
 import MULNLogo from "../public/logos/muln.png";
-import MULNLogoBlack from "../public/logos/muln_black.png";
 import NSSLogo from "../public/logos/nss.png";
 import SFILogo from "../public/logos/sfi.png";
 import TRHLogo from "../public/logos/trh.png";
-import TRHLogoBlack from "../public/logos/trh_black.png";
 import RenvnzaLogo from "../public/logos/renvnza.png";
-import RenvnzaLogoBlack from "../public/logos/renvnza_black.png";
-import moment from "moment";
-import { QueryDocumentSnapshot } from "firebase/firestore";
+import RASLogo from "../public/logos/ras.png";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,17 +28,18 @@ export function resolveClubIcon(clb: string,black:boolean ): any {
   return {
     "GDSC - UCEK": GDSCLogo,
     "Google Developers Student Club - UCEK": GDSCLogo,
-    "IEEE - UCEK": black ? IEEELogoBlack : IEEELogo,
-    "Legacy IEDC - UCEK": black ? IEDCLogoBlack : IEDCLogo,
-    "μlearn - UCEK": black ? MULNLogoBlack : MULNLogo,
+    "IEEE - UCEK": IEEELogo,
+    "Legacy IEDC - UCEK": IEDCLogo,
+    "μlearn - UCEK": MULNLogo,
     "FOSS - UCEK": FOSSLogo,
-    "TinkerHub - UCEK": black ? TRHLogoBlack : TRHLogo,  
+    "TinkerHub - UCEK": TRHLogo,  
     "SFI UCEK": SFILogo,
+    "IEEE RAS SBC UCEK" : RASLogo,
     "Meluhans Dance Club": MDCLogo,
-    "Music Club - UCEK": black ? MCCLogoBlack : MCCLogo,
-    "Film Club - UCEK": black ? FMCLogoBlack : FMCLogo,
+    "Music Club - UCEK": MCCLogo,
+    "Film Club - UCEK": FMCLogo,
     "NSS - UCEK": NSSLogo,
-    "Renvnza '24": black ? RenvnzaLogoBlack : RenvnzaLogo,
+    "Renvnza '24": RenvnzaLogo,
   }[clb];
 }
 

@@ -120,7 +120,7 @@ function FilterTab({
                 className="flex overflow-x-scroll remove-scrollbar gap-2"
                 ref={scrollRef}
               >
-                {getClubs.map((club, idx) => (
+                {getClubs.filter(x => x != "IEEE RAS SBC UCEK").map((club, idx) => (
                   <div
                     key={idx}
                     onClick={() => handleClubClick(idx)}

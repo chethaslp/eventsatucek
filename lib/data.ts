@@ -139,6 +139,7 @@ export const getClubs = [
   "GDSC - UCEK",
   "IEEE - UCEK",
   "Legacy IEDC - UCEK",
+  "IEEE RAS SBC UCEK",
   "μlearn - UCEK",
   "FOSS - UCEK",
   "NSS - UCEK",
