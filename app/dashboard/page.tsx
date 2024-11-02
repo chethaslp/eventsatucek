@@ -14,8 +14,6 @@ import { Navbar } from "@/components/ui/navbar";
 import { Separator } from "@/components/ui/separator";
 import React, { useEffect, useState } from "react";
 import { QueryDocumentSnapshot, DocumentData } from "firebase-admin/firestore";
-import { resolveClubIcon } from "@/lib/utils";
-import Image from "next/image";
 import Loading from "@/components/ui/Loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";

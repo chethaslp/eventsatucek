@@ -86,7 +86,7 @@ function Page({ params }: { params: { id: string } }) {
       const clubList = d[6].split(",");
       let logoList: any[] = [];
       clubList.forEach(async (cl: string) => {
-        logoList.push(await resolveClubIcon(cl.trim(), themeToDark));
+        logoList.push(await resolveClubIcon(cl.trim()));
       });
       setClubIcon(logoList);
 

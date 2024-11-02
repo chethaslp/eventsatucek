@@ -9,7 +9,6 @@ import { Navbar } from "@/components/ui/navbar";
 import { Separator } from "@/components/ui/separator";
 import React, { useEffect, useState } from "react";
 import { QueryDocumentSnapshot, DocumentData } from "firebase-admin/firestore";
-import { cn, resolveClubIcon } from "@/lib/utils";
 import Image from "next/image";
 import Loading from "@/components/ui/Loading";
 import { signOut } from "firebase/auth";
@@ -17,6 +16,7 @@ import { useSearchParams } from "next/navigation";
 import { auth } from "@/components/fb/config";
 import { FaEye, FaEyeSlash, FaUserEdit } from "react-icons/fa";
 import { Edit } from "lucide-react";
+import { resolveClubIcon } from "@/lib/utils";
 
 function Page() {
   const user = useAuthContext();
@@ -260,7 +260,7 @@ function UserEvents({
                           width={48}
                           height={48}
                           referrerPolicy={"no-referrer"}
-                          src={resolveClubIcon(evnt.club, false)}
+                          src={resolveClubIcon(evnt.club)}
                           alt={evnt.club}
                         />
                       </div>
@@ -319,7 +319,7 @@ function UserEvents({
                               width={48}
                               height={48}
                               referrerPolicy={"no-referrer"}
-                              src={resolveClubIcon(evnt.club, false)}
+                              src={resolveClubIcon(evnt.club)}
                               alt={evnt.club}
                             />
                           </div>

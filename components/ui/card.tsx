@@ -29,7 +29,8 @@ function Card({
   club: string;
 }) {
   const dt = moment(date, "DD/MM/YYYY HH:mm:s");
-  const clubIcon = resolveClubIcon(club, false);
+
+  const clubIcon = club.includes(",") ? resolveClubIcon(club.split(",")[0].trim()) : resolveClubIcon(club);
 
   return (
     <div className="px-5 py-5 bg-[#1c1c1c] rounded-lg flex gap-7 md:flex-row flex-col">

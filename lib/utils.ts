@@ -24,7 +24,7 @@ export const GITHUB_URL = "https://github.com/chethaslp/eventsatucek";
 export const GITHUB_API_URL =
   "https://api.github.com/repos/chethaslp/eventsatucek/contributors";
 
-export function resolveClubIcon(clb: string,black:boolean ): any {
+export function resolveClubIcon(clb: string): any {
   return {
     "GDSC - UCEK": GDSCLogo,
     "Google Developers Student Club - UCEK": GDSCLogo,

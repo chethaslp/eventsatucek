@@ -25,7 +25,7 @@ const OldCard = ({
   club: string;
 }) => {
   const dt = moment(date, "DD/MM/YYYY HH:mm:s");
-  const clubIcon = resolveClubIcon(club, false);
+  const clubIcon = resolveClubIcon(club);
 
   return (
     <div className="shadow-md hover:shadow-sm shadow-black cursor-pointer group rounded-xl overflow-hidden relative bg-black w-[20rem] h-[20rem] sm:w-[25rem] sm:h-[25rem] md:w-[25rem] md:h-[25rem] transition duration-300 ease-in-out ">
