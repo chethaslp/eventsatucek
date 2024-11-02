@@ -243,7 +243,7 @@ function UserEvents({
           been to any events so far.{" "}
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full">
           {/* Cards for Mobile View */}
           <div className="grid grid-cols-1 w-full sm:grid-cols-2 md:grid-cols-3 gap-4 md:hidden">
             {userEvents.map((evntData) => {
@@ -296,10 +296,10 @@ function UserEvents({
           </div>
 
           {/* Table for Desktop View */}
-          <table className="table hidden md:block">
+          <table className="table hidden md:block w-full">
             {/* head */}
             <thead>
-              <tr className="dark:text-white ">
+              <tr className="dark:text-white">
                 <th className="px-1 sm:px-4">Club</th>
                 <th className="px-1 sm:px-4">Event</th>
                 <th className="px-1 sm:px-4">Date</th>
@@ -341,7 +341,7 @@ function UserEvents({
                         className={`badge badge-ghost badge-sm text-white p-2 ${
                           evnt.status == "Registered"
                             ? "bg-green-700"
-                            : "bg-blue-700"
+                            : (evnt.status == "Attended" ? "bg-green-700" : "bg-blue-700")
                         }`}
                       >
                         {evnt.status}

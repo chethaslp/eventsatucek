@@ -356,8 +356,8 @@ function UserEventInteractionPanel({
         switch (userStatus) {
           case "Attended":
             return (
-              <div className="border rounded-lg bg-success gap-3 flex flex-row p-3">
-                <InfoIcon /> Wohooo! You have already attended this event.
+              <div className="border rounded-lg bg-green-600 gap-3 flex flex-row p-3">
+                <InfoIcon /> You have attended this event !
               </div>
             );
           case "Registered":

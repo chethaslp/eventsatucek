@@ -98,7 +98,7 @@ export function getMoreClubEvents(clb:string, id:string): Promise<string[][]> {
   const url = "https://docs.google.com/spreadsheets/d/"
               + EVNTS_SHEET_ID
               + "/gviz/tq?tqx=out:csv&sheet=s1&tq=" 
-              + encodeURIComponent("select * where `G` = '" + clb + "' and `B` != '" + id + "' and L = 'Yes' order by `H` ");
+              + encodeURIComponent("select * where `G` = '" + clb + "' and `B` != '" + id + "' and L = 'Yes' order by `H` limit 3");
   return getData(url)
 }
 
