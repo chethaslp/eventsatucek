@@ -26,7 +26,7 @@ export async function generateMetadata({params}:{params:{id:string}}): Promise<M
     metadataBase: new URL('https://events.ieeesbucek.in'),
     title: "Events@UCE",
     description: 'An all-in-one place to know about all events at UCEK!',
-    icons: "/vercel.svg"}
+    icons: "/icon512_rounded.png"}
 
   const evnt = data.data[1] as Array<string>
 
@@ -35,7 +35,7 @@ export async function generateMetadata({params}:{params:{id:string}}): Promise<M
     metadataBase: new URL('https://events.ieeesbucek.in'),
     title: "Events@UCE - " + evnt[3],
     description: evnt[4],
-    icons: "/vercel.svg",
+    icons: "/icon512_rounded.png",
     openGraph: {
       title: evnt[3],
       images: getImgLink(evnt[5]),
