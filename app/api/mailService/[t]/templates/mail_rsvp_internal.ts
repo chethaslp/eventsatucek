@@ -97,7 +97,7 @@ const template =  `<!DOCTYPE html>
           Can't wait to see you there and make this event awesome! 🥳 If you have any questions
           or need further assistance, feel free to contact us.
         {{ else }}
-          {{rsvpData.rsvp.custom_text}}
+          {{rsvpData.custom_text}}
          {{/ifEquals}}
         </p>
         <p>

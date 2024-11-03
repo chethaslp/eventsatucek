@@ -17,6 +17,7 @@
 # production
 /build
 
+**/*/Untitled-1.html
 cred.json
 
 # misc

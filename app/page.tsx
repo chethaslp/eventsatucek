@@ -5,8 +5,6 @@ import { Navbar } from "@/components/ui/navbar";
 import Footer from "@/components/ui/Footer";
 import {
   getImgLink,
-  getUpcomingEvents,
-  getClubs,
   filterEvents,
   getEvents,
 } from "@/lib/data";
@@ -14,17 +12,11 @@ import Loading from "../components/ui/Loading";
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Urbanist } from "next/font/google";
-import { PiClockCounterClockwiseBold } from "react-icons/pi";
-import { LuFilter } from "react-icons/lu";
 
-import NoEvents from "./NoEvents";
 import FCM from "@/components/ui/fcm";
 import moment from "moment";
 import Bannner from "@/components/ui/bannner";
-import PreviewCard from "@/components/ui/previewCard";
-import OldCard from "@/components/ui/oldCard";
 import Card from "@/components/ui/card";
 import FilterTab from "@/components/ui/filterTab";
 import EventsList from "@/components/ui/eventsList";

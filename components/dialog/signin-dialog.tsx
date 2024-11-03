@@ -116,7 +116,6 @@ export function SigninDialog({
           location.reload();
           return;
         }
-        location.reload();
         setSigninStep(false);
         setLoading("");
       })
@@ -175,16 +174,15 @@ export function SigninDialog({
 
       })
         // Sending welcome mail.
-        .then(async (data: any) => {
-          fetch("/api/mailService/welcome/", {
+        .then(async (data: any) => 
+          fetch("/api/mailService/welcome", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               "X-Token": await user.getIdToken(),
             },
             body: JSON.stringify({ user: data }),
-          });
-        })
+          }))
         .then(() => {
           if (s.has("r")) {
             router.push(s.get("r") || "")
@@ -198,6 +196,37 @@ export function SigninDialog({
         .catch((err) => console.log(err))
     );
   };
+
+  React.useEffect(() => {
+    if(!isUcek) return;
+    let agg = "", agg2 = "-_";
+    
+    if(batch != ""){
+      switch(batch) {
+        case "CSE":
+        case "CSE B1":
+        case "CSE B2":
+          agg += "415"
+          agg2.replace("_", "CSE");
+          break;
+        case "IT":
+          agg += "416"
+          agg2.replace("_", "IT");
+          break;
+        case "ECE":
+          agg += "412"
+          agg2.replace("_", "ECE");
+          break;
+      }
+    }
+    if(admYear != "") {
+      agg += admYear.slice(2,4);
+      agg2.replace("-", admYear.slice(2,4));
+    }
+    if(batch != "" && admYear != "") agg += "404";
+    
+    setRegistrationNumber(agg);
+  }, [batch, admYear]);
 
   React.useEffect(() => {
     setSigninStep(!user);
@@ -479,7 +508,7 @@ export function SigninDialog({
                         <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
                           <div className="grid gap-2 grid-flow-row ">
                             <Label htmlFor="admissionyear">
-                              Admission Year
+                              Admission Year <span className="text-red-700 font-mono">*</span>
                             </Label>
                             <Select
                               required
@@ -502,7 +531,7 @@ export function SigninDialog({
                             </Select>
                           </div>
                           <div className="grid gap-2 grid-flow-row ">
-                            <Label htmlFor="batch">Batch</Label>
+                            <Label htmlFor="batch">Batch <span className="text-red-700 font-mono">*</span></Label>
                             <Select required onValueChange={(v) => setBatch(v)}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select" />
@@ -544,20 +573,20 @@ export function SigninDialog({
                         </div>
                         <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
                           <div className="grid gap-2 grid-flow-row ">
-                            <Label htmlFor="addNumber" className={`${checkAdmission ? 'text-red-600': ''} `}>{ checkAdmission ? "Already Registered"  :  "Admission No"}</Label>
+                            <Label htmlFor="addNumber" className={`${checkAdmission ? 'text-red-600': ''} `}>{ checkAdmission ? "Already Registered"  :  "Admission No"} </Label>
                             <Input
                               className="dark:bg-[#121212] bg-[#ffff]"
                               id="addNumber"
                               type="text"
                               placeholder="23CSE111"
-                              required
+                              value={admissionNumber}
                               onChange={(e) =>
                                 setAdmissionNumber(e.currentTarget.value)
                               }
                             />
                           </div>
                           <div className="grid gap-2 grid-flow-row">
-                            <Label htmlFor="gender">Gender</Label>
+                            <Label htmlFor="gender">Gender <span className="text-red-700 font-mono">*</span></Label>
                             <Select
                               required
                               onValueChange={(v) => setGender(v)}
@@ -590,21 +619,22 @@ export function SigninDialog({
                         </div>
 
                         <div className="grid gap-2">
-                          <Label htmlFor="registrationNumber">Registration No</Label>
+                          <Label htmlFor="registrationNumber">Candidate Code <span className="text-red-700 font-mono">*</span></Label>
                           <Input
                             className="dark:bg-[#121212]  bg-[#ffff]"
                             id="registrationNumber"
-                            type="number"
-                            placeholder="58947589"
-                            min={1}
+                            type="text"
+                            placeholder="41523404###"
+                            pattern="(415|412|416)(19|20|21|22|23|24|25)404(0[0-9]{2}|1[0-3][0-9])"
                             required
+                            value={registrationNumber}
                             onChange={(e) =>
                               setRegistrationNumber(e.currentTarget.value)
                             }
                           />
                         </div>
                         <div className="grid gap-2">
-                          <Label htmlFor="rollnumber">Personal Info</Label>
+                          <Label htmlFor="rollnumber" className="border-l-2  p-2">Personal Info  <span className="text-red-700 font-mono">*</span></Label>
                           <Input
                             className="dark:bg-[#121212]  bg-[#ffff]"
                             id="phone"
@@ -633,6 +663,7 @@ export function SigninDialog({
                             >
                               terms and conditions.
                             </a>
+                            <span className="text-red-700 font-mono">*</span>
                           </div>
                         </div>
                         <button

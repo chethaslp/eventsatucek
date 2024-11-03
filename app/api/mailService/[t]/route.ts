@@ -12,6 +12,7 @@ import { Event } from "@/lib/types";
 import mail_welcome from "./templates/mail_welcome";
 import mail_rsvp_external from "./templates/mail_rsvp_external";
 import mail_rsvp_internal from "./templates/mail_rsvp_internal";
+import "dotenv/config"
 
 export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   try {
   tokenData = await getAuth().verifyIdToken(token)
   } catch (e) {
+    console.log(e);
     return NextResponse.json(
       { msg: 'Unauthorized.' },
       { status: 401 }
@@ -50,7 +52,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
   const mailOptions = {
     from: "Events@UCEK <events@uck.ac.in>",
     to: data.user.email,
-    subject: "Welcome to Events@UCEK!",
+    subject: "Welcome to Events@UCEK! 👋🎉",
     html : ""
   };
 

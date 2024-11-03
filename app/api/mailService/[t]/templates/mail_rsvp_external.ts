@@ -114,10 +114,12 @@ const template = `<!DOCTYPE html>
         </p>
         <p>
           Cheers!<br />
-          The Events@UCEK Crew
+          {{clubName}}<br />
         </p>
       </div>
-      <div class="footer">
+      <div class="footer">      
+      <div>
+      Powered by <a href="https://events.ieeesbucek.in">Events@UCE</a><br/>
         <small style="padding: 5px;">
           This email was sent to {{userEmail}}. If you believe you received this
           email by mistake, please contact us.
