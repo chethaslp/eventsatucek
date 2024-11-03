@@ -103,21 +103,21 @@ function Page() {
               </p>
               <p className="flex flex-col gap-1 border rounded-lg p-3">
                 <span className="text-muted-foreground text-sm">
-                  {isUcek ? "Admission Number :" : "College :"}
+                  {isUcek ? "Candidate Code :" : "College :"}
                 </span>
-                {isUcek ? userData?.admissionNumber : userData?.college}
+                {isUcek ? userData?.registrationNumber?.split(":")[0] : userData?.college}
               </p>
               <p className="flex flex-col gap-1 border rounded-lg p-3">
                 <span className="text-muted-foreground text-sm">Batch :</span>
                 {isUcek ? userData?.batch : userData?.branch}
-                {"   "}({userData?.admYear} Admission)
+                {"   "}({userData?.admYear})
               </p>
-              <p className="flex flex-col gap-1 border rounded-lg p-3">
+              {userData?.admissionNumber && <p className="flex flex-col gap-1 border rounded-lg p-3">
                 <span className="text-muted-foreground text-sm">
-                  Registration No:
+                  Admission Number:
                 </span>
-                {userData?.registrationNumber}
-              </p>
+                {userData?.admissionNumber}
+              </p>}
               <p className="flex flex-col gap-1 border rounded-lg p-3">
                 <span className="text-muted-foreground text-sm">
                   Wifi Username:

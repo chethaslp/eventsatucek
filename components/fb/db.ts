@@ -59,6 +59,11 @@ export async function createUser(
     token: string;
   }
 ) {
+
+  let agg = 0
+  if(batch == "CSE B1" ) agg = 1;
+  else if(batch == "CSE B2") agg = 2;
+
   const data = {
     uid: user.uid,
     email: user.email,
@@ -69,7 +74,7 @@ export async function createUser(
     gender: gender,
     ph: phoneNumber,
     admissionNumber: admissionNumber,
-    registrationNumber: registrationNumber,
+    registrationNumber: registrationNumber + ":" + agg,
     college: college,
     branch: branch,
     fcmToken: token,
@@ -94,8 +99,9 @@ export async function rsvpEvent(user: User, data: Event_User, userData?: UserTyp
         name: user.displayName,
         email: user.email,
         regNo: userData?.registrationNumber,
-        ph: user.phoneNumber,
+        ph: userData?.ph,
         clg: userData?.college,
+        dept: userData?.branch,
         status: "registered",
         updatedAt: serverTimestamp(),
         createdAt: serverTimestamp(),

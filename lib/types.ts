@@ -5,7 +5,8 @@ export type UserType = {
     displayName: string;
     club?: string;
     email: string;
-    role: 'Student' | 'Club' | 'Admin';
+    role: 'Student' | 'Club Lead' | 'Admin' | 'Club Managers';
+    ph: string;
     admYear: string;
     batch: string;
     admissionNumber: string;
@@ -39,8 +40,10 @@ export type Event_RSVP = {
     status: 'attended' | 'registered' | 'missed';
     email: string;
     name: string;
-    ph?: string;
     uid: string;
+    clg?: string;
+    dept?: string;
+    ph?: string;
     regNo?: string;
     updatedAt?: Timestamp;
     createdAt: Timestamp;

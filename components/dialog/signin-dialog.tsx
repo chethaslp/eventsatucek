@@ -75,6 +75,7 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { PUBLIC_KEY } from "@/lib/data";
 import { useRouter } from "next/navigation";
 import { log } from "console";
+import { set } from "react-hook-form";
 
 export function SigninDialog({
   open,
@@ -103,7 +104,7 @@ export function SigninDialog({
   const [loading, setLoading] = React.useState("");
   const [signinStep, setSigninStep] = React.useState(false);
   const [checkAdmission, setCheckAdmission] = React.useState(false);
-  const [whichCollegeDialog, setWhichCollegeDialog] = React.useState(true);
+  const [whichCollegeDialog, setWhichCollegeDialog] = React.useState(false);
 
   function handleSignin() {
     setLoading("Authenticating...");
@@ -116,6 +117,7 @@ export function SigninDialog({
           location.reload();
           return;
         }
+        setWhichCollegeDialog(true);
         setSigninStep(false);
         setLoading("");
       })
@@ -229,6 +231,7 @@ export function SigninDialog({
   }, [batch, admYear]);
 
   React.useEffect(() => {
+    setWhichCollegeDialog(true);
     setSigninStep(!user);
   }, [user]);
 

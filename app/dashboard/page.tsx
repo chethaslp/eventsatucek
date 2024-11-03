@@ -17,7 +17,7 @@ import { QueryDocumentSnapshot, DocumentData } from "firebase-admin/firestore";
 import Loading from "@/components/ui/Loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-
+import { MdOutlineQrCodeScanner } from "react-icons/md";
 import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 import { ListRsvpDialog } from "@/components/dialog/list-rsvp-dialog";
@@ -103,7 +103,7 @@ function Page() {
           <div className="flex justify-between">
             <h1 className="sm:text-2xl text-xl mb-3 ">Events Hosted</h1>
             <Button
-              variant="secondary"
+              variant="default"
               onClick={() =>
                 (location.href =
                   "https://docs.google.com/forms/d/e/1FAIpQLSchkVsDZD5FysBkRhokE2QGTTKrs_CqnXRt1EXGuF3DpDhCxw/viewform")
@@ -126,6 +126,7 @@ function Page() {
                   setOpenCheckInDialog={setOpenCheckInDialog}
                   type="upcoming"
                   club={userData?.club || ""}
+                  userData={userData}
                 />
               </div>
             </TabsContent>
@@ -138,6 +139,7 @@ function Page() {
                   setOpenCheckInDialog={setOpenCheckInDialog}
                   type="past"
                   club={userData?.club || ""}
+                  userData={userData}
                 />
               </div>
             </TabsContent>
@@ -159,6 +161,7 @@ function ClubEvents({
   setOpenRsvpDialog,
   setOpenCheckInDialog,
   club,
+  userData
 }: {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setCrntEvent: React.Dispatch<React.SetStateAction<Event | undefined>>;
@@ -166,6 +169,7 @@ function ClubEvents({
   setOpenCheckInDialog: React.Dispatch<React.SetStateAction<boolean>>;
   type: "upcoming" | "past";
   club: string;
+  userData?: UserType | null;
 }) {
   const user = useAuthContext();
   const [userEvents, setUserEvents] = useState<
@@ -231,7 +235,7 @@ function ClubEvents({
                             : "bg-red-700"
                         }`}
                       >
-                        {evnt.rsvp.status}
+                        {evnt.rsvp.status.replace("open", "Visible to All").replace("closed", "Private")}
                       </span>
                       <span
                         className={`badge badge-ghost badge-sm capitalize text-white p-2 ${
@@ -246,29 +250,30 @@ function ClubEvents({
                       </span>
                     </td>
                     <td className="flex gap-2">
-                      <Link href={evnt.editLink} target="_blank">
+                      {userData?.role == "Club Lead" &&  <Link href={evnt.editLink} target="_blank">
                         <Button variant={"outline"}>Edit Event</Button>
-                      </Link>
-                      {evnt.rsvp.type != "none" && (
+                      </Link>}
+                      {userData?.role == "Club Lead" && evnt.rsvp.type != "none" && (
                         <Button
-                          variant={"outline"}
+                          variant={"secondary"}
                           onClick={() => {
                             setCrntEvent(evnt);
                             setOpenRsvpDialog(true);
                           }}
                         >
-                          View RSVP
+                          View Details
                         </Button>
                       )}
                       {evnt.rsvp.type != "none" &&
                         evnt.rsvp.status == "open" && (
                           <Button
-                            variant={"secondary"}
+                            variant={"default"}
                             onClick={() => {
                               setCrntEvent(evnt);
                               setOpenCheckInDialog(true);
                             }}
                           >
+                            <MdOutlineQrCodeScanner size={20} className="mr-2" />
                             Check-in
                           </Button>
                         )}
