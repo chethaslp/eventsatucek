@@ -112,7 +112,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
       eventVenue: data.evnt[10],
       userEmail: data.user.email,
       clubIcon: resolveClubIcon((typeof evntData.club == "string") ? evntData.club : evntData.club[0]),
-      clubName: (typeof evntData.club == "string") ? evntData.club : evntData.club[1],
+      clubName: (typeof evntData.club == "string") ? evntData.club : evntData.club[0],
       customText: evntData.rsvp.custom_text,
     };
 

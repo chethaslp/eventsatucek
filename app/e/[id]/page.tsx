@@ -387,7 +387,9 @@ function UserEventInteractionPanel({
               </div>
             );
           case null:
-            return !date?.isBefore() && data[12] != "No RSVP" ? (
+            if(data[12] == "No RSVP") return null;
+            if(data[11] == "No") return null;
+            return !date?.isBefore() ? (
               <button
                 onClick={() => {
                   if (!user) {
@@ -400,11 +402,11 @@ function UserEventInteractionPanel({
               >
                 Register Now!
               </button>
-            ) : data[12] != "No RSVP" ? (
+            ) : (
               <div className="border rounded-lg bg-secondary gap-3 flex flex-row p-3">
                 <InfoIcon /> This event is over.
               </div>
-            ) : null;
+            );
           default:
             return <HashLoader color={"white"} />;
         }

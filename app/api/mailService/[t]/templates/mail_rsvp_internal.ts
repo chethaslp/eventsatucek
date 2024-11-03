@@ -38,13 +38,16 @@ const template =  `<html lang="en">
           </li>
         </ul>
         <p>
-        {{#ifEquals rsvpData.custom_text ""}}
+        {{#ifEquals customText ""}}
           Mark your calendars and get hyped, because this event is gonna be off the charts! 🚀 We'll be sending out more updates as we get closer to the date, so keep an eye on your inbox. 👀
           Can't wait to see you there and make this event awesome! 🥳 If you have any questions
           or need further assistance, feel free to contact us.
-        {{ else }}
-          {{rsvpData.custom_text}}
-         {{/ifEquals}}
+          {{/ifEquals}}
+          {{customText}}
+
+         <center>
+            <a href="https://events.ieeesbucek.in/e/{{eventID}}" class="btn" style="background-color: #121212; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block; margin: 20px 0;">Get my Ticket</a>
+          </center>
         </p>
         <p>
           Cheers!<br>
