@@ -1,5 +1,4 @@
-const template =  `<!DOCTYPE html>
-<html lang="en">
+const template =  `<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -8,20 +7,16 @@ const template =  `<!DOCTYPE html>
 </head>
 
 <body style="font-family: Arial, sans-serif;background-color: #f4f4f4;margin: 0;padding: 0;">
-    <div class="container"
-        style="max-width: 600px;margin: 0 auto;padding: 20px;background-color: #fff;border-radius: 8px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-        <div class="header"
-            style="background-color: #000000;color: white;background-repeat: no-repeat;background-size: cover;background-image: url(https://events.ieeesbucek.in/img/bg-mail.png);text-align: center;padding: 30px 0;padding-bottom: 60px;margin-bottom: 0;border-radius: 8px 8px 0 0;">
+    <div class="container" style="max-width: 600px;margin: 0 auto;padding: 20px;background-color: #fff;border-radius: 8px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        <div class="header" style="background-color: #000000;color: white;background-repeat: no-repeat;background-size: cover;background-image: url(https://events.ieeesbucek.in/img/bg-mail.png);text-align: center;padding: 30px 0;padding-bottom: 60px;margin-bottom: 0;border-radius: 8px 8px 0 0;">
             
             <table style="margin: 0 auto;">
                 <tr>
                     <td style="vertical-align: middle; padding-right: 10px;">
-                        <img src="https://events.ieeesbucek.in/logos/logo_white.png" alt="Events@UCEK"
-                            style="width: 40px; height: 40px; border-radius: 10%;">
+                        <img src="https://events.ieeesbucek.in/logos/logo_white.png" alt="Events@UCEK" style="width: 40px; height: 40px; border-radius: 10%;">
                     </td>
                     <td style="vertical-align: middle;">
-                        <img src="https://events.ieeesbucek.in/logos/logo_text.png" alt="Events@UCE"
-                            style="width: 130px; height: 20px; border-radius: 10%;">
+                        <img src="https://events.ieeesbucek.in/logos/logo_text.png" alt="Events@UCE" style="width: 130px; height: 20px; border-radius: 10%;">
                     </td>
                 </tr>
             </table>
@@ -51,13 +46,11 @@ const template =  `<!DOCTYPE html>
                 </p>
             </div>
         </div>
-        <div class="footer"
-            style="background-color: #f4f4f4; padding: 10px 0; text-align: center; border-radius: 0 0 8px 8px;">
+        <div class="footer" style="background-color: #f4f4f4; padding: 10px 0; text-align: center; border-radius: 0 0 8px 8px;">
             <small style="padding: 5px;">
                 Powered by <a href="https://events.ieeesbucek.in" style="text-decoration: none; color: #000000;">
                     <div>
-                        <img src="https://events.ieeesbucek.in/logos/logo_black.png" alt="Events@UCE"
-                            style="width: 30px; height: 30px; border-radius: 10%;">
+                        <img src="https://events.ieeesbucek.in/logos/logo_black.png" alt="Events@UCE" style="width: 30px; height: 30px; border-radius: 10%;">
                         <h4 style="margin: 0; padding: 0;">Events@UCE</h4>
                     </div>
                 </a>
