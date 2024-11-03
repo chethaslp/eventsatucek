@@ -82,12 +82,12 @@ export function ListRsvpDialog({
   function resolveDept(regNo: string | undefined): React.ReactNode {
     if (!regNo) return "Unknown Department";
     const deptCode = regNo.substring(0, 3);
-    const rollNo = parseInt(regNo.substring(9, 11))
+    const cls = regNo.split(":")[1];
     return {
       "415": "CSE",
       "416": "IT",
       "412": "ECE",
-     }[deptCode] + " " + (regNo.split(":")[1]? regNo.split(":")[1]: "")  || "Unknown Department";
+     }[deptCode] + " " + (cls? (cls!="0"?cls : "") : "")  || "Unknown Department";
   }
 
   function resolveYear(regNo: string | undefined): React.ReactNode {
