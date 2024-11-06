@@ -67,9 +67,19 @@ export function ListRsvpDialog({
 
   function exportCSV(){
     if(rsvps == null) return
-    const csv = Papa.unparse(rsvps.map((d)=>{
-      return {Register_No: d.regNo || "", Name: d.name, Email: d.email, PhoneNumber: d.ph, Status: d.status, RegisteredAt: d.createdAt.toDate().toLocaleString()}
-  }))
+    const csv = Papa.unparse((searchTerm === "" ? rsvps : filteredRsvps).map((d)=>{
+      return {
+        "Registered At": d.createdAt.toDate().toLocaleString(),
+        Name: d.name,
+        Email: d.email,
+        "Phone Number": d.ph,
+        College: d.clg || "University College of Engineering",
+        Department: d.dept || resolveDept(d.regNo),
+        Year: resolveYear(d.regNo),
+        "Candidate Code": d.regNo?.split(":")[0] || "-",
+        Status: d.status
+      }
+    }))
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');

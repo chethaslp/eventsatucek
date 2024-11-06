@@ -87,7 +87,7 @@ function ShowTicket({ evnt, setOpen }: { evnt: string[]; setOpen: React.Dispatch
 
     setLoading("Getting your ticket...");
     (async ()=>{
-      const ls = localStorage.getItem("ticketToken_"+evnt[1])
+      const ls = localStorage.getItem("ticketToken."+evnt[1]+"."+ user.uid)
       if(ls && ls != ""){
         setTicketToken(ls)
         setLoading("")
@@ -116,7 +116,7 @@ function ShowTicket({ evnt, setOpen }: { evnt: string[]; setOpen: React.Dispatch
           return
         }
         const d = await data.json()
-        localStorage.setItem("ticketToken_"+evnt[1], d.ticketToken)
+        localStorage.setItem("ticketToken."+evnt[1]+"."+ user.uid, d.ticketToken)
         setTicketToken(d.ticketToken)
         setLoading("")
       })
