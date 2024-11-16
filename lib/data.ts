@@ -146,5 +146,6 @@ export const getClubs = [
   "SFI UCEK",
   "Meluhans Dance Club",
   "Music Club - UCEK",
-  "IEEE RAS SBC UCEK"
+  "IEEE RAS SBC UCEK",
+  "Hult Prize UCEK"
 ]

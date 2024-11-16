@@ -35,6 +35,8 @@ import { HashLoader } from "react-spinners";
 import { TicketDialog } from "@/components/dialog/ticket-dialog";
 import { Button } from "@/components/ui/button";
 import { set } from "react-hook-form";
+import Markdown  from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
@@ -237,9 +239,12 @@ ${about}`
                 {date?.format("h:mm a")}
               </p>
               <h4 className="my-2 font-semibold">About</h4>
-              <p className="whitespace-break-spaces">
-                {createLinkElements(data[4])}
-              </p>
+                <Markdown
+                  remarkPlugins={[remarkGfm]}
+                  className={"whitespace-break-spaces"}
+                >
+                  {data[4]}
+                </Markdown>
             </div>
 
             <UserEventInteractionPanel

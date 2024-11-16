@@ -16,6 +16,7 @@ import SFILogo from "../public/logos/sfi.png";
 import TRHLogo from "../public/logos/trh.png";
 import RenvnzaLogo from "../public/logos/renvnza.png";
 import RASLogo from "../public/logos/ras.png";
+import HultLogo from "../public/logos/hp.png";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -40,6 +41,7 @@ export function resolveClubIcon(clb: string): any {
     "Film Club - UCEK": FMCLogo,
     "NSS - UCEK": NSSLogo,
     "Renvnza '24": RenvnzaLogo,
+    "Hult Prize - UCEK": HultLogo,
   }[clb];
 }
 
