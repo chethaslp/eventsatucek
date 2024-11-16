@@ -17,6 +17,7 @@ import TRHLogo from "../public/logos/trh.png";
 import RenvnzaLogo from "../public/logos/renvnza.png";
 import RASLogo from "../public/logos/ras.png";
 import HultLogo from "../public/logos/hp.png";
+import ArcLogo from "../public/logos/arc.png";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -42,6 +43,7 @@ export function resolveClubIcon(clb: string): any {
     "NSS - UCEK": NSSLogo,
     "Renvnza '24": RenvnzaLogo,
     "Hult Prize - UCEK": HultLogo,
+    "Arc": ArcLogo
   }[clb];
 }
 
