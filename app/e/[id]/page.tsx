@@ -341,8 +341,9 @@ function UserEventInteractionPanel({
       setUserStatus(null);
       return;
     }
+    
     if (data[12] == "No RSVP") {
-      setUserStatus(null);
+      setUserStatus(null); 
       return;
     }
 
@@ -358,6 +359,11 @@ function UserEventInteractionPanel({
   return (
     <div className="flex items-center justify-center mt-5">
       {(() => {
+
+        if(data[15] == "No") return <div className="border rounded-lg bg-orange-600 gap-3 flex flex-row p-3">
+            <InfoIcon /> Registrations are closed for this event!
+          </div>;
+
         switch (userStatus) {
           case "Attended":
             return (
