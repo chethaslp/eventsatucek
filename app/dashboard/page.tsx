@@ -250,10 +250,10 @@ function ClubEvents({
                       </span>
                     </td>
                     <td className="flex gap-2">
-                      {userData?.role == "Club Lead" &&  <Link href={evnt.editLink} target="_blank">
+                      {(userData?.role == "Club Lead" || userData?.role == "Admin") &&  <Link href={evnt.editLink} target="_blank">
                         <Button variant={"outline"}>Edit Event</Button>
                       </Link>}
-                      {userData?.role == "Club Lead" && evnt.rsvp.type != "none" && (
+                      {(userData?.role == "Club Lead" || userData?.role == "Admin") && evnt.rsvp.type != "none" && (
                         <Button
                           variant={"secondary"}
                           onClick={() => {

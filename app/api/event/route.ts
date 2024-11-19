@@ -105,7 +105,7 @@ function getImgLink(link: string) {
 function resolveClubIcon(clb: string): any {
   return {
     "GDSC - UCEK" : "/logos/gdsc.png",
-    "IEEE - UCEK": "/logos/ieee.png",
+    "IEEE SB UCEK": "/logos/ieee.png",
     "Legacy IEDC - UCEK": "/logos/iedc.png",
     "μlearn - UCEK": "/logos/muln.png",
     "FOSS - UCEK": "/logos/foss.png",
@@ -116,6 +116,8 @@ function resolveClubIcon(clb: string): any {
     "Film Club - UCEK": "/logos/fmc.png",
     "NSS - UCEK": "/logos/nss.png",
     "Renvnza '24": "/logos/renvnza.png",
+    "Hult Prize - UCEK": "/logos/hp.png",
+    "Arc": "/logos/arc.png"
   }[clb];
 }
 

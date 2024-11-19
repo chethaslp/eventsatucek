@@ -30,7 +30,7 @@ export function resolveClubIcon(clb: string): any {
   return {
     "GDSC - UCEK": GDSCLogo,
     "Google Developers Student Club - UCEK": GDSCLogo,
-    "IEEE - UCEK": IEEELogo,
+    "IEEE SB UCEK": IEEELogo,
     "Legacy IEDC - UCEK": IEDCLogo,
     "μlearn - UCEK": MULNLogo,
     "FOSS - UCEK": FOSSLogo,

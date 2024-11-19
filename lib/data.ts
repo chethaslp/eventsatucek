@@ -137,7 +137,7 @@ export function search(keyword:string,n="20"): Promise<string[][]> {
 
 export const getClubs = [
   "All",
-  "IEEE - UCEK",
+  "IEEE SB UCEK",
   "Legacy IEDC - UCEK",
   "μlearn - UCEK",
   "FOSS - UCEK",
@@ -147,5 +147,6 @@ export const getClubs = [
   "Meluhans Dance Club",
   "Music Club - UCEK",
   "IEEE RAS SBC UCEK",
-  "Hult Prize UCEK"
+  "Hult Prize UCEK",
+  "Arc"
 ]
