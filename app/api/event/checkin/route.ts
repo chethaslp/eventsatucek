@@ -42,11 +42,11 @@ export async function POST(req: NextRequest) {
 
   const [evntId, data] = ticketToken.split(".");
   const evntDoc = await getFirestore().doc(`/events/${evntId}`).get();
-  const hostData = (await getFirestore().doc(`/users/${decodedToken.uid}`).get()).data() as {club: string}
+  const hostData = (await getFirestore().doc(`/users/${decodedToken.uid}`).get()).data() as {club: string, role: string}
 
   if(evntDoc.exists){
       const d = evntDoc.data() as {host :string, evntSecretKey: string, club: string[]}
-      if(!d.club.includes(hostData.club)) return NextResponse.json(
+      if(hostData.role != "Admin" && d.club.includes(hostData.club)) return NextResponse.json(
         { msg: 'Unauthorized.' },
         { status: 401 }
       );

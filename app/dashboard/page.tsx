@@ -22,6 +22,11 @@ import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 import { ListRsvpDialog } from "@/components/dialog/list-rsvp-dialog";
 import { CheckInDialog } from "@/components/dialog/checkin-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
+import { getClubs } from "@/lib/data";
 
 function Page() {
   const user = useAuthContext();
@@ -81,6 +86,39 @@ function Page() {
           evnt={crntEvent}
         />
       )}
+
+      
+      {/* {openAddMemberDialog && <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Add Member</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Club Member</DialogTitle>
+            <DialogDescription>Add a new member to your club.</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="member@uck.ac.in" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="club">Select Club</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a club" />
+                </SelectTrigger>
+                <SelectContent>
+                  {getClubs.map((clb)=><SelectItem value={clb}>{clb}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button>Add Member</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>} */}
 
       <div className="mt-20 p-16 flex-1 flex-col dark:bg-[#0a0a0a]">
         <div className="flex flex-row items-center w-full justify-between">
