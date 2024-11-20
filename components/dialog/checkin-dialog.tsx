@@ -6,6 +6,7 @@ import { HashLoader } from "react-spinners";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -53,7 +54,7 @@ import { Event, Event_RSVP, Event_User, Event as _Event } from "@/lib/types";
 import Papa from "papaparse";
 import { QrReader } from "react-qr-reader";
 import { Result } from '@zxing/library';
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { set } from "react-hook-form";
 
 export function CheckInDialog({
@@ -66,18 +67,11 @@ export function CheckInDialog({
   evnt: Event;
 }) {
 
-  const [rsvps, setRsvps] = React.useState<QuerySnapshot<DocumentData, DocumentData>>();
   const [qrActive, setQrActive] = React.useState(true);
   const { toast } = useToast();
   const user = useAuthContext();
-
-  React.useEffect(() => {
-    if(!open || !user) return 
-    getDocs(collection(db, "events", evnt.evntID, "regs")).then((data)=>setRsvps(data))
-  }, [open])
   
   async function handleSuccess(result: Result | null | undefined): Promise<void> {
-
     if (result) {
       const txt  = result.getText();
       console.log(txt)
@@ -102,28 +96,55 @@ export function CheckInDialog({
         }
       })
     }
-
   }
 
-    return (
-      <Dialog open={open} onOpenChange={setOpen} modal>
-        <DialogContent className="max-w-[90%] max-h-[90%] dark:bg-[#121212]">
-          <DialogHeader>
-            <DialogTitle>Checkin</DialogTitle>
-          </DialogHeader>
-          {(qrActive)? <QrReader 
-            scanDelay={300}
-            onResult={handleSuccess}
-            ViewFinder={(props)=> <div className="w-full h-full bg-black bg-opacity-50" {...props} />}
-            videoStyle={{ width: "100%" , height: "100%"}}
-            constraints={{
-              facingMode:"environment"
-            }}
-            containerStyle={{ width: "100%" }}
-           />: <div className="flex flex-row gap-4 p-4">
-              <Loader2 className="animate-spin"/> Checking in...
-            </div>}
-        </DialogContent>
-      </Dialog>
-    );
+  return (
+    <Dialog open={open} onOpenChange={setOpen} modal>
+      <DialogContent className="!max-w-screen !w-screen !h-screen !max-h-screen !p-0 !m-0 dark:bg-[#121212]">
+        <DialogHeader className="absolute top-0 z-20 w-full p-6 bg-slate-900 rounded-lg">
+          <DialogTitle>Checkin</DialogTitle>
+          <DialogClose className="absolute top-0 right-0 p-4 text-white"><X/></DialogClose>
+        </DialogHeader>
+        {qrActive ? (
+          <div className="w-full h-full flex items-center">
+            <QrReader 
+              scanDelay={300}
+              onResult={handleSuccess}
+              ViewFinder={() => (
+                <div className="absolute inset-0 flex items-center justify-center z-10">
+                <div className="w-64 h-64 border-2 border-white rounded-lg relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 1 2 2v2M7 21H5a2 2 0 0 1-2-2v-2M17 21h2a2 2 0 0 0 2-2v-2" />
+                    </svg>
+                  </div>
+                </div>
+                </div>
+              )}
+              videoStyle={{ 
+                width: "100%", 
+                height: "100%",
+                objectFit: "cover"
+              }}
+              containerStyle={{ 
+                width: "100%", 
+                height: "100%",
+                position: "relative",
+                overflow: "hidden",
+                justify_items: "center",
+                alignItems: "center"
+              }}
+              constraints={{
+                facingMode: "environment"
+              }}
+            />
+          </div>
+        ) : (
+          <div className="flex flex-row gap-4 p-4">
+            <Loader2 className="animate-spin"/> Checking in...
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
 }

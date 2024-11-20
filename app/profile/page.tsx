@@ -323,7 +323,6 @@ function UserEvents({
                               alt={evnt.club}
                             />
                           </div>
-                          <span className="hidden sm:block">{evnt.club}</span>
                         </div>
                       </div>
                     </td>
