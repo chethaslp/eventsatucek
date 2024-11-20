@@ -149,7 +149,7 @@ export function CheckInDialog({
             />
           </div>
         ) : (
-          <div className="flex flex-row gap-4 p-4">
+          <div className="flex flex-row justify-center items-center gap-4 z-20 p-4 text-white">
             <Loader2 className="animate-spin"/> Checking in...
           </div>
         )}
