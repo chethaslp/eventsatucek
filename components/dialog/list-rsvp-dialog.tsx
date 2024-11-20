@@ -119,7 +119,7 @@ export function ListRsvpDialog({
           </DialogHeader>
 
           {(rsvps && rsvps.length != 0) ? (<>
-            <div className="md:flex flex-col gap-2 hidden">
+            <div className="flex flex-col gap-2">
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div className="p-4 rounded-lg bg-primary/10">
@@ -149,15 +149,15 @@ export function ListRsvpDialog({
                     placeholder="Search in all fields..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="max-w-sm bg-[#121212] mb-4 md:mb-0"
+                    className="max-w-sm bg-[#121212] mb-4 md:mb-0 hidden md:block"
                     />
-                  <div className="flex flex-col md:flex-row">
+                  <div className="flex flex-col gap-4 md:flex-row">
                   <Button className="mt-2 mr-2 md:mt-0 w-full md:w-auto" variant={"outline"} onClick={()=> window.open(evnt.editLink, '_blank')}>Edit Event <EditIcon size={15} className="ml-2"/></Button>
                   <Button className="mr-0 md:mr-5 mb-5 md:mb-0 w-full md:w-auto" onClick={exportCSV}>Export as CSV <BiExport size={15} className="ml-2"/></Button>
                   </div>
                 </div>
-              <div className="overflow-x-auto">
-                <div className="overflow-x-auto">
+              <div className="md:flex hidden overflow-auto">
+                <div className="overflow-auto">
                   <div className="overflow-y-auto max-h-96">
                   <table className="table-auto w-full min-w-[1000px]">
                     <thead>
@@ -197,7 +197,7 @@ export function ListRsvpDialog({
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row justify-center gap-2 mt-4">
+              <div className="md:flex hidden flex-col md:flex-row justify-center gap-2 mt-4">
                 <Button
                   variant="outline"
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}

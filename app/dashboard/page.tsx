@@ -26,7 +26,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
-import { getClubs } from "@/lib/data";
+import { getImgLink } from "@/lib/data";
+import Image from "next/image";
+import { Edit, Edit2Icon, View } from "lucide-react";
 
 function Page() {
   const user = useAuthContext();
@@ -238,89 +240,96 @@ function ClubEvents({
             : "You haven&'t hosted any events so far."}
         </div>
       ) : (
-        <div className="overflow-x-auto w-full">
-          <table className="table w-full">
-            {/* head */}
-            <thead>
-              <tr className="dark:text-white ">
-                <th className="px-1 sm:px-4">Event</th>
-                <th className="px-1 sm:px-4">Date</th>
-                <th className="px-1 sm:px-4">Status</th>
-                <th className="px-1 sm:px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {userEvents.map((evntData) => {
-                const evnt = evntData.data() as Event;
-                return (
-                  <tr key={evnt.evntID}>
-                    <td className="px-1 sm:px-4">
-                      <div
-                        className="font-bold underline cursor-pointer hover:no-underline"
-                        onClick={() => (location.href = `/e/${evnt.evntID}`)}
-                      >
-                        {evnt.title}
-                      </div>
-                    </td>
-                    <td className="px-1 sm:px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+          {userEvents.map((evntData) => {
+            const evnt = evntData.data() as Event;
+            return (
+              <div key={evnt.evntID} className="card flex-row bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+                <Image 
+                  src={getImgLink(evnt.img) || '/default-event-cover.jpg'} 
+                  alt={evnt.title}
+                  height={192}
+                  width={320}
+                  className="w-48 h-48 object-cover hidden md:block"
+                />
+                <div className="p-4 flex justify-between w-full">
+                  <div>
+                    <div 
+                      className="font-bold text-lg transition-colors cursor-pointer hover:text-blue-600"
+                      onClick={() => (location.href = `/e/${evnt.evntID}`)}
+                    >
+                      {evnt.title}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
                       {(evnt.dt as Timestamp).toDate().toLocaleString()}
-                    </td>
-                    <td className="px-1 sm:px-4">
-                      <span
-                        className={`badge badge-ghost capitalize badge-sm text-white p-2 ${
-                          evnt.rsvp.status == "open"
-                            ? "bg-green-700"
-                            : "bg-red-700"
-                        }`}
+                    </div>
+                  
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs text-white ${
+                        evnt.rsvp.status == "open"
+                          ? "bg-green-700"
+                          : "bg-red-700"
+                      }`}
+                    >
+                      {evnt.rsvp.status.replace("open", "Visible to All").replace("closed", "Private")}
+                    </span>
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs text-white ${
+                        evnt.rsvp.type == "internal"
+                          ? "bg-green-700"
+                          : evnt.rsvp.type == "external"
+                          ? "bg-blue-700"
+                          : "bg-slate-700"
+                      }`}
+                    >
+                      RSVP: {evnt.rsvp.type}
+                    </span>
+                  </div>
+                  
+                  </div>
+
+
+                  <div className="flex flex-wrap flex-col gap-2 mt-3 items-end">
+                    {(userData?.role == "Club Lead" || userData?.role == "Admin") &&
+                      <Link href={evnt.editLink} target="_blank">
+                        <Button variant={"ghost"} size="sm" className="flex items-center gap-1 border-b border-slate-700 text-white"><Edit size={15}/> Edit Event</Button>
+                      </Link>
+                    }
+                    {(userData?.role == "Club Lead" || userData?.role == "Admin") && evnt.rsvp.type != "none" && (
+                      <Button
+                        variant={"ghost"}
+                        size="sm"
+                        className="border-b border-slate-700"
+                        onClick={() => {
+                          setCrntEvent(evnt);
+                          setOpenRsvpDialog(true);
+                        }}
                       >
-                        {evnt.rsvp.status.replace("open", "Visible to All").replace("closed", "Private")}
-                      </span>
-                      <span
-                        className={`badge badge-ghost badge-sm capitalize text-white p-2 ${
-                          evnt.rsvp.type == "internal"
-                            ? "bg-green-700"
-                            : evnt.rsvp.type == "external"
-                            ? "bg-blue-700"
-                            : ""
-                        }`}
-                      >
-                        RSVP: {evnt.rsvp.type}
-                      </span>
-                    </td>
-                    <td className="flex gap-2">
-                      {(userData?.role == "Club Lead" || userData?.role == "Admin") &&  <Link href={evnt.editLink} target="_blank">
-                        <Button variant={"outline"}>Edit Event</Button>
-                      </Link>}
-                      {(userData?.role == "Club Lead" || userData?.role == "Admin") && evnt.rsvp.type != "none" && (
+                        <View size={16} className="mr-2" />
+                        View Info
+                      </Button>
+                    )}
+                    {evnt.rsvp.type != "none" &&
+                      evnt.rsvp.status == "open" && (
                         <Button
-                          variant={"secondary"}
+                          variant={"ghost"}
+                          className=" text-white border-b border-slate-700"
+                          size="sm"
                           onClick={() => {
                             setCrntEvent(evnt);
-                            setOpenRsvpDialog(true);
+                            setOpenCheckInDialog(true);
                           }}
                         >
-                          View Details
+                          <MdOutlineQrCodeScanner size={16} className="mr-2" />
+                          Check-in
                         </Button>
                       )}
-                      {evnt.rsvp.type != "none" &&
-                        evnt.rsvp.status == "open" && (
-                          <Button
-                            variant={"default"}
-                            onClick={() => {
-                              setCrntEvent(evnt);
-                              setOpenCheckInDialog(true);
-                            }}
-                          >
-                            <MdOutlineQrCodeScanner size={20} className="mr-2" />
-                            Check-in
-                          </Button>
-                        )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </>
