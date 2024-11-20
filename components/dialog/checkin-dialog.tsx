@@ -100,15 +100,23 @@ export function CheckInDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen} modal>
-      <DialogContent className="!max-w-screen !w-screen !h-screen !max-h-screen !p-0 !m-0 dark:bg-[#121212]">
-        <DialogHeader className="absolute top-0 z-20 w-full p-6 bg-slate-900 rounded-lg">
+      <DialogContent className="!max-w-screen !w-screen !h-screen !max-h-screen !p-0 !m-0 bg-zinc-800">
+        <DialogHeader className="absolute top-0 z-20 w-full p-6 bg-zinc-900 rounded-b-3xl">
           <DialogTitle>Checkin</DialogTitle>
           <DialogClose className="absolute top-0 right-0 p-4 text-white"><X/></DialogClose>
+
+          <div className="flex rounded gap-3 items-center">
+            <Image src={getImgLink(evnt.img)} width={64} height={64} className="rounded-lg w-15 h-16" alt={""}/>
+            <div className="flex flex-col items-start">
+              <span className="text-white font-bold">{evnt.title}</span>
+              <span className="text-gray-300 ">{evnt.club}</span>
+            </div>
+          </div>
         </DialogHeader>
         {qrActive ? (
           <div className="w-full h-full flex items-center">
             <QrReader 
-              scanDelay={300}
+              scanDelay={1000}
               onResult={handleSuccess}
               ViewFinder={() => (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -131,6 +139,7 @@ export function CheckInDialog({
                 height: "100%",
                 position: "relative",
                 overflow: "hidden",
+                display: "flex",
                 justify_items: "center",
                 alignItems: "center"
               }}
