@@ -62,7 +62,13 @@ import {
   signInWithCredential,
   signInWithPopup,
 } from "firebase/auth";
-import { checkAdmissionNumber, createUser, getClub, getUser, updateUserProfile } from "../fb/db";
+import {
+  checkAdmissionNumber,
+  createUser,
+  getClub,
+  getUser,
+  updateUserProfile,
+} from "../fb/db";
 import { Logo } from "../ui/logo";
 import SSImage from "@/public/img/ss-signin.png";
 import Image from "next/image";
@@ -82,13 +88,12 @@ import { UserType } from "@/lib/types";
 export function EditDialog({
   open,
   setOpen,
-  userData
+  userData,
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   userData: UserType;
 }) {
-
   const user = useAuthContext();
   const { toast } = useToast();
   const s = useSearchParams();
@@ -96,19 +101,25 @@ export function EditDialog({
   const router = useRouter();
   const { theme } = useTheme();
 
- 
-  
   const [admYear, setAdmYear] = React.useState<string>(userData.admYear);
   const [batch, setBatch] = React.useState<string>(userData.batch);
-  const [wifiUsername, setWifiUsername] = React.useState<string>(userData.wifiUsername || "");
-  const [regNo, setRegNo] = React.useState<string>(userData.registrationNumber || "");
-  const [admissionNo, setAdmissionNo] = React.useState<string>(userData.admissionNumber || "");
-  const [wifiPass, setWifiPass] = React.useState<string>(userData.wifiPass || "");
+  const [wifiUsername, setWifiUsername] = React.useState<string>(
+    userData.wifiUsername || ""
+  );
+  const [regNo, setRegNo] = React.useState<string>(
+    userData.registrationNumber || ""
+  );
+  const [admissionNo, setAdmissionNo] = React.useState<string>(
+    userData.admissionNumber || ""
+  );
+  const [wifiPass, setWifiPass] = React.useState<string>(
+    userData.wifiPass || ""
+  );
+  const [name, setName] = React.useState<string>(userData.displayName || "");
 
   const [loading, setLoading] = React.useState("");
   const [signinStep, setSigninStep] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -121,28 +132,24 @@ export function EditDialog({
 
     // const token = await getToken(getMessaging(app), { vapidKey: PUBLIC_KEY })
 
-  
-    return (
-      updateUserProfile(user, {
-        admYear: admYear,
-        batch: batch,
-        admissionNumber: admissionNo,
-        registrationNumber: regNo,
-        wifiUsername: wifiUsername,
-        wifiPass: wifiPass,
+    return updateUserProfile(user, {
+      name: name,
+      admissionNumber: admissionNo,
+      registrationNumber: regNo,
+      wifiUsername: wifiUsername,
+      wifiPass: wifiPass,
+    })
+      .then(() => {
+        if (s.has("r")) {
+          router.push(s.get("r") || "");
+          return;
+        }
+        setSigninStep(false);
+        setOpen(false);
+        if (pathname == "/profile") location.reload();
+        return false;
       })
-        .then(() => {
-          if (s.has("r")) {
-            router.push(s.get("r") || "");
-            return;
-          }
-          setSigninStep(false);
-          setOpen(false);
-          if (pathname == "/profile") location.reload();
-          return false;
-        })
-        .catch((err) => console.log(err))
-    );
+      .catch((err) => console.log(err));
   };
 
   React.useEffect(() => {
@@ -172,60 +179,22 @@ export function EditDialog({
         onSubmit={handleSubmit}
         className={"grid items-center justify-center gap-4"}
       >
-        <Label className="border-l-2  p-2 w-80">Edit Profile</Label>
-        <div className="grid gap-2 grid-flow-col grid-cols-2 sm:grid-flow-col">
-          <div className="grid gap-2 grid-flow-row ">
-            <Label htmlFor="admissionyear">Admission Year</Label>
-            <Select  onValueChange={(v) => setAdmYear(v)}>
-              <SelectTrigger>
-                <SelectValue placeholder={admYear} />
-              </SelectTrigger>
-              <SelectContent className="dark:bg-[#0e0e0e] ">
-                {[...new Array(6)].map((x, i) => (
-                  <SelectItem
-                    key={`Y${i + new Date().getFullYear() - 5}`}
-                    value={(i + new Date().getFullYear() - 5).toString()}
-                    className="hover:dark:bg-[#000000a5]"
-                  >
-                    {i + new Date().getFullYear() - 5}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-2 grid-flow-row ">
-            <Label htmlFor="batch">Batch</Label>
-            <Select  onValueChange={(v) => setBatch(v)}>
-              <SelectTrigger>
-                <SelectValue placeholder={userData.batch} />
-              </SelectTrigger>
-              <SelectContent className="dark:bg-[#0e0e0e]">
-                <SelectItem value={"CSE"} className="hover:dark:bg-[#000000a5]">
-                  CSE
-                </SelectItem>
-                <SelectItem
-                  value={"CSE B1"}
-                  className="hover:dark:bg-[#000000a5]"
-                >
-                  CSE B1
-                </SelectItem>
-                <SelectItem
-                  value={"CSE B2"}
-                  className="hover:dark:bg-[#000000a5]"
-                >
-                  CSE B2
-                </SelectItem>
-                <SelectItem value={"IT"} className="hover:dark:bg-[#000000a5]">
-                  IT
-                </SelectItem>
-                <SelectItem value={"ECE"} className="hover:dark:bg-[#000000a5]">
-                  ECE
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+        <Label className="border-l-2 border-white  p-2 w-80">
+          Edit Profile
+        </Label>
+
         <div className="grid gap-2">
+          <div className="grid gap-2 grid-flow-row ">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              className="dark:bg-[#121212] bg-[#ffff]"
+              id="name"
+              type="text"
+              placeholder=""
+              value={name}
+              onChange={(e) => setName(e.currentTarget.value)}
+            />
+          </div>
           <Label htmlFor="admission-no">Admission Number</Label>
           <Input
             className="dark:bg-[#121212]  bg-[#ffff]"
@@ -233,7 +202,6 @@ export function EditDialog({
             type="number"
             placeholder=""
             value={admissionNo}
-            
             onChange={(e) => setAdmissionNo(e.currentTarget.value)}
           />
           <Label htmlFor="reg-no">Registration no</Label>
@@ -243,9 +211,12 @@ export function EditDialog({
             type="number"
             placeholder=""
             value={regNo}
-            
             onChange={(e) => setRegNo(e.currentTarget.value)}
           />
+        </div>
+
+        <div className="grid gap-2 relative">
+          <Label className="border-l-2 border-white p-2 w-80">Wifi Info</Label>
           <Label htmlFor="wifi-username">Wifi Username</Label>
           <Input
             className="dark:bg-[#121212]  bg-[#ffff]"
@@ -256,9 +227,6 @@ export function EditDialog({
             value={wifiUsername}
             onChange={(e) => setWifiUsername(e.currentTarget.value)}
           />
-        </div>
-
-        <div className="grid gap-2 relative">
           <Label htmlFor="wifi-password">Wifi Password</Label>
           <Input
             className="dark:bg-[#121212] bg-[#ffff] pr-10"
@@ -271,7 +239,7 @@ export function EditDialog({
           />
           <button
             type="button"
-            className="absolute right-2 top-9"
+            className="absolute right-2 bottom-3"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <FaEye /> : <FaEyeSlash />}

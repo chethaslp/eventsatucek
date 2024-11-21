@@ -8,6 +8,7 @@ import {
   query,
   where,
   collectionGroup,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "./config";
 import { User, getAuth, updatePhoneNumber } from "firebase/auth";
@@ -171,38 +172,26 @@ export async function getUserEventStatus(user: User, evntID: string) {
 }
 
 export async function updateUserProfile(user: User,{
-  admYear,
-  batch,
+  name,
   admissionNumber,
   registrationNumber,
   wifiUsername,
   wifiPass,
 }: {
-  admYear: string;
-  batch: string;
+  name: string;
   admissionNumber: string;
   registrationNumber: string;
   wifiUsername: string,
   wifiPass: string,
 }) {
   const userRef = doc(db, "users", user.uid);
-  return getDoc(userRef)
-    .then((docSnap) => {
-      if (docSnap.exists()) {
-        return setDoc(userRef, {
-          ...docSnap.data(),
-          admYear: admYear,
-          batch: batch,
-          admissionNumber: admissionNumber,
-          registrationNumber: registrationNumber,
-          wifiUsername: wifiUsername,
-          wifiPass: wifiPass,
-        });
-      } else {
-        throw new Error("User does not exist");
-      }
-    })
-    .then(() => {
+  return updateDoc(userRef, {
+    name: name, 
+    admissionNumber: admissionNumber,
+    registrationNumber: registrationNumber,
+    wifiUsername: wifiUsername,
+    wifiPass: wifiPass,
+  }).then(() => {
       return true;
     })
     .catch((err) => {
