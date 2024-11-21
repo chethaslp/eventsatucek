@@ -49,10 +49,15 @@ export async function POST(req: NextRequest) {
   if(evntDoc.exists){
       const d = evntDoc.data() as {host :string, evntSecretKey: string, club: string[]}
       const hostData = hostDoc.data() as {role: string, club: string}
-      if(hostData.role != "Admin" || !d.club.includes(hostData.club)) return NextResponse.json(
-        { msg: 'Unauthorized.' },
-        { status: 401 }
-      );
+
+
+      if(hostData.role != "Admin") {
+        if(!d.club.includes(hostData.club)) return NextResponse.json(
+          { msg: 'Unauthorized.' },
+          { status: 401 }
+        );
+      } 
+      
       try{
         const IV = Buffer.alloc(16, 0);
         const SECRET_KEY = Buffer.from(process.env.ENC_SECRET || "testkey");
