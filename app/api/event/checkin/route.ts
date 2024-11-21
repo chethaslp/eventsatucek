@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
   }
 
   let decodedToken, decodedUID;
+  const [evntId, data] = ticketToken.split(".");
 
   //Verify identity token firebase
   try {
@@ -53,7 +54,6 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const [evntId, data] = ticketToken.split(".");
   const [regUser, userData, hostDoc, evntDoc] = await Promise.all([
     getFirestore().collection(`/events/${evntId}/regs`).doc(decodedUID).get(),
     getFirestore().collection(`/users/${decodedUID}/attendedEvents`).doc(evntId).get(),
