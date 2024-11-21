@@ -186,7 +186,7 @@ export async function updateUserProfile(user: User,{
 }) {
   const userRef = doc(db, "users", user.uid);
   return updateDoc(userRef, {
-    name: name, 
+    displayName: name, 
     admissionNumber: admissionNumber,
     registrationNumber: registrationNumber,
     wifiUsername: wifiUsername,

@@ -100,9 +100,7 @@ export function EditDialog({
   const pathname = usePathname();
   const router = useRouter();
   const { theme } = useTheme();
-
-  const [admYear, setAdmYear] = React.useState<string>(userData.admYear);
-  const [batch, setBatch] = React.useState<string>(userData.batch);
+  
   const [wifiUsername, setWifiUsername] = React.useState<string>(
     userData.wifiUsername || ""
   );
