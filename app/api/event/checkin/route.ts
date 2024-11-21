@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let decodedToken;
+  let decodedToken, decodedUID;
 
   //Verify identity token firebase
   try {
@@ -38,10 +38,25 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  //Verify ticket token
+  try{
+    //@ts-ignore
+    const c = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
+    //@ts-ignore
+    decodedUID = (c.update(data, 'base64', 'utf8') + c.final('utf8')).toString();
+    
+  }catch(e){
+    console.log(e)
+    return NextResponse.json(
+      { msg: 'Unauthorized.' },
+      { status: 400 }
+    );
+  }
+
   const [evntId, data] = ticketToken.split(".");
   const [regUser, userData, hostDoc, evntDoc] = await Promise.all([
-    getFirestore().collection(`/events/${evntId}/regs`).doc(decodedToken.uid).get(),
-    getFirestore().collection(`/users/${decodedToken.uid}/attendedEvents`).doc(evntId).get(),
+    getFirestore().collection(`/events/${evntId}/regs`).doc(decodedUID).get(),
+    getFirestore().collection(`/users/${decodedUID}/attendedEvents`).doc(evntId).get(),
     getFirestore().doc(`/users/${decodedToken.uid}`).get(),
     getFirestore().doc(`/events/${evntId}`).get()
   ]);
@@ -57,22 +72,6 @@ export async function POST(req: NextRequest) {
           { status: 401 }
         );
       } 
-      
-      try{
-        const IV = Buffer.alloc(16, 0);
-        const SECRET_KEY = Buffer.from(process.env.ENC_SECRET || "testkey");
-        //@ts-ignore
-        const c = crypto.createDecipheriv('aes-192-cbc', SECRET_KEY, IV);
-        //@ts-ignore
-        decodedUID = (c.update(data, 'base64', 'utf8') + c.final('utf8')).toString();
-        
-      }catch(e){
-        console.log(e)
-        return NextResponse.json(
-          { msg: 'Unauthorized.' },
-          { status: 400 }
-        );
-      }
 
       if(!regUser.exists || !userData.exists) return NextResponse.json(
         { msg: 'Unauthorized.' },
