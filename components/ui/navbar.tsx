@@ -30,7 +30,7 @@ export function Navbar({ qName }: { qName?: string }) {
   const { toast } = useToast();
   const user = useAuthContext();
   const [open, setOpen] = useState(false);
-  const role = localStorage.getItem('role');
+  const club = localStorage.getItem('club');
 
   const [openScanner, setOpenScanner]  =useState(false)
   function handleUserLogin(): void {
@@ -95,10 +95,23 @@ export function Navbar({ qName }: { qName?: string }) {
                 {user ? (
                   <>
                     <DropdownMenuItem
-                      onClick={() => (location.href = role == 'club' ? "/dashboard" : "/profile")}
+                      onClick={() => (location.href = "/profile")}
                       className="cursor-pointer "
                     >
-                      {role == 'club' ? "View Dashboard" : "View Profile"}
+                       View Profile
+                      
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                ) : null}
+
+              {club && club !="" ? (
+                  <>
+                    <DropdownMenuItem
+                      onClick={() => (location.href = "/dashboard")}
+                      className="cursor-pointer "
+                    >
+                     View Dashboard
                       
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />

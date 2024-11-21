@@ -54,8 +54,7 @@ import { Event, Event_RSVP, Event_User, Event as _Event } from "@/lib/types";
 import Papa from "papaparse";
 import { QrReader } from "react-qr-reader";
 import { Result } from '@zxing/library';
-import { Loader2, X } from "lucide-react";
-import { set } from "react-hook-form";
+import { Loader2, LoaderIcon, X } from "lucide-react";
 
 export function CheckInDialog({
   open,
@@ -66,42 +65,112 @@ export function CheckInDialog({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   evnt: Event;
 }) {
-
   const [qrActive, setQrActive] = React.useState(true);
   const { toast } = useToast();
   const user = useAuthContext();
   
-  async function handleSuccess(result: Result | null | undefined): Promise<void> {
-    if (result) {
-      const txt  = result.getText();
-      console.log(txt)
-      if("vibrate" in navigator) navigator.vibrate(200)
-      if(txt.length == 0) return
+  const [clubToken, setClubToken] = React.useState<string | null>(null);
+  const [userToken, setUserToken] = React.useState<string | null>(null);
 
-      setQrActive(false)
+  const fetchClubToken = React.useCallback(async (token: string) => {
+    try {
+      const response = await fetch(`/api/getClubToken`, {
+        method: "POST",
+        headers: {
+          "X-Token": token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        setClubToken(data.clubToken);
+        localStorage.setItem('clubToken_'+user?.uid, data.clubToken);
+      }
+    } catch (error) {
+      console.error('Failed to fetch club token:', error);
+      
+      toast({
+        title: "Failed to fetch club token",
+        variant: "destructive"
+      });
+    }
+  }, []); 
+
+  React.useEffect(() => {
+    if (user) {
+      const retrieveToken = async () => {
+        try {
+          const token = await user.getIdToken();
+          
+          setUserToken(token);
+        localStorage.setItem('userToken_'+user?.uid, token);
+          
+          await fetchClubToken(token);
+        } catch (error) {
+          console.error('Token retrieval failed:', error);
+        }
+      };
+
+      retrieveToken();
+    }
+  }, [user, fetchClubToken]); 
+
+  function handleSuccess(result: Result | null | undefined) {
+    if (result) {
+      const txt = result.getText();
+      
+      const userToken = localStorage.getItem('userToken_'+user?.uid);
+      const clubToken = localStorage.getItem('clubToken_'+user?.uid);
+
+      if (!userToken || !clubToken) {
+        toast({
+          title: "Tokens not available. Please try again.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if ("vibrate" in navigator) navigator.vibrate(200);
+
+      setQrActive(false);
 
       fetch(`/api/event/checkin`, {
         method: "POST",
         headers: {
-          "X-Token": await user?.getIdToken() || "",
+          "X-Token": userToken,
+          "X-ClubToken": clubToken
         },
         body: txt,
       })
       .then(async (res) => {
-        setQrActive(true)
-        if(res.ok){
-          toast({title:"Checked in successfully.", variant:"default"})
-        }else{
-          toast({title:"Failed to checkin: "+ (await res.json()).msg, variant:"destructive"})
+        setQrActive(true);
+        
+        if (res.ok) {
+          toast({ title: "Checked in successfully.", variant: "success" });
+        } else {
+          const errorMsg = (await res.json()).msg;
+          toast({ 
+            title: `Failed to check in: ${errorMsg}`, 
+            variant: "destructive" 
+          });
         }
       })
+      .catch(error => {
+        console.error('Check-in error:', error);
+        setQrActive(true);
+        toast({ 
+          title: "Check-in failed. Please try again.", 
+          variant: "destructive" 
+        });
+      });
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen} modal>
       <DialogContent className="!max-w-screen !w-screen !h-screen !max-h-screen !p-0 !m-0 bg-zinc-800">
-        <DialogHeader className="absolute top-0 z-20 w-full p-6 bg-zinc-900 rounded-b-3xl">
+        <DialogHeader className="absolute top-0 z-30 w-full p-6 bg-zinc-900 rounded-b-3xl">
           <DialogTitle>Checkin</DialogTitle>
           <DialogClose className="absolute top-0 right-0 p-4 text-white"><X/></DialogClose>
 
@@ -113,6 +182,8 @@ export function CheckInDialog({
             </div>
           </div>
         </DialogHeader>
+
+        {!clubToken && <div className="flex absolute items-center justify-center w-full h-full backdrop-blur z-20"><HashLoader color="white"/></div>}
         {qrActive ? (
           <div className="w-full h-full flex items-center">
             <QrReader 

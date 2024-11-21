@@ -17,16 +17,17 @@ import crypto from "crypto"
 export async function POST(req: NextRequest) {
 
   const token = req.headers.get('X-Token')
+  const clubToken = req.headers.get('X-ClubToken')
   const ticketToken = await req.text()
 
-  if (!token || !ticketToken) {
+  if (!token || !ticketToken || !clubToken) {
     return NextResponse.json(
       { msg: 'Missing Required Fields.' },
       { status: 400 }
     );
   }
 
-  let decodedToken, decodedUID;
+  let decodedToken, decodedUID, club;
   const [evntId, data] = ticketToken.split(".");
 
   //Verify identity token firebase
@@ -45,7 +46,6 @@ export async function POST(req: NextRequest) {
     const c = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
     //@ts-ignore
     decodedUID = (c.update(data, 'base64', 'utf8') + c.final('utf8')).toString();
-    
   }catch(e){
     console.log(e)
     return NextResponse.json(
@@ -54,40 +54,48 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const [regUser, userData, hostDoc, evntDoc] = await Promise.all([
-    getFirestore().collection(`/events/${evntId}/regs`).doc(decodedUID).get(),
-    getFirestore().collection(`/users/${decodedUID}/attendedEvents`).doc(evntId).get(),
-    getFirestore().doc(`/users/${decodedToken.uid}`).get(),
-    getFirestore().doc(`/events/${evntId}`).get()
-  ]);
+  // Verify club token
+  try{
+    //@ts-ignore
+    const cl = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
+    const raw = JSON.parse((cl.update(clubToken, 'base64', 'utf8') + cl.final('utf8')).toString())
+
+    if(raw[0] != decodedUID) return NextResponse.json(
+      { msg: 'Unauthorized.' },
+      { status: 401 }
+    );
+
+    club = raw[1];
+  }catch(e){
+    console.log(e)
+    return NextResponse.json(
+      { msg: 'Unauthorized.' },
+      { status: 400 }
+    );
+  }
+
+  const evntDoc = await getFirestore().doc(`/events/${evntId}`).get();
 
   if(evntDoc.exists){
       const d = evntDoc.data() as {host :string, evntSecretKey: string, club: string[]}
-      const hostData = hostDoc.data() as {role: string, club: string}
 
-
-      if(hostData.role != "Admin") {
-        if(!d.club.includes(hostData.club)) return NextResponse.json(
+      if(club != "All Clubs") {
+        if(!d.club.includes(club)) return NextResponse.json(
           { msg: 'Unauthorized.' },
           { status: 401 }
         );
       } 
 
-      if(!regUser.exists || !userData.exists) return NextResponse.json(
-        { msg: 'Unauthorized.' },
-        { status: 404 }
-      );
-
-      if(((regUser.data() as {status:string}).status.toLocaleLowerCase() != "registered") || ((userData.data() as Event_User).status.toLocaleLowerCase() != "registered")) return NextResponse.json(
-        { msg: 'This user is already checked in.' },
-        { status: 409 }
-      );
-
-
       await Promise.all([
-        regUser.ref.update({status: "attended", updatedAt: FieldValue.serverTimestamp()}),
-        userData.ref.update({status: "Attended", updatedAt: FieldValue.serverTimestamp()})
-      ]);
+        getFirestore().collection(`/events/${evntId}/regs`).doc(decodedUID).update({status: "attended", updatedAt: FieldValue.serverTimestamp()}),
+        getFirestore().collection(`/users/${decodedUID}/attendedEvents`).doc(evntId).update({status: "Attended", updatedAt: FieldValue.serverTimestamp()})
+      ]).catch(e => {
+        console.log(e)
+        return NextResponse.json(
+          { msg: 'Failed to checkin.' },
+          { status: 500 }
+        );
+      });
       
       return NextResponse.json(
         { msg: 'User Checked in.' },

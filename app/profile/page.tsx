@@ -40,6 +40,11 @@ function Page() {
         setOpenSignin(true);
       } else {
         setUserData(data.data);
+
+        if(data.data.club && data.data.club.length > 0){
+          localStorage.setItem("club", data.data.club);
+        } else localStorage.removeItem("club");
+        
         if (data.data.college.length == 0) {
           setIsUcek(true);
         }
