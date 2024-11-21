@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
-import { Message, getMessaging } from 'firebase-admin/messaging';
 import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
 import { Event, Event_User } from "@/lib/types";
 import { getAuth } from "firebase-admin/auth";
 import crypto from "crypto"
-import Papa from "papaparse";
 
 /*
     CHECKIN AN USER TO THE EVENT
@@ -28,7 +26,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let decodedToken, decodedUID;
+  let decodedToken;
 
   //Verify identity token firebase
   try {
@@ -41,18 +39,25 @@ export async function POST(req: NextRequest) {
   }
 
   const [evntId, data] = ticketToken.split(".");
-  const evntDoc = await getFirestore().doc(`/events/${evntId}`).get();
-  const hostData = (await getFirestore().doc(`/users/${decodedToken.uid}`).get()).data() as {club: string, role: string}
+  const [regUser, userData, hostDoc, evntDoc] = await Promise.all([
+    getFirestore().collection(`/events/${evntId}/regs`).doc(decodedToken.uid).get(),
+    getFirestore().collection(`/users/${decodedToken.uid}/attendedEvents`).doc(evntId).get(),
+    getFirestore().doc(`/users/${decodedToken.uid}`).get(),
+    getFirestore().doc(`/events/${evntId}`).get()
+  ]);
 
   if(evntDoc.exists){
       const d = evntDoc.data() as {host :string, evntSecretKey: string, club: string[]}
-      if(hostData.role != "Admin" && d.club.includes(hostData.club)) return NextResponse.json(
+      const hostData = hostDoc.data() as {role: string, club: string}
+      if(hostData.role != "Admin" || !d.club.includes(hostData.club)) return NextResponse.json(
         { msg: 'Unauthorized.' },
         { status: 401 }
       );
       try{
+        const IV = Buffer.alloc(16, 0);
+        const SECRET_KEY = Buffer.from(process.env.ENC_SECRET || "testkey");
         //@ts-ignore
-        const c = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0))
+        const c = crypto.createDecipheriv('aes-192-cbc', SECRET_KEY, IV);
         //@ts-ignore
         decodedUID = (c.update(data, 'base64', 'utf8') + c.final('utf8')).toString();
         
@@ -64,10 +69,6 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const regUser = await getFirestore().collection(`/events/${evntId}/regs`).doc(decodedUID).get();
-      const userData = await getFirestore().collection(`/users/${decodedUID}/attendedEvents`).doc(evntId).get();
-
-
       if(!regUser.exists || !userData.exists) return NextResponse.json(
         { msg: 'Unauthorized.' },
         { status: 404 }
@@ -78,8 +79,11 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
 
-      regUser.ref.update({status: "attended"})    
-      userData.ref.update({status: "Attended"}) 
+
+      await Promise.all([
+        regUser.ref.update({status: "attended", updatedAt: FieldValue.serverTimestamp()}),
+        userData.ref.update({status: "Attended", updatedAt: FieldValue.serverTimestamp()})
+      ]);
       
       return NextResponse.json(
         { msg: 'User Checked in.' },
