@@ -349,9 +349,10 @@ function UserEventInteractionPanel({
 
     getUserEventStatus(user, params.id).then((d) => {
       if (d?.exists()) {
-        d.data()?.status == "Registered" && date.isBefore()
-          ? setUserStatus("Missed")
-          : setUserStatus(d.data()?.status);
+
+        // d.data()?.status == "Registered" && date.isBefore()
+        //   ? setUserStatus("Missed")
+          setUserStatus(d.data()?.status);
       } else setUserStatus(null);
     });
   }, []);
