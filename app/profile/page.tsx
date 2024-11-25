@@ -15,8 +15,9 @@ import { signOut } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
 import { auth } from "@/components/fb/config";
 import { FaEye, FaEyeSlash, FaUserEdit } from "react-icons/fa";
-import { Edit } from "lucide-react";
+import { Edit, ScanLine } from "lucide-react";
 import { resolveClubIcon } from "@/lib/utils";
+import { CheckInDialog } from "@/components/dialog/checkin-dialog";
 
 function Page() {
   const user = useAuthContext();
@@ -26,6 +27,7 @@ function Page() {
   const [openSignin, setOpenSignin] = useState(false);
   const [isUcek, setIsUcek] = useState(false);
   const [editDialog, setEditDialog] = useState(false);
+  const [qrScanner, setQrScanner] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [infoText, setInfoText] = useState(<></>);
 
@@ -75,6 +77,16 @@ function Page() {
         />
       )}
 
+      {qrScanner && userData && (
+        <CheckInDialog
+          lateral={true}
+          open={qrScanner}
+          setOpen={setQrScanner}
+          evnt={null}
+          userData={userData}
+        />
+      )}
+
       <div className="flex h-full flex-col dark:bg-[#0a0a0a]">
         <Navbar />
         <div className="mt-40 flex flex-1 flex-col sm:flex-row items-center md:items-start dark:bg-[#0a0a0a]">
@@ -92,6 +104,13 @@ function Page() {
                   </h2>
                   <p className="text-muted-foreground">{userData?.role}</p>
                 </div>
+              </div>
+              <div
+                className="absolute left-5 tooltip cursor-pointer"
+                data-tip="Edit profile"
+                onClick={() => setQrScanner(true)}
+              >
+                <ScanLine color="white" size={20} />
               </div>
               <div
                 className="absolute right-5 tooltip cursor-pointer"

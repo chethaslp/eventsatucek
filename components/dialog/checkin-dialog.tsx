@@ -50,20 +50,24 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { getImgLink } from "@/lib/data";
 import { getUser, rsvpEvent } from "../fb/db";
-import { Event, Event_RSVP, Event_User, Event as _Event } from "@/lib/types";
+import { Event, Event_RSVP, Event_User, UserType, Event as _Event } from "@/lib/types";
 import Papa from "papaparse";
 import { QrReader } from "react-qr-reader";
-import { Result } from '@zxing/library';
+import { BrowserQRCodeReader, Result } from '@zxing/library';
 import { Loader2, LoaderIcon, X } from "lucide-react";
 
 export function CheckInDialog({
   open,
+  lateral,
   setOpen,
   evnt,
+  userData
 }: {
   open: boolean;
+  lateral: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  evnt: Event;
+  evnt: Event | null;
+  userData: UserType | null;
 }) {
   const [qrActive, setQrActive] = React.useState(true);
   const { toast } = useToast();
@@ -98,6 +102,7 @@ export function CheckInDialog({
   }, []); 
 
   React.useEffect(() => {
+    if(lateral) return;
     if (user) {
       const retrieveToken = async () => {
         try {
@@ -115,6 +120,14 @@ export function CheckInDialog({
       retrieveToken();
     }
   }, [user, fetchClubToken]); 
+
+  React.useEffect(() => {
+    if(!lateral) return;
+
+    setTimeout(() => {
+      setClubToken("lateral");
+    }, 1000);
+  });
 
   function handleSuccess(result: Result | null | undefined) {
     if (result) {
@@ -167,20 +180,46 @@ export function CheckInDialog({
     }
   }
 
+  function handleSuccessLateral(result?: Result | null | undefined, error?: Error | null | undefined): void {
+    if(!result) return
+
+    const userToken = localStorage.getItem('userToken_'+user?.uid);
+    if (!userToken) {
+      toast({
+        title: "Token not available. Please try again.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const txt = result.getText();
+    if ("vibrate" in navigator) navigator.vibrate(200);
+
+    setQrActive(false);
+
+    fetch(`/api/event/checkin-lateral`, {
+      method: "POST",
+      headers: {
+        "X-Token": userToken,
+      },
+      body: txt,
+    })
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen} modal>
       <DialogContent className="!max-w-screen !w-screen !h-screen !max-h-screen !p-0 !m-0 bg-zinc-800">
         <DialogHeader className="absolute top-0 z-30 w-full p-6 bg-zinc-900 rounded-b-3xl">
-          <DialogTitle>Checkin</DialogTitle>
+          <DialogTitle>{lateral? "Scanner":"Checkin"}</DialogTitle>
           <DialogClose className="absolute top-0 right-0 p-4 text-white"><X/></DialogClose>
 
-          <div className="flex rounded gap-3 items-center">
+          {evnt && <div className="flex rounded gap-3 items-center">
             <Image src={getImgLink(evnt.img)} width={64} height={64} className="rounded-lg w-15 h-16" alt={""}/>
             <div className="flex flex-col items-start">
               <span className="text-white font-bold">{evnt.title}</span>
               <span className="text-gray-300 ">{evnt.club}</span>
             </div>
-          </div>
+          </div>}
         </DialogHeader>
 
         {!clubToken && <div className="flex absolute items-center justify-center w-full h-full backdrop-blur z-20"><HashLoader color="white"/></div>}
@@ -188,7 +227,7 @@ export function CheckInDialog({
           <div className="w-full h-full flex items-center">
             <QrReader 
               scanDelay={1000}
-              onResult={handleSuccess}
+              onResult={lateral? handleSuccessLateral :handleSuccess}
               ViewFinder={() => (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
                 <div className="w-64 h-64 border-2 border-white rounded-lg relative">

@@ -83,6 +83,8 @@ function Page() {
       )}
       {openCheckInDialog && crntEvent && (
         <CheckInDialog
+          lateral={false}
+          userData={null}
           open={openCheckInDialog}
           setOpen={setOpenCheckInDialog}
           evnt={crntEvent}

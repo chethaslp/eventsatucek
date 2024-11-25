@@ -6,8 +6,8 @@ import { getAuth } from "firebase-admin/auth";
 import crypto from "crypto"
 
 /*
-    CHECKIN AN USER TO THE EVENT
-    Endpoint: /api/event/checkin
+    CHECKIN AN USER TO THE EVENT LATERALY
+    Endpoint: /api/event/checkin-lateral
     Method: POST
     Params: { X-Token -> Firebase ID Token }
 */
@@ -17,10 +17,9 @@ import crypto from "crypto"
 export async function POST(req: NextRequest) {
 
   const token = req.headers.get('X-Token')
-  const clubToken = req.headers.get('X-ClubToken')
   const ticketToken = await req.text()
 
-  if (!token || !ticketToken || !clubToken) {
+  if (!token || !ticketToken) {
     return NextResponse.json(
       { msg: 'Missing Required Fields.' },
       { status: 400 }
@@ -40,6 +39,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  return NextResponse.json(
+    { msg: 'Not Implemented.' },
+    { status: 418 }
+  );
+
   //Verify ticket token
   try{
     //@ts-ignore
@@ -54,25 +58,25 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Verify club token
-  try{
-    //@ts-ignore
-    const cl = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
-    const raw = JSON.parse((cl.update(clubToken, 'base64', 'utf8') + cl.final('utf8')).toString())
+  // // Verify club token
+  // try{
+  //   //@ts-ignore
+  //   const cl = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
+  //   const raw = JSON.parse((cl.update(clubToken, 'base64', 'utf8') + cl.final('utf8')).toString())
 
-    if(raw[0] != decodedToken.uid) return NextResponse.json(
-      { msg: 'Unauthorized.' },
-      { status: 401 }
-    );
+  //   // if(raw[0] != decodedUID) return NextResponse.json(
+  //   //   { msg: 'Unauthorized.' },
+  //   //   { status: 401 }
+  //   // );
 
-    club = raw[1];
-  }catch(e){
-    console.log(e)
-    return NextResponse.json(
-      { msg: 'Unauthorized.' },
-      { status: 400 }
-    );
-  }
+  //   club = raw[1];
+  // }catch(e){
+  //   console.log(e)
+  //   return NextResponse.json(
+  //     { msg: 'Unauthorized.' },
+  //     { status: 400 }
+  //   );
+  // }
 
   const evntDoc = await getFirestore().doc(`/events/${evntId}`).get();
 

@@ -56,28 +56,6 @@ function Page({ params }: { params: { id: string } }) {
 
   const handleClubIcon = async (d: string[]) => {};
 
-  const createLinkElements = (text: string): (JSX.Element | string)[] => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-    return text.split(urlRegex).map((part, index) => {
-      if (urlRegex.test(part)) {
-        return (
-          <a
-            key={index}
-            href={part}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline text-slate-300 hover:no-underline"
-          >
-            {part}
-          </a>
-        );
-      } else {
-        return part;
-      }
-    });
-  };
-
   useEffect(() => {
     getEvent(params.id).then((evnt) => {
       const d = evnt[0];
@@ -350,8 +328,8 @@ function UserEventInteractionPanel({
     getUserEventStatus(user, params.id).then((d) => {
       if (d?.exists()) {
 
-        // d.data()?.status == "Registered" && date.isBefore()
-        //   ? setUserStatus("Missed")
+        d.data()?.status == "Registered" && date?.isBefore(moment().subtract(1, 'days'))
+          ? setUserStatus("Missed") :
           setUserStatus(d.data()?.status);
       } else setUserStatus(null);
     });

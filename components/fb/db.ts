@@ -7,6 +7,7 @@ import {
   serverTimestamp,
   query,
   where,
+  orderBy,
   collectionGroup,
   updateDoc,
 } from "firebase/firestore";
@@ -14,7 +15,6 @@ import { db } from "./config";
 import { User, getAuth, updatePhoneNumber } from "firebase/auth";
 import { UserType, Event_User, ClubType } from "@/lib/types";
 import { GenericConverter } from "@/lib/utils";
-import { log } from "util";
 
 export async function getUser(user: User) {
   const rslt = await getDoc(doc(db, "/users/" + user.uid));
@@ -115,11 +115,11 @@ export async function rsvpEvent(user: User, data: Event_User, userData?: UserTyp
 }
 
 export async function getUserEvents(user: User) {
-  return getDocs(
+  return getDocs(query(
     collection(doc(db, "users", user.uid), "attendedEvents").withConverter(
       GenericConverter<Event_User>()
     )
-  )
+  , orderBy("dt", "desc")))
     .then((data) => data.docs)
     .catch((err) => {
       console.error(err);
@@ -145,14 +145,14 @@ export async function getClubEvents(type: "past" | "upcoming", club: string) {
 
   if (type == "upcoming") t = where("dt", ">", new Date());
   
-  if(club == "All Clubs") return getDocs(query(collection(db, "events"), t))
+  if(club == "All Clubs") return getDocs(query(collection(db, "events"), t, orderBy("dt", "desc")))
     .then((data) => data.docs)
     .catch((err) => {
       console.error(err);
       return null;
     });
 
-  return getDocs(query(collection(db, "events"), where("club", "array-contains", club), t))
+  return getDocs(query(collection(db, "events"), where("club", "array-contains", club), t, orderBy("dt", "desc")))
     .then((data) => data.docs)
     .catch((err) => {
       console.error(err);
