@@ -14,20 +14,19 @@ import crypto from "crypto"
 
 !getApps().length ? initializeApp({credential: cert(JSON.parse(process.env.CREDS || ""))}) : getApp();
 
-export async function POST(req: NextRequest) {
 
+export async function GET(req: NextRequest) {
+
+  let decodedToken;
+
+  const evntID = req.headers.get("X-EventID")
   const token = req.headers.get('X-Token')
-  const ticketToken = await req.text()
-
-  if (!token || !ticketToken) {
+  if (!token || !evntID) {
     return NextResponse.json(
       { msg: 'Missing Required Fields.' },
       { status: 400 }
     );
   }
-
-  let decodedToken, decodedUID, club;
-  const [evntId, data] = ticketToken.split(".");
 
   //Verify identity token firebase
   try {
@@ -39,60 +38,80 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  return NextResponse.json(
-    { msg: 'Not Implemented.' },
-    { status: 418 }
-  );
+  const userData = (await getFirestore().collection("users").doc(decodedToken.uid).get()).data()
 
-  //Verify ticket token
-  try{
-    //@ts-ignore
-    const c = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
-    //@ts-ignore
-    decodedUID = (c.update(data, 'base64', 'utf8') + c.final('utf8')).toString();
-  }catch(e){
-    console.log(e)
-    return NextResponse.json(
+  if(userData){
+    if(!userData.club || userData.club == "") return NextResponse.json(
       { msg: 'Unauthorized.' },
+      { status: 404 }
+    );
+
+    // Creating a doc in firestore to store checkin token
+    const d = await getFirestore().collection("events").doc(evntID).collection("checkin-tokens").add({uid: decodedToken.uid, evntID: evntID, createdAt: FieldValue.serverTimestamp()})
+
+
+    //@ts-ignore
+    const c = crypto.createCipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0))
+    return NextResponse.json({ token: c.update(JSON.stringify([evntID, d.id]),'utf8','base64').toString() + c.final('base64').toString() });
+  }else{
+    return NextResponse.json(
+      { msg: 'User Not Found.' },
+      { status: 404 }
+    );
+  }
+
+
+}
+
+export async function POST(req: NextRequest) {
+
+  const token = req.headers.get('X-Token')
+  const checkinToken = await req.text()
+
+  if (!token || !checkinToken) {
+    return NextResponse.json(
+      { msg: 'Missing Required Fields.' },
       { status: 400 }
     );
   }
 
-  // // Verify club token
-  // try{
-  //   //@ts-ignore
-  //   const cl = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
-  //   const raw = JSON.parse((cl.update(clubToken, 'base64', 'utf8') + cl.final('utf8')).toString())
+  let decodedToken, decodedUID, club;
 
-  //   // if(raw[0] != decodedUID) return NextResponse.json(
-  //   //   { msg: 'Unauthorized.' },
-  //   //   { status: 401 }
-  //   // );
+  //Verify identity token firebase
+  try {
+    decodedToken = await getAuth().verifyIdToken(token);
+  } catch (e) {
+    return NextResponse.json(
+      { msg: 'Invalid Token.' },
+      { status: 400 }
+    );
+  }
 
-  //   club = raw[1];
-  // }catch(e){
-  //   console.log(e)
-  //   return NextResponse.json(
-  //     { msg: 'Unauthorized.' },
-  //     { status: 400 }
-  //   );
-  // }
+  // Verify token
+  try{
+    //@ts-ignore
+    const cl = crypto.createDecipheriv('aes-192-cbc', Buffer.from(process.env.ENC_SECRET || "testkey"), Buffer.alloc(16, 0));
+    const raw = JSON.parse((cl.update(checkinToken, 'base64', 'utf8') + cl.final('utf8')).toString())
 
-  const evntDoc = await getFirestore().doc(`/events/${evntId}`).get();
 
-  if(evntDoc.exists){
-      const d = evntDoc.data() as {host :string, evntSecretKey: string, club: string[]}
 
-      if(club != "All Clubs") {
-        if(!d.club.includes(club)) return NextResponse.json(
-          { msg: 'Unauthorized.' },
-          { status: 401 }
-        );
-      } 
+    const doc = await getFirestore().collection("events").doc(raw[0]).collection("checkin-tokens").doc(raw[1]).get()
 
+
+    if(doc.exists){
+      // Check if token is expired
+      // TOKEN TTL : 5 mins
+      
+      //@ts-ignore
+      if(doc.data().createdAt < Timestamp.now().toMillis() - 300000) return NextResponse.json(
+        { msg: 'Token Expired.' },
+        { status: 401 }
+      );
+
+      // Checkin the user to the event
       await Promise.all([
-        getFirestore().collection(`/events/${evntId}/regs`).doc(decodedUID).update({status: "attended", updatedAt: FieldValue.serverTimestamp()}),
-        getFirestore().collection(`/users/${decodedUID}/attendedEvents`).doc(evntId).update({status: "Attended", updatedAt: FieldValue.serverTimestamp()})
+        getFirestore().collection(`/events/${raw[0]}/regs`).doc(decodedToken.uid).update({status: "attended", updatedAt: FieldValue.serverTimestamp()}),
+        getFirestore().collection(`/users/${decodedToken.uid}/attendedEvents`).doc(raw[0]).update({status: "Attended", updatedAt: FieldValue.serverTimestamp()})
       ]).catch(e => {
         console.log(e)
         return NextResponse.json(
@@ -100,15 +119,26 @@ export async function POST(req: NextRequest) {
           { status: 500 }
         );
       });
-      
+
+      // Delete the token
+      await doc.ref.delete()
+
       return NextResponse.json(
-        { msg: 'User Checked in.' },
+        { msg: 'You are checked in!' }
       );
-      
-  }else{
+    
+    } else{
+      return NextResponse.json(
+        { msg: 'Unauthorized.' },
+        { status: 401 });
+    }
+
+
+  }catch(e){
+    console.log(e)
     return NextResponse.json(
-      { msg: 'Event Not Found.' },
-      { status: 404 }
+      { msg: 'Unauthorized.' },
+      { status: 400 }
     );
   }
 }

@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ clubToken: c.update(JSON.stringify([decodedToken.uid, userData.club]),'utf8','base64').toString() + c.final('base64').toString() });
   }else{
     return NextResponse.json(
-      { msg: 'Event Not Found.' },
+      { msg: 'User Not Found.' },
       { status: 404 }
     );
   }
