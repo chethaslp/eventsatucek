@@ -373,7 +373,7 @@ function UserEventInteractionPanel({
             );
           case null:
             if(data[12] == "No RSVP") return null;
-if(data[15] == "No") return <div className="border rounded-lg bg-orange-600 gap-3 flex flex-row p-3">
+          if(data[8] == "Offline" && data[15] == "No") return <div className="border rounded-lg bg-orange-600 gap-3 flex flex-row p-3">
             <InfoIcon /> Registrations are closed for this event!
           </div>;
 
