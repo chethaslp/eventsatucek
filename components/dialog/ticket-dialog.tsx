@@ -29,10 +29,12 @@ export function TicketDialog({
   open,
   setOpen,
   evnt,
+  lateralCheckin
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   evnt: string[];
+  lateralCheckin?: boolean;
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   if (isDesktop) {
@@ -45,7 +47,7 @@ export function TicketDialog({
           Please show this ticket to the event host.
             </DialogDescription>
           </DialogHeader>
-          { open && <ShowTicket evnt={evnt} setOpen={setOpen} />}
+          { open && <ShowTicket evnt={evnt} setOpen={setOpen} lateralCheckin={lateralCheckin} />}
         </DialogContent>
       </Dialog>
     );
@@ -60,14 +62,14 @@ export function TicketDialog({
           Please show this ticket to the event host.
           </DrawerDescription>
         </DrawerHeader>
-        { open && <ShowTicket evnt={evnt} setOpen={setOpen} />}
+        { open && <ShowTicket evnt={evnt} setOpen={setOpen} lateralCheckin={lateralCheckin} /> }
       </DrawerContent>
     </Drawer>
   );
 }
 
-function ShowTicket({ evnt, setOpen }: { evnt: string[]; setOpen: React.Dispatch<React.SetStateAction<boolean>>;}) {
-  
+function ShowTicket({ evnt, setOpen, lateralCheckin }: { evnt: string[]; setOpen: React.Dispatch<React.SetStateAction<boolean>>; lateralCheckin?: boolean; }) {
+
   const user = useAuthContext();
   const { toast } = useToast();
   const { theme } = useTheme();
@@ -87,6 +89,39 @@ function ShowTicket({ evnt, setOpen }: { evnt: string[]; setOpen: React.Dispatch
 
     setLoading("Getting your ticket...");
     (async ()=>{
+      if(lateralCheckin) {
+        setLoading("Loading...");
+
+        await fetch(`/api/event/checkin-lateral`, {
+          method: "GET",
+          headers: {
+            "X-Token": await user.getIdToken(),
+            "X-EventID": evnt[1]
+          }
+        }).then(async (data) => {
+          if (data.status === 400) {
+            setLoading("Unauthorized. Please login to continue.");
+            setTimeout(() => location.href = `/login?r=/e/${evnt[1]}`, 2000);
+            return;
+          }
+          if (data.status === 404) {
+            setLoading("Unauthorized. Please RSVP to continue.");
+            setTimeout(() => setOpen(false), 2000);
+            return;
+          }
+          const d = await data.json();
+          localStorage.setItem("ticketToken." + evnt[1] + "." + user.uid, d.token);
+          setTicketToken(d.token);
+          setLoading("");
+        }).catch((error) => {
+          console.error("Error fetching ticket:", error);
+          setLoading("Failed to fetch ticket. Please try again later.");
+        });
+        return;
+      }
+
+      setLoading("Loading your ticket...");
+
       const ls = localStorage.getItem("ticketToken."+evnt[1]+"."+ user.uid)
       if(ls && ls != ""){
         setTicketToken(ls)

@@ -1,60 +1,19 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import useMediaQuery from "@/components/hooks/use-media-query";
-import { Button } from "@/components/ui/button";
-import { HashLoader } from "react-spinners";
-import { FaExternalLinkAlt } from "react-icons/fa";
 import {
   Dialog,
   DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogContent, DialogHeader,
+  DialogTitle
 } from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import {
-  DocumentData,
-  QuerySnapshot,
-  and,
-  collection,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { db } from "../fb/config";
-import { useTheme } from "next-themes";
+import { getImgLink } from "@/lib/data";
+import { Event, UserType } from "@/lib/types";
+import { Result } from '@zxing/library';
+import { Loader2, X } from "lucide-react";
+import Image from "next/image";
+import * as React from "react";
+import { QrReader } from "react-qr-reader";
+import { HashLoader } from "react-spinners";
 import { useAuthContext } from "../context/auth";
 import { useToast } from "../ui/use-toast";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { getImgLink } from "@/lib/data";
-import { getUser, rsvpEvent } from "../fb/db";
-import { Event, Event_RSVP, Event_User, UserType, Event as _Event } from "@/lib/types";
-import Papa from "papaparse";
-import { QrReader } from "react-qr-reader";
-import { BrowserQRCodeReader, Result } from '@zxing/library';
-import { Loader2, LoaderIcon, X } from "lucide-react";
 
 export function CheckInDialog({
   open,
@@ -180,10 +139,10 @@ export function CheckInDialog({
     }
   }
 
-  function handleSuccessLateral(result?: Result | null | undefined, error?: Error | null | undefined): void {
+  async function handleSuccessLateral(result?: Result | null | undefined, error?: Error | null | undefined): Promise<void> {
     if(!result) return
 
-    const userToken = localStorage.getItem('userToken_'+user?.uid);
+    const userToken = await user?.getIdToken();
     if (!userToken) {
       toast({
         title: "Token not available. Please try again.",

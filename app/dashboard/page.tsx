@@ -28,7 +28,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
 import { getImgLink } from "@/lib/data";
 import Image from "next/image";
-import { Edit, Edit2Icon, View } from "lucide-react";
+import { Edit, Edit2Icon, QrCode, View } from "lucide-react";
+import { TicketDialog } from "@/components/dialog/ticket-dialog";
 
 function Page() {
   const user = useAuthContext();
@@ -36,6 +37,7 @@ function Page() {
   const [loading, setLoading] = useState(true);
   const [openSignin, setOpenSignin] = useState(false);
   const [openRsvpDialog, setOpenRsvpDialog] = useState(false);
+  const [openLateralCheckInDialog, setOpenLateralCheckInDialog] = useState(false);
   const [openCheckInDialog, setOpenCheckInDialog] = useState(false);
   const [crntEvent, setCrntEvent] = useState<Event>();
 
@@ -91,7 +93,15 @@ function Page() {
         />
       )}
 
-      
+      {openLateralCheckInDialog && crntEvent && (
+        <TicketDialog
+          open={openLateralCheckInDialog}
+          setOpen={setOpenLateralCheckInDialog}
+          evnt={[crntEvent.title, crntEvent.evntID, "", crntEvent.title, "", crntEvent.img, "Lateral Check-in"]}
+          lateralCheckin={true}
+        />
+      )}
+
       {/* {openAddMemberDialog && <Dialog>
         <DialogTrigger asChild>
           <Button variant="outline">Add Member</Button>
@@ -166,6 +176,7 @@ function Page() {
                   setCrntEvent={setCrntEvent}
                   setOpenRsvpDialog={setOpenRsvpDialog}
                   setOpenCheckInDialog={setOpenCheckInDialog}
+                  setOpenLateralCheckInDialog={setOpenLateralCheckInDialog}
                   type="upcoming"
                   club={userData?.club || ""}
                   userData={userData}
@@ -178,6 +189,7 @@ function Page() {
                   setLoading={setLoading}
                   setCrntEvent={setCrntEvent}
                   setOpenRsvpDialog={setOpenRsvpDialog}
+                  setOpenLateralCheckInDialog={setOpenLateralCheckInDialog}
                   setOpenCheckInDialog={setOpenCheckInDialog}
                   type="past"
                   club={userData?.club || ""}
@@ -202,12 +214,14 @@ function ClubEvents({
   setCrntEvent,
   setOpenRsvpDialog,
   setOpenCheckInDialog,
+  setOpenLateralCheckInDialog,
   club,
   userData
 }: {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setCrntEvent: React.Dispatch<React.SetStateAction<Event | undefined>>;
   setOpenRsvpDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenLateralCheckInDialog: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenCheckInDialog: React.Dispatch<React.SetStateAction<boolean>>;
   type: "upcoming" | "past";
   club: string;
@@ -313,8 +327,8 @@ function ClubEvents({
                       </Button>
                     )}
                     {evnt.rsvp.type != "none" &&
-                      evnt.rsvp.status == "open" && (
-                        <Button
+                      evnt.rsvp.status == "open" && (<>
+                      <Button
                           variant={"ghost"}
                           className=" text-white border-b border-slate-700"
                           size="sm"
@@ -326,6 +340,19 @@ function ClubEvents({
                           <MdOutlineQrCodeScanner size={16} className="mr-2" />
                           Check-in
                         </Button>
+                        <Button
+                          variant={"ghost"}
+                          className=" text-white border-b border-slate-700"
+                          size="sm"
+                          onClick={() => {
+                            setCrntEvent(evnt);
+                            setOpenLateralCheckInDialog(true);
+                          }}
+                        >
+                          <QrCode size={16} className="mr-2" />
+                          Lateral Check-in
+                        </Button>
+                      </>
                       )}
                   </div>
                 </div>
