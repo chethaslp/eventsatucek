@@ -15,8 +15,8 @@ import { signOut } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
 import { auth } from "@/components/fb/config";
 import { FaEye, FaEyeSlash, FaUserEdit } from "react-icons/fa";
-import { Edit, ScanLine } from "lucide-react";
-import { resolveClubIcon } from "@/lib/utils";
+import { Edit, ScanLine, Calendar, MapPin, Users, Trophy, Clock, ExternalLink, UserCheck2 } from "lucide-react";
+import { resolveClubIcon, parseDate } from "@/lib/utils";
 import { CheckInDialog } from "@/components/dialog/checkin-dialog";
 
 function Page() {
@@ -238,6 +238,18 @@ function UserEvents({
     QueryDocumentSnapshot<DocumentData, DocumentData>[] | null
   >();
 
+  // Helper function to determine display status
+  const getDisplayStatus = (evnt: Event_User): string => {
+    if (evnt.status === "Registered") {
+      const eventDate = parseDate(evnt.dt);
+      const currentDate = new Date();
+      if (currentDate > eventDate) {
+        return "Missed";
+      }
+    }
+    return evnt.status;
+  };
+
   useEffect(() => {
     if (!user) return;
     getUserEvents(user).then((data) => {
@@ -260,58 +272,108 @@ function UserEvents({
 
   return (
     <>
-      <h1 className="sm:text-2xl text-xl mb-3">Your Events</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="sm:text-2xl text-xl font-bold flex items-center gap-2">
+          Your Events
+        </h1>
+        {userEvents && userEvents.length > 0 && (
+          <div className="text-sm text-gray-600 dark:text-gray-400 backdrop-blur-sm bg-white/10 dark:bg-white/5 px-3 py-1.5 rounded-full border border-white/20 dark:border-white/10">
+            {userEvents.length} event{userEvents.length !== 1 ? 's' : ''}
+          </div>
+        )}
+      </div>
+      
       {!userEvents ? (
-        <div className="flex items-center justify-center flex-col h-full">
-          <h2 className="text-3xl md:text-6xl">Whaaaaat?</h2> You haven&apos;t
-          been to any events so far.{" "}
+        <div className="flex items-center justify-center flex-col h-full py-16">
+          <div className="text-8xl mb-4">🎪</div>
+          <h2 className="text-2xl md:text-4xl font-bold mb-2 text-center">No Events Yet!</h2>
+          <p className="text-muted-foreground text-center max-w-md">
+            You haven't attended any events so far. Start exploring and join exciting events!
+          </p>
         </div>
       ) : (
-        <div className="overflow-x-auto w-full">
-          {/* Cards for Mobile View */}
-          <div className="grid grid-cols-1 w-full sm:grid-cols-2 md:grid-cols-3 gap-4 md:hidden">
+        <div className="w-full">
+          {/* Enhanced Cards for Mobile and Tablet View */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:hidden">
             {userEvents.map((evntData) => {
               const evnt = evntData.data() as Event_User;
               return (
                 <div
                   key={evnt.evntID}
-                  className="bg-white w-full dark:bg-[#1f1f1f] rounded-lg shadow-md p-4"
+                  className="group backdrop-blur-md bg-white/10 dark:bg-white/5 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 dark:border-white/10 overflow-hidden hover:bg-white/20 dark:hover:bg-white/10"
                 >
-                  <div className="flex w-full flex-row items-center gap-3">
-                    <div className="text-xs flex items-center flex-col text-muted-foreground">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <Image
-                          width={48}
-                          height={48}
-                          referrerPolicy={"no-referrer"}
-                          src={resolveClubIcon(evnt.club)}
-                          alt={evnt.club}
-                        />
+                  <div className="p-6">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="relative">
+                        <div className="w-16 h-16 rounded-2xl backdrop-blur-sm bg-white/20 dark:bg-white/10 p-3 shadow-lg border border-white/30 dark:border-white/20">
+                          <Image
+                            width={40}
+                            height={40}
+                            referrerPolicy={"no-referrer"}
+                            src={resolveClubIcon(evnt.club)}
+                            alt={evnt.club}
+                            className="w-full h-full object-contain rounded-lg"
+                          />
+                        </div>
                       </div>
-                      <span className="max-w-20 line-clamp-2">{evnt.club}</span>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">
+                          {evnt.club}
+                        </div>
+                        <h3
+                          className="font-bold text-lg leading-tight cursor-pointer text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2"
+                          onClick={() => (location.href = `/e/${evnt.evntID}`)}
+                        >
+                          {evnt.evntName}
+                        </h3>
+                      </div>
                     </div>
 
-                    <div className="flex-1">
-                      <div
-                        className="font-bold underline cursor-pointer hover:no-underline mt-2"
-                        onClick={() => (location.href = `/e/${evnt.evntID}`)}
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <Calendar className="h-4 w-4 text-blue-500" />
+                        <span>{parseDate(evnt.dt).toLocaleDateString('en-US', { 
+                          weekday: 'short', 
+                          year: 'numeric', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })}</span>
+                      </div>
+                      
+                      <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <Clock className="h-4 w-4 text-green-500" />
+                        <span>{parseDate(evnt.dt).toLocaleTimeString('en-US', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm border ${
+                          getDisplayStatus(evnt) === "Attended"
+                            ? "bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30"
+                            : getDisplayStatus(evnt) === "Registered" 
+                            ? "bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30"
+                            : getDisplayStatus(evnt) === "Missed"
+                            ? "bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30"
+                            : "bg-gray-500/20 text-gray-700 dark:text-gray-300 border-gray-500/30"
+                        }`}
                       >
-                        {evnt.evntName}
-                      </div>
-                      <div className="text-sm text-muted-foreground mt-1">
-                        {evnt.dt.split(" ")[0]}
-                      </div>
-                      <div className="mt-2">
-                        <span
-                          className={`badge badge-ghost badge-sm text-white p-2 ${
-                            evnt.status == "Registered"
-                              ? "bg-green-700"
-                              : "bg-blue-700"
-                          }`}
-                        >
-                          {evnt.status}
-                        </span>
-                      </div>
+                        {getDisplayStatus(evnt) === "Attended" && <UserCheck2 className="h-3 w-3" />}
+                        {getDisplayStatus(evnt) === "Registered" && <Users className="h-3 w-3" />}
+                        {getDisplayStatus(evnt) === "Missed" && <Clock className="h-3 w-3" />}
+                        {getDisplayStatus(evnt)}
+                      </span>
+                      
+                      <button
+                        onClick={() => (location.href = `/e/${evnt.evntID}`)}
+                        className="opacity-0 group-hover:opacity-100 transition-all duration-300 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 backdrop-blur-sm bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 p-2 rounded-full border border-white/20"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -319,62 +381,121 @@ function UserEvents({
             })}
           </div>
 
-          {/* Table for Desktop View */}
-          <table className="table hidden md:block w-full">
-            {/* head */}
-            <thead>
-              <tr className="dark:text-white">
-                <th className="px-1 sm:px-4">Club</th>
-                <th className="px-1 sm:px-4">Event</th>
-                <th className="px-1 sm:px-4">Date</th>
-                <th className="px-1 sm:px-4">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {userEvents.map((evntData) => {
-                const evnt = evntData.data() as Event_User;
-                return (
-                  <tr key={evnt.evntID}>
-                    <td className="px-1 sm:px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="text-xs flex items-center flex-row text-muted-foreground">
-                          <div className="mask mask-squircle w-12 h-12">
-                            <Image
-                              width={48}
-                              height={48}
-                              referrerPolicy={"no-referrer"}
-                              src={resolveClubIcon(evnt.club)}
-                              alt={evnt.club}
-                            />
-                          </div>
-                        </div>
+          {/* Enhanced Table for Desktop View */}
+          <div className="hidden lg:block backdrop-blur-md bg-white/10 dark:bg-white/5 rounded-2xl shadow-xl border border-white/20 dark:border-white/10 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="backdrop-blur-sm bg-white/20 dark:bg-white/10 border-b border-white/20 dark:border-white/10">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4" />
+                        Club
                       </div>
-                    </td>
-                    <td className="px-1 sm:px-4">
-                      <div
-                        className="font-bold underline cursor-pointer hover:no-underline"
-                        onClick={() => (location.href = `/e/${evnt.evntID}`)}
-                      >
-                        {evnt.evntName}
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        Event
                       </div>
-                    </td>
-                    <td className="px-1 sm:px-4">{evnt.dt.split(" ")[0]}</td>
-                    <td className="px-1 sm:px-4">
-                      <span
-                        className={`badge badge-ghost badge-sm text-white p-2 ${
-                          evnt.status == "Registered"
-                            ? "bg-green-700"
-                            : (evnt.status == "Attended" ? "bg-green-700" : "bg-blue-700")
-                        }`}
-                      >
-                        {evnt.status}
-                      </span>
-                    </td>
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        Date & Time
+                      </div>
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Action
+                    </th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  {userEvents.map((evntData, index) => {
+                    const evnt = evntData.data() as Event_User;
+                    return (
+                      <tr 
+                        key={evnt.evntID} 
+                        className="hover:bg-white/10 dark:hover:bg-white/5 transition-colors backdrop-blur-sm"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl backdrop-blur-sm bg-white/20 dark:bg-white/10 p-2 shadow-lg border border-white/30 dark:border-white/20">
+                              <Image
+                                width={32}
+                                height={32}
+                                referrerPolicy={"no-referrer"}
+                                src={resolveClubIcon(evnt.club)}
+                                alt={evnt.club}
+                                className="w-full h-full object-contain rounded"
+                              />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                {evnt.club}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div
+                            className="text-sm font-semibold text-gray-900 dark:text-white cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2 max-w-xs"
+                            onClick={() => (location.href = `/e/${evnt.evntID}`)}
+                          >
+                            {evnt.evntName}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900 dark:text-white font-medium">
+                            {parseDate(evnt.dt).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              year: 'numeric' 
+                            })}
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">
+                            {parseDate(evnt.dt).toLocaleTimeString('en-US', { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm border ${
+                              getDisplayStatus(evnt) === "Attended"
+                                ? "bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30"
+                                : getDisplayStatus(evnt) === "Registered"
+                                ? "bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30"
+                                : getDisplayStatus(evnt) === "Missed"
+                                ? "bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30"
+                                : "bg-gray-500/20 text-gray-700 dark:text-gray-300 border-gray-500/30"
+                            }`}
+                          >
+                            {getDisplayStatus(evnt) === "Attended" && <Trophy className="h-3 w-3" />}
+                            {getDisplayStatus(evnt) === "Registered" && <Users className="h-3 w-3" />}
+                            {getDisplayStatus(evnt) === "Missed" && <Clock className="h-3 w-3" />}
+                            {getDisplayStatus(evnt)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button
+                            onClick={() => (location.href = `/e/${evnt.evntID}`)}
+                            className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors backdrop-blur-sm bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 p-2 rounded-full border border-white/20"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
     </>

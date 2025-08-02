@@ -101,12 +101,14 @@ export async function POST(req: NextRequest) {
     if(doc.exists){
       // Check if token is expired
       // TOKEN TTL : 5 mins
-      
-      //@ts-ignore
-      if(doc.data().createdAt < Timestamp.now().toMillis() - 300000) return NextResponse.json(
-        { msg: 'Token Expired.' },
-        { status: 401 }
-      );
+
+      const now = Timestamp.now();
+      if(doc.data()?.createdAt.toMillis() < new Timestamp(now.seconds - 300, now.nanoseconds).toMillis()) {
+        return NextResponse.json(
+          { msg: 'Token Expired.' },
+          { status: 401 }
+        );
+      }
 
       // Checkin the user to the event
       await Promise.all([

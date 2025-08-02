@@ -40,6 +40,7 @@ function Page() {
   const [openLateralCheckInDialog, setOpenLateralCheckInDialog] = useState(false);
   const [openCheckInDialog, setOpenCheckInDialog] = useState(false);
   const [crntEvent, setCrntEvent] = useState<Event>();
+  const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
 
   useEffect(() => {
     if (!user) {
@@ -134,7 +135,7 @@ function Page() {
         </DialogContent>
       </Dialog>} */}
 
-      <div className="mt-20 p-16 flex-1 flex-col dark:bg-[#0a0a0a]">
+      <div className="mt-20 p-5 md:p-16 flex-1 flex-col dark:bg-[#0a0a0a]">
         <div className="flex flex-row items-center w-full justify-between">
           <div className="flex flex-row items-center gap-5">
             <img
@@ -164,13 +165,13 @@ function Page() {
               Add event
             </Button>
           </div>
-          <Tabs defaultValue="upcoming" className="w-full flex-1 h-full">
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "upcoming" | "past")} className="w-full flex-1 h-full">
             <TabsList>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               <TabsTrigger value="past">Past</TabsTrigger>
             </TabsList>
             <TabsContent value="upcoming" className="w-full h-full">
-              <div className="flex gap-2 flex-col items-center w-full">
+              <div className="flex flex-col items-center w-full">
                 <ClubEvents
                   setLoading={setLoading}
                   setCrntEvent={setCrntEvent}
@@ -180,11 +181,12 @@ function Page() {
                   type="upcoming"
                   club={userData?.club || ""}
                   userData={userData}
+                  setActiveTab={setActiveTab}
                 />
               </div>
             </TabsContent>
             <TabsContent value="past">
-              <div className="flex gap-2 flex-col h-full items-center w-full">
+              <div className="flex flex-col h-full items-center w-full">
                 <ClubEvents
                   setLoading={setLoading}
                   setCrntEvent={setCrntEvent}
@@ -216,7 +218,8 @@ function ClubEvents({
   setOpenCheckInDialog,
   setOpenLateralCheckInDialog,
   club,
-  userData
+  userData,
+  setActiveTab
 }: {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setCrntEvent: React.Dispatch<React.SetStateAction<Event | undefined>>;
@@ -226,6 +229,7 @@ function ClubEvents({
   type: "upcoming" | "past";
   club: string;
   userData?: UserType | null;
+  setActiveTab?: React.Dispatch<React.SetStateAction<"upcoming" | "past">>;
 }) {
   const user = useAuthContext();
   const [userEvents, setUserEvents] = useState<
@@ -235,16 +239,20 @@ function ClubEvents({
   useEffect(() => {
     if (!user) return;
     getClubEvents(type, club).then((data) => {
-      data?.length == 0
-        ? setUserEvents(null)
-        : setUserEvents(
-            data as unknown as
-              | QueryDocumentSnapshot<DocumentData, DocumentData>[]
-              | null
-          );
+      const events = data as unknown as QueryDocumentSnapshot<DocumentData, DocumentData>[] | null;
+      
+      if (events?.length === 0 || !events) {
+        setUserEvents(null);
+        if (type === "upcoming" && setActiveTab) {
+              setActiveTab("past");
+        }
+      } else {
+        setUserEvents(events);
+      }
+      
       setLoading(false);
     });
-  }, []);
+  }, [user, type, club]);
 
   return (
     <>
