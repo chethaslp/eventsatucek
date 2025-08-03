@@ -127,7 +127,7 @@ function RsvpForm({ evnt, setOpen, }: { evnt: string[]; setOpen: React.Dispatch<
         "Content-Type": "application/json",
         "X-Token": await user.getIdToken()
       },
-      body: JSON.stringify({user, evnt}),
+      body: JSON.stringify({user, evnt, userData}),
     }))
     // Checking if the event has a external RSVP link and redirecting to it.
     .then(async (data)=>{

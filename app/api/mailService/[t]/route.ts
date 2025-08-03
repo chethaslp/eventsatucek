@@ -142,7 +142,7 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     // Send email
     await Promise.all([
       transporter.sendMail(mailOptions),
-      sendRegistrationUpdates(data.user, evntData!, data.user)
+      sendRegistrationUpdates(data.user, evntData!, data.userData)
     ]);
 
     return NextResponse.json(resp);
