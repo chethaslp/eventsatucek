@@ -288,7 +288,7 @@ function UserEvents({
           <div className="text-8xl mb-4">🎪</div>
           <h2 className="text-2xl md:text-4xl font-bold mb-2 text-center">No Events Yet!</h2>
           <p className="text-muted-foreground text-center max-w-md">
-            You haven't attended any events so far. Start exploring and join exciting events!
+            You haven&apos;t attended any events so far. Start exploring and join exciting events!
           </p>
         </div>
       ) : (

@@ -257,111 +257,135 @@ function ClubEvents({
   return (
     <>
       {!userEvents ? (
-        <div className="flex items-center justify-center flex-col h-full w-full">
-          <h2 className="text-5xl md:text-6xl">Whaaaaat?</h2>
-          {type == "upcoming"
-            ? "You aren't hosting any events right now."
-            : "You haven&'t hosted any events so far."}
+        <div className="flex items-center justify-center flex-col h-full w-full py-16">
+          <div className="text-8xl mb-4">
+            {type === "upcoming" ? "📅" : "📚"}
+          </div>
+          <h2 className="text-2xl md:text-4xl font-bold mb-2 text-center">
+            {type === "upcoming" ? "No Upcoming Events" : "No Past Events"}
+          </h2>
+          <p className="text-muted-foreground text-center max-w-md">
+            {type === "upcoming"
+              ? "You aren't hosting any events right now. Create your first event to get started!"
+              : "You haven't hosted any events so far. Your past events will appear here."}
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
           {userEvents.map((evntData) => {
             const evnt = evntData.data() as Event;
             return (
-              <div key={evnt.evntID} className="card flex-row bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-                <Image 
-                  src={getImgLink(evnt.img) || '/default-event-cover.jpg'} 
-                  alt={evnt.title}
-                  height={192}
-                  width={320}
-                  className="w-48 h-48 object-cover hidden md:block"
-                />
-                <div className="p-4 flex justify-between w-full">
-                  <div>
-                    <div 
-                      className="font-bold text-lg transition-colors cursor-pointer hover:text-blue-600"
+              <div key={evnt.evntID} className="group backdrop-blur-md bg-white/10 dark:bg-white/5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 dark:border-white/10 overflow-hidden hover:bg-white/20 dark:hover:bg-white/10 flex min-h-[180px]">
+                <div className="relative w-40 flex-shrink-0">
+                  <Image 
+                    src={getImgLink(evnt.img) || '/default-event-cover.jpg'} 
+                    alt={evnt.title}
+                    height={200}
+                    width={200}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2 left-2 flex flex-col gap-1">
+                    <span
+                      className={`rounded-full px-2 py-1 text-xs font-medium ${
+                        evnt.rsvp.status === "open"
+                          ? "bg-green-600 text-white"
+                          : "bg-red-600 text-white"
+                      }`}
+                    >
+                      {evnt.rsvp.status.replace("open", "Public").replace("closed", "Private")}
+                    </span>
+                    <span
+                      className={`rounded-full px-2 py-1 text-xs font-medium ${
+                        evnt.rsvp.type === "internal"
+                          ? "bg-blue-600 text-white"
+                          : evnt.rsvp.type === "external"
+                          ? "bg-purple-600 text-white"
+                          : "bg-gray-600 text-white"
+                      }`}
+                    >
+                      {evnt.rsvp.type === "internal" ? "Internal RSVP" : evnt.rsvp.type === "external" ? "External RSVP" : "No RSVP"}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="p-4 flex-1 flex flex-col justify-between">
+                  <div className="mb-4">
+                    <h3 
+                      className="font-bold text-lg leading-tight cursor-pointer text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-1"
                       onClick={() => (location.href = `/e/${evnt.evntID}`)}
                     >
                       {evnt.title}
+                    </h3>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {(evnt.dt as Timestamp).toDate().toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      {(evnt.dt as Timestamp).toDate().toLocaleString()}
-                    </div>
-                  
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs text-white ${
-                        evnt.rsvp.status == "open"
-                          ? "bg-green-700"
-                          : "bg-red-700"
-                      }`}
-                    >
-                      {evnt.rsvp.status.replace("open", "Visible to All").replace("closed", "Private")}
-                    </span>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs text-white ${
-                        evnt.rsvp.type == "internal"
-                          ? "bg-green-700"
-                          : evnt.rsvp.type == "external"
-                          ? "bg-blue-700"
-                          : "bg-slate-700"
-                      }`}
-                    >
-                      RSVP: {evnt.rsvp.type}
-                    </span>
-                  </div>
-                  
                   </div>
 
-
-                  <div className="flex flex-wrap flex-col gap-2 mt-3 items-end">
-                    {(userData?.role == "Club Lead" || userData?.role == "Admin") &&
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap gap-1">
+                    {(userData?.role === "Club Lead" || userData?.role === "Admin") && (
                       <Link href={evnt.editLink} target="_blank">
-                        <Button variant={"ghost"} size="sm" className="flex items-center gap-1 border-b border-slate-700 text-white"><Edit size={15}/> Edit Event</Button>
+                        <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-950">
+                          <Edit size={12}/>
+                          Edit
+                        </Button>
                       </Link>
-                    }
-                    {(userData?.role == "Club Lead" || userData?.role == "Admin") && evnt.rsvp.type != "none" && (
+                    )}
+                    
+                    {(userData?.role === "Club Lead" || userData?.role === "Admin") && evnt.rsvp.type !== "none" && (
                       <Button
-                        variant={"ghost"}
+                        variant="outline"
                         size="sm"
-                        className="border-b border-slate-700"
+                        className="flex items-center gap-1 text-xs hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-950"
                         onClick={() => {
+                            setCrntEvent(evnt);
+                            setOpenLateralCheckInDialog(true);
+                          }}
+                      >
+                        <QrCode size={14} className="mr-1" />
+                        Lateral
+                      </Button>
+                       
+                    )}
+                  </div>
+
+                  {evnt.rsvp.type !== "none" && evnt.rsvp.status === "open" && (
+                    <div className="flex gap-1">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="flex-1 text-xs"
+                        onClick={() => {
+                          setCrntEvent(evnt);
+                          setOpenCheckInDialog(true);
+                        }}
+                      >
+                        <MdOutlineQrCodeScanner size={14} className="mr-1" />
+                        Check-in
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 text-xs"
+                         onClick={() => {
                           setCrntEvent(evnt);
                           setOpenRsvpDialog(true);
                         }}
                       >
-                        <View size={16} className="mr-2" />
-                        View Info
+                       <View size={12} className="mr-1" />
+                        RSVPs
                       </Button>
-                    )}
-                    {evnt.rsvp.type != "none" &&
-                      evnt.rsvp.status == "open" && (<>
-                      <Button
-                          variant={"ghost"}
-                          className=" text-white border-b border-slate-700"
-                          size="sm"
-                          onClick={() => {
-                            setCrntEvent(evnt);
-                            setOpenCheckInDialog(true);
-                          }}
-                        >
-                          <MdOutlineQrCodeScanner size={16} className="mr-2" />
-                          Check-in
-                        </Button>
-                        <Button
-                          variant={"ghost"}
-                          className=" text-white border-b border-slate-700"
-                          size="sm"
-                          onClick={() => {
-                            setCrntEvent(evnt);
-                            setOpenLateralCheckInDialog(true);
-                          }}
-                        >
-                          <QrCode size={16} className="mr-2" />
-                          Lateral Check-in
-                        </Button>
-                      </>
-                      )}
+                    </div>
+                  )}
                   </div>
                 </div>
               </div>

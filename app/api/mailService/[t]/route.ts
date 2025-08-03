@@ -84,6 +84,14 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
 
     evntData = (await getFirestore().doc(`events/${data.evnt[1]}`).get()).data() as unknown as Event  // Getting the RSVP infos of the event from the DB
 
+
+    if(!evntData || !evntData.rsvp){
+          return NextResponse.json(
+            { msg: 'Event not found or RSVP not enabled.' },
+            { status: 404 }
+          );
+        }
+        
     const date = moment(data.evnt[7],"DD/MM/YYYY HH:mm:ss")
     if(evntData.rsvp.type == "external"){
         template = mail_rsvp_external;
@@ -132,7 +140,10 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     mailOptions.html = Handlebars.compile(template)(replacements);
 
     // Send email
-    await transporter.sendMail(mailOptions);
+    await Promise.all([
+      transporter.sendMail(mailOptions),
+      sendRegistrationUpdates(data.user, evntData!, data.user)
+    ]);
 
     return NextResponse.json(resp);
   } catch (error) {
@@ -143,6 +154,31 @@ export async function POST(req: NextRequest, {params}:{params:{ t: string }}) {
     );
   }
 }
+
+async function sendRegistrationUpdates(user: any, evnt: Event, userData: any) {
+  // Sending registration updates to the webhook if it exists.
+  if(evnt.rsvp.webhook && evnt.rsvp.webhook != ""){
+    await fetch(evnt.rsvp.webhook, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: {
+          name: user.displayName,
+          email: user.email,
+          phone: resolvePhoneNumber(userData.ph),
+        },
+        evnt: {
+          title: evnt.title,
+          id: evnt.evntID,
+        }
+      }),
+    })
+    .catch((error) => console.error("Error sending registration updates:", error));
+  }
+}
+
 
 
 function resolveClubIcon(clb: string): any {

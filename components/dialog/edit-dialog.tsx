@@ -1,88 +1,21 @@
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { FaExclamation } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import { Checkbox } from "@/components/ui/checkbox";
-import { HashLoader } from "react-spinners";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import {
-  and,
-  collection,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { app, auth, db } from "../fb/config";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/cardlayout";
 import { useTheme } from "next-themes";
 import { useAuthContext } from "../context/auth";
 import { useToast } from "../ui/use-toast";
-import { FcGoogle } from "react-icons/fc";
 import {
-  GoogleAuthProvider,
-  signInWithCredential,
-  signInWithPopup,
-} from "firebase/auth";
-import {
-  checkAdmissionNumber,
-  createUser,
-  getClub,
-  getUser,
-  updateUserProfile,
+  updateUserProfile
 } from "../fb/db";
 import { Logo } from "../ui/logo";
-import SSImage from "@/public/img/ss-signin.png";
-import Image from "next/image";
-import { Separator } from "../ui/separator";
 import BottomGradient from "../ui/BottomGradient";
 import { usePathname, useSearchParams } from "next/navigation";
-import path from "path";
-import { RadioGroup } from "@radix-ui/react-radio-group";
-import { RadioGroupItem } from "../ui/radio-group";
-import { CollegeList } from "../ui/collegeList";
-import { getMessaging, getToken } from "firebase/messaging";
-import { PUBLIC_KEY } from "@/lib/data";
 import { useRouter } from "next/navigation";
-import { log } from "console";
 import { UserType } from "@/lib/types";
 
 export function EditDialog({

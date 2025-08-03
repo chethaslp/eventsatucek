@@ -64,6 +64,7 @@ export type Event = {
         type: 'internal' | 'external' | 'none';
         custom_text?: string;
         link?: string;
+        webhook?: string;
         tpa?: number;
         checkins: boolean;
         custom_quest?: string;
