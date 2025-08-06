@@ -12,7 +12,7 @@ import { QueryDocumentSnapshot, DocumentData } from "firebase-admin/firestore";
 import Image from "next/image";
 import Loading from "@/components/ui/Loading";
 import { signOut } from "firebase/auth";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { auth } from "@/components/fb/config";
 import { FaEye, FaEyeSlash, FaUserEdit } from "react-icons/fa";
 import { Edit, ScanLine, Calendar, MapPin, Users, Trophy, Clock, ExternalLink, UserCheck2 } from "lucide-react";
@@ -30,6 +30,7 @@ function Page() {
   const [qrScanner, setQrScanner] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [infoText, setInfoText] = useState(<></>);
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) {
@@ -65,7 +66,7 @@ function Page() {
   return openSignin || !user ? (
     <SigninDialog
       open={true}
-      setOpen={function (value: React.SetStateAction<boolean>): void {}}
+      setOpen={function (value: React.SetStateAction<boolean>): void { !value && router.back();}}
     />
   ) : (
     <>

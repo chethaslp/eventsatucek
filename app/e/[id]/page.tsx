@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 
-import Card from "@/components/ui/previewCard";
 import Footer from "@/components/ui/Footer";
 import Loading from "@/components/ui/Loading";
 import CardGrid from "@/components/ui/CardGrid";
 import { Navbar } from "@/components/ui/navbar";
-import ShareButton from "@/components/ui/ShareButton";
 import { RsvpDialog } from "@/components/dialog/rsvp-dialog";
 import { SigninDialog } from "@/components/dialog/signin-dialog";
 import { useAuthContext } from "@/components/context/auth";
@@ -34,27 +32,22 @@ import NotFound from "@/app/not-found";
 import { HashLoader } from "react-spinners";
 import { TicketDialog } from "@/components/dialog/ticket-dialog";
 import { Button } from "@/components/ui/button";
-import { set } from "react-hook-form";
-import Markdown  from "react-markdown";
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 function Page({ params }: { params: { id: string } }) {
   const { theme } = useTheme();
 
-  const themeToDark = theme == "dark" ? false : true;
   const [data, setData] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const s = useSearchParams();
   const user = useAuthContext();
   const [open, setOpen] = useState(false);
-  const [openSignin, setOpenSignin] = useState(false);
   const [moreEvents, setMoreEvents] = useState<string[][]>([]);
   const [showTicketDialog, setShowTicketDialog] = useState(false);
 
   const [date, setDate] = useState<any>();
   const [clubIcon, setClubIcon] = useState<any[]>();
-
-  const handleClubIcon = async (d: string[]) => {};
 
   useEffect(() => {
     getEvent(params.id).then((evnt) => {
@@ -75,7 +68,7 @@ function Page({ params }: { params: { id: string } }) {
   }, []);
 
   useEffect(() => {
-    if (!data[6]) return;
+    if (!data) return;
     getMoreClubEvents(data[6] ? data[6] : "*", params.id)
       .then((upcomingEvents) => {
         setMoreEvents(upcomingEvents);
@@ -129,7 +122,6 @@ ${about}`
   ) : (
     <div className="flex flex-col min-h-[50rem] dark:bg-[#0a0a0a]">
       <Navbar />
-      <SigninDialog open={openSignin} setOpen={setOpenSignin} />
       <RsvpDialog open={open} setOpen={setOpen} evnt={data} />
       <TicketDialog
         open={showTicketDialog}
@@ -227,7 +219,6 @@ ${about}`
 
             <UserEventInteractionPanel
               setOpen={setOpen}
-              setOpenSignin={setOpenSignin}
               setShowTicketDialog={setShowTicketDialog}
               data={data}
               date={date}
@@ -299,19 +290,18 @@ function UserEventInteractionPanel({
   user,
   params,
   setOpen,
-  setOpenSignin,
   setShowTicketDialog,
   date,
 }: {
   data: string[];
   user: any;
   params: { id: string };
-  setOpenSignin: any;
   setShowTicketDialog: any;
   setOpen: any;
   date: any;
 }) {
   const [userStatus, setUserStatus] = useState<Event_User["status"] | null>();
+  const router = useRouter();
 
   useEffect(() => {
     if (!data) return;
@@ -382,7 +372,7 @@ function UserEventInteractionPanel({
               <button
                 onClick={() => {
                   if (!user) {
-                    setOpenSignin(true);
+                    router.push("/profile?r=/e/" + params.id + "%3Frsvp");
                     return;
                   }
                   setOpen(true);
