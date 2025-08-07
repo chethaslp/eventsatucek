@@ -5,7 +5,7 @@ export type UserType = {
     displayName: string;
     club?: string;
     email: string;
-    role: 'Student' | 'Club Lead' | 'Admin' | 'Club Managers';
+    role: 'Student' | 'Club Lead' | 'Admin' | 'Club Manager';
     ph: string;
     admYear: string;
     batch: string;
@@ -71,4 +71,11 @@ export type Event = {
     }
 
     updatedAt?: FieldValue;
+};
+
+export const Roles = {
+    Admin: 'Admin',
+    Student: 'Student',
+    ClubLead: 'Club Lead',
+    ClubManager: 'Club Manager',
 };

@@ -2,13 +2,10 @@
 import { useAuthContext } from "@/components/context/auth";
 import { SigninDialog } from "@/components/dialog/signin-dialog";
 import {
-  getClub,
   getClubEvents,
-  getProfileData,
-  getUser,
-  getUserEvents,
+  getProfileData
 } from "@/components/fb/db";
-import { ClubType, Event, Event_User, UserType } from "@/lib/types";
+import { Event, Roles, UserType } from "@/lib/types";
 import Footer from "@/components/ui/Footer";
 import { Navbar } from "@/components/ui/navbar";
 import { Separator } from "@/components/ui/separator";
@@ -22,23 +19,20 @@ import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 import { ListRsvpDialog } from "@/components/dialog/list-rsvp-dialog";
 import { CheckInDialog } from "@/components/dialog/checkin-dialog";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
 import { getImgLink } from "@/lib/data";
 import Image from "next/image";
-import { Edit, Edit2Icon, QrCode, View } from "lucide-react";
+import { Edit, QrCode, View } from "lucide-react";
 import { TicketDialog } from "@/components/dialog/ticket-dialog";
+import { AssignRoleDialog } from "@/components/dialog/assign-role-dialog";
 
 function Page() {
   const user = useAuthContext();
   const [userData, setUserData] = useState<UserType | null>();
   const [loading, setLoading] = useState(true);
-  const [openSignin, setOpenSignin] = useState(false);
   const [openRsvpDialog, setOpenRsvpDialog] = useState(false);
   const [openLateralCheckInDialog, setOpenLateralCheckInDialog] = useState(false);
   const [openCheckInDialog, setOpenCheckInDialog] = useState(false);
+  const [openAssignRoleDialog, setOpenAssignRoleDialog] = useState(false);
   const [crntEvent, setCrntEvent] = useState<Event>();
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
 
@@ -53,7 +47,7 @@ function Page() {
         return;
       }
 
-      if (!data.club) {
+      if (!data.club || data.role == "Student") {
         location.href = "/profile";
         return;
       }
@@ -68,7 +62,7 @@ function Page() {
 
   if (loading) return <Loading msg={"Launching dashboard..."} />;
 
-  return openSignin || !user ? (
+  return !user ? (
     <SigninDialog
       open={true}
       setOpen={function (value: React.SetStateAction<boolean>): void {}}
@@ -100,6 +94,14 @@ function Page() {
           setOpen={setOpenLateralCheckInDialog}
           evnt={[crntEvent.title, crntEvent.evntID, "", crntEvent.title, "", crntEvent.img, "Lateral Check-in"]}
           lateralCheckin={true}
+        />
+      )}
+
+      {openAssignRoleDialog && userData && (
+        <AssignRoleDialog
+          open={openAssignRoleDialog}
+          setOpen={setOpenAssignRoleDialog}
+          userData={userData}
         />
       )}
 
@@ -155,15 +157,27 @@ function Page() {
         <div className="py-7 w-full">
           <div className="flex justify-between">
             <h1 className="sm:text-2xl text-xl mb-3 ">Events Hosted</h1>
-            <Button
-              variant="default"
-              onClick={() =>
-                (location.href =
-                  "https://docs.google.com/forms/d/e/1FAIpQLSchkVsDZD5FysBkRhokE2QGTTKrs_CqnXRt1EXGuF3DpDhCxw/viewform")
-              }
-            >
-              Add event
-            </Button>
+            <div className="flex gap-2">
+              {(userData?.role == Roles.Admin || userData?.role == Roles.ClubLead) && (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => setOpenAssignRoleDialog(true)}
+                  >
+                    Assign Role
+                  </Button>
+                  <Button
+                    variant="default"
+                    onClick={() =>
+                      (location.href =
+                        "https://docs.google.com/forms/d/e/1FAIpQLSchkVsDZD5FysBkRhokE2QGTTKrs_CqnXRt1EXGuF3DpDhCxw/viewform")
+                    }
+                  >
+                    Add event
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
           <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "upcoming" | "past")} className="w-full flex-1 h-full">
             <TabsList>
@@ -332,7 +346,7 @@ function ClubEvents({
 
                   <div className="space-y-2">
                     <div className="flex flex-wrap gap-1">
-                    {(userData?.role === "Club Lead" || userData?.role === "Admin") && (
+                    {(userData?.role === Roles.Admin || userData?.role === Roles.ClubLead) && (
                       <Link href={evnt.editLink} target="_blank">
                         <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-950">
                           <Edit size={12}/>
@@ -341,7 +355,7 @@ function ClubEvents({
                       </Link>
                     )}
                     
-                    {(userData?.role === "Club Lead" || userData?.role === "Admin") && evnt.rsvp.type !== "none" && (
+                    { evnt.rsvp.type !== "none" && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -372,7 +386,7 @@ function ClubEvents({
                         <MdOutlineQrCodeScanner size={14} className="mr-1" />
                         Check-in
                       </Button>
-                      <Button
+                      {(userData?.role == Roles.Admin || userData?.role == Roles.ClubLead) && <Button
                         variant="outline"
                         size="sm"
                         className="flex-1 text-xs"
@@ -383,7 +397,7 @@ function ClubEvents({
                       >
                        <View size={12} className="mr-1" />
                         RSVPs
-                      </Button>
+                      </Button>}
                     </div>
                   )}
                   </div>
